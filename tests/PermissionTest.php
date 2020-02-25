@@ -3,7 +3,6 @@
 namespace TPG\Tests;
 
 use TPG\Deadbolt\Exceptions\NoSuchPermissionException;
-use TPG\Deadbolt\Facades\Deadbolt;
 
 class PermissionTest extends TestCase
 {

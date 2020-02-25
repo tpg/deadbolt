@@ -6,6 +6,6 @@ return [
 
     'permissions' => [
         // Define your permissions here...
-    ]
+    ],
 
 ];

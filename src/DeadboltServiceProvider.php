@@ -19,8 +19,7 @@ class DeadboltServiceProvider extends ServiceProvider
     protected function publish()
     {
         $this->publishes([
-            __DIR__.'/../config/deadbolt.php' =>
-            config_path('deadbolt.php')
+            __DIR__.'/../config/deadbolt.php' => config_path('deadbolt.php'),
         ], 'deadbolt');
     }
 }
