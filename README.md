@@ -165,3 +165,42 @@ If you need to make sure that a user does NOT have any of the specified permissi
 ```php
 $user->deadbolt()->hasNone('articles.delete', 'articles.destroy');
 ```
+
+## Using Laravel Policies
+Laravel policies are a great way to deal with user abilities associated with your different models, and deadbolt works perfectly with policies. You can read the Laravel documentation about policies [here](https://laravel.com/docs/6.x/authorization#creating-policies).
+
+Once you have a policy in place, you can do something like this:
+
+```php
+<?php
+
+namespace App\Policies;
+
+use App\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
+
+class ArticlePolicy
+{
+    use HandlesAuthorization;
+
+    public function create(User $user)
+    {
+        return $user->deadbolt()->has('articles.create');
+    }
+}
+```
+
+And you can test the policy with:
+
+```php
+$user->can('create', Article::class);
+```
+
+This is handy if a policy needs to test for more than one permission:
+
+```php
+public function update(User $user, Article $article)
+{
+    return $user->deadbolt()->hasAll('articles.create', 'articles.edit');
+}
+```
