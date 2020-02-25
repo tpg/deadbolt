@@ -21,7 +21,8 @@
     "require": {
         "php": "^7.2",
         "ext-json": "*",
-        "phpunit/phpunit": "^8.5"
+        "phpunit/phpunit": "^8.5",
+        "laravel/framework": "^6.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
