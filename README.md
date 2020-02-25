@@ -2,6 +2,8 @@
 
 **Dead simple user permissions for Laravel**
 
+[![Build Status](https://travis-ci.org/tpg/deadbolt.svg?branch=master)](https://travis-ci.org/tpg/deadbolt)
+
 ## Installation
 Install the Deadbolt package through Composer:
 
