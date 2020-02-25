@@ -8,8 +8,7 @@ use Illuminate\Support\Arr;
 use TPG\Deadbolt\Exceptions\NoSuchPermissionException;
 
 /**
- * Class Permissions
- * @package TPG\Deadbolt
+ * Class Permissions.
  */
 class Permissions implements Arrayable
 {
@@ -49,7 +48,7 @@ class Permissions implements Arrayable
         $permissions = $this->unwrap($permissions);
 
         foreach ($permissions as $permission) {
-            if (!in_array($permission, $this->config['permissions'], true)) {
+            if (! in_array($permission, $this->config['permissions'], true)) {
                 throw new NoSuchPermissionException($permission);
             }
         }
@@ -86,7 +85,7 @@ class Permissions implements Arrayable
         $permissions = $this->unwrap($permissions);
 
         $this->permissions = array_filter($this->permissions, function ($permission) use ($permissions) {
-            return !in_array($permission, $permissions, true);
+            return ! in_array($permission, $permissions, true);
         });
 
         return $this;
@@ -137,7 +136,7 @@ class Permissions implements Arrayable
         $permissions = $this->unwrap($permissions);
 
         foreach ($permissions as $permission) {
-            if (!in_array($permission, $this->permissions, true)) {
+            if (! in_array($permission, $this->permissions, true)) {
                 return false;
             }
         }
@@ -172,7 +171,7 @@ class Permissions implements Arrayable
      */
     public function hasNone(...$permissions): bool
     {
-        return !$this->hasAny($permissions);
+        return ! $this->hasAny($permissions);
     }
 
     /**
@@ -205,13 +204,14 @@ class Permissions implements Arrayable
 
     /**
      * Make the current permission set permanent.
-
+     *
      * @return $this
      */
     public function makePermanent(): self
     {
         $this->user->{$this->config['column']} = json_encode($this->permissions);
         $this->user->save();
+
         return $this;
     }
 
@@ -232,6 +232,6 @@ class Permissions implements Arrayable
      */
     public function toArray(): array
     {
-        return (array)$this->permissions;
+        return (array) $this->permissions;
     }
 }
