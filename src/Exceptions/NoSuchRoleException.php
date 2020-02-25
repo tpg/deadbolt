@@ -2,8 +2,6 @@
 
 namespace TPG\Deadbolt\Exceptions;
 
-use Throwable;
-
 class NoSuchRoleException extends \Exception
 {
     public function __construct(string $role)
