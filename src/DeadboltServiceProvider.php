@@ -14,6 +14,10 @@ class DeadboltServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/deadbolt.php', 'deadbolt');
+
+        $this->app->bind('deadbolt.facade', function () {
+            return new Deadbolt(app('config')['deadbolt']);
+        });
     }
 
     protected function publish()

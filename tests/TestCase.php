@@ -6,6 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use TPG\Deadbolt\DeadboltServiceProvider;
+use TPG\Deadbolt\Facades\Deadbolt;
 
 class TestCase extends Orchestra
 {
@@ -36,7 +37,7 @@ class TestCase extends Orchestra
 
     protected function setPermissions(): void
     {
-        $this->app['config']->set('deadbolt.permissions', [
+        $this->app['config']->set('deadbolt.permissions.array', [
             'articles.create',
             'articles.edit',
             'articles.delete',
@@ -48,5 +49,17 @@ class TestCase extends Orchestra
         return [
             DeadboltServiceProvider::class,
         ];
+    }
+
+    protected function getPackageAliases($app)
+    {
+        return [
+            'Deadbolt' => Deadbolt::class,
+        ];
+    }
+
+    protected function user(): User
+    {
+        return factory(User::class)->create();
     }
 }

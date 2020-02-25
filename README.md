@@ -196,6 +196,14 @@ And you can test the policy with:
 $user->can('create', Article::class);
 ```
 
+Or in a controller method using `$this->authorize()`:
+```php
+public function update(Request $request, Article $article)
+{
+    $this->authorize('update', $article);
+}
+```
+
 This is handy if a policy needs to test for more than one permission:
 
 ```php

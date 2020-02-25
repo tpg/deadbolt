@@ -3,6 +3,7 @@
 namespace TPG\Tests;
 
 use TPG\Deadbolt\Exceptions\NoSuchPermissionException;
+use TPG\Deadbolt\Facades\Deadbolt;
 
 class PermissionTest extends TestCase
 {
@@ -118,7 +119,7 @@ class PermissionTest extends TestCase
 
         $user->deadbolt()->super()->makePermanent();
 
-        $this->assertTrue($user->deadbolt()->hasAll(config('deadbolt.permissions')));
+        $this->assertTrue($user->deadbolt()->hasAll(Deadbolt::permissions()));
     }
 
     /**
@@ -145,11 +146,6 @@ class PermissionTest extends TestCase
         $user->permissions = json_decode($user->permissions, true);
 
         $this->assertTrue($user->deadbolt()->has('articles.edit'));
-        $this->assertTrue($user->deadbolt()->hasAll(config('deadbolt.permissions')));
-    }
-
-    protected function user(): User
-    {
-        return factory(User::class)->create();
+        $this->assertTrue($user->deadbolt()->hasAll(Deadbolt::permissions()));
     }
 }

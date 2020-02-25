@@ -24,16 +24,23 @@ class Permissions implements Arrayable
      * @var array
      */
     protected $permissions;
+    /**
+     * @var array
+     */
+    protected $definedPermissions;
 
     /**
      * DeadboltPermissions constructor.
      * @param Authenticatable $user
+     * @param array $config
+     * @param array $definedPermissions
      */
-    public function __construct(Authenticatable $user, array $config)
+    public function __construct(Authenticatable $user, array $config, array $definedPermissions)
     {
         $this->user = $user;
         $this->config = $config;
         $this->permissions = $this->getPermissionsFromUser($user);
+        $this->definedPermissions = $definedPermissions;
     }
 
     /**
@@ -48,7 +55,7 @@ class Permissions implements Arrayable
         $permissions = $this->unwrap($permissions);
 
         foreach ($permissions as $permission) {
-            if (! in_array($permission, $this->config['permissions'], true)) {
+            if (! in_array($permission, $this->definedPermissions, true)) {
                 throw new NoSuchPermissionException($permission);
             }
         }
@@ -98,7 +105,7 @@ class Permissions implements Arrayable
      */
     public function revokeAll(): self
     {
-        return $this->revoke($this->config['permissions']);
+        return $this->revoke($this->definedPermissions);
     }
 
     /**
@@ -109,7 +116,7 @@ class Permissions implements Arrayable
      */
     public function super(): self
     {
-        $this->give($this->config['permissions']);
+        $this->give($this->definedPermissions);
 
         return $this;
     }
