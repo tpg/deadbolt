@@ -1,8 +1,15 @@
-# Deadbolt
-
-**Dead simple user permissions for Laravel**
+# Dead simple user permissions for Laravel
 
 [![Build Status](https://travis-ci.org/tpg/deadbolt.svg?branch=master)](https://travis-ci.org/tpg/deadbolt)
+
+> NOTE! Deadbolt is sparkly new. Don't use this in production yet. We're still figuring out things and it's going to change a lot in the early stages. Breaking changes between versions are likely.
+
+## Why another authorization package?
+Because we wanted something way simpler than the other solutions. We've used many of the current top authorization packages, and will continue to use them in the future, but in a number of cases they're just a little over the top.
+
+Deadbolt is "dead" simple. you define your permissions in the config file, and you can assign them to your users (or any model you like). All you need to do is add a `permissions` column. No need for any additional migrations or complicated configurations.
+
+Deadbolt is simple by design. If you need something more feature rich, take a look at Spatie's `laravel-permission` package [here](https://github.com/spatie/laravel-permission)
 
 ## Installation
 Install the Deadbolt package through Composer:
@@ -12,7 +19,7 @@ composer require thepublicgood/deadbolt
 ```
 
 
-## Quick Start
+## Getting Started
 Deadbolt works by setting permissions in a JSON array in a column on your users table. It doesn't care much about authentication and such, as long as it can fetch an array of permissions.
 
 To get started quickly, add a nullable string/text column to your users table:
@@ -45,7 +52,7 @@ class User extends Authenticatable
 }
 ```
 
-That's it. If you want to add permissions to other models, just follow the same steps.
+If you want to add permissions to other models, just follow the same steps.
 
 ## Configuration
 Make sure you publish the Deadbolt config file with:
@@ -202,5 +209,73 @@ This is handy if a policy needs to test for more than one permission:
 public function update(User $user, Article $article)
 {
     return $user->deadbolt()->hasAll('articles.create', 'articles.edit');
+}
+```
+
+## Roles
+Deadbolt provides a simple solution to grouping permissions together in some form of logical collection. For example, you might have a role named "Publisher" which has the permissions `create articles` and `edit articles` and `publish articles` but not `delete articles`. When assigning a role to a user, the permissions within the role are assigned instead.
+
+> It is considered bad practise to authorize a user based on their roles. Test for user permissions instead. Roles are a convenience tool used to group permissions together and those permissions can change at any time causing unexpected issues.
+
+### Defining roles
+Define roles in the `deadbolt.php` config file and assign the permissions you want in the role.
+
+```php
+return [
+
+    'permissions' => [
+        'create articles',
+        'edit articles',
+        'publish articles',
+        'delete articls',
+    ]
+    
+    'roles' => [
+    
+        'writer' => [
+            'create articles',
+            'edit articles',
+            'delete articles',
+        ],
+        'publisher' => [
+            'edit articles',
+            'publish articles',
+        ]
+    ]
+
+];
+```
+
+### Assigning roles
+Assign roles to user with the `giveRoles` method:
+
+```php
+$user->deadbolt()->roles()->give('publisher');
+```
+
+The above will assign the `edit articles` and `publish articles` permissions.
+
+### Revoking roles
+Roles can be used to remove groups of permissions. However, be careful when doing so. Deadbolt will remove all the permissions associated with that role regardless of any other roles that may have been assigned to the same user.
+
+```php
+$user->deadbolt()->roles()->give('publisher', 'writer');
+$user->deadbolt()->roles()->revole('publisher');
+```
+The above will revoke the `edit articles` permission because it is in the `publisher` role. Even though the `writer` role wasn't revoked.
+
+### Getting a users roles
+You can also check what roles a user has by the permissions they have. Users don't actually get assigned roles, but we can deduce the role by their permissions.
+
+```php
+$roles = $user->deadbolt()->roles()->get();
+```
+
+### Check if a user has a role
+You can also check if a specific role is applied to a user:
+
+```php
+if ($user->deadbolt()->roles()->has('publisher')) {
+    // ...
 }
 ```

@@ -28,6 +28,7 @@ class Permissions implements Arrayable
     /**
      * DeadboltPermissions constructor.
      * @param Authenticatable $user
+     * @param array $config
      */
     public function __construct(Authenticatable $user, array $config)
     {
@@ -182,11 +183,13 @@ class Permissions implements Arrayable
      */
     protected function getPermissionsFromUser(Authenticatable $user): array
     {
-        if (is_array($user->{$this->config['column']})) {
-            return $user->{$this->config['column']};
+        $permissions = $user->{$this->config['column']};
+
+        if (is_array($permissions)) {
+            return $permissions;
         }
 
-        return $user->{$this->config['column']} ? json_decode($user->{$this->config['column']}, true) : [];
+        return $permissions ? json_decode($permissions, true) : [];
     }
 
     /**

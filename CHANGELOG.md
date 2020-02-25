@@ -7,5 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 - Alternative permission sources (DB or JSON endpoint)
 
-## [0.1]
-- Initial Import
+## [0.2] 25-02-2020
+### Additions
+- Permissions can be groups by roles.
+- Roles can be assigned to users like permissions
+- The `deadbolt()` method now returns an instance of `Deadbolt` instead of `Permissions`.
+
+## [0.1] 25-02-2020
+- Initial commit.

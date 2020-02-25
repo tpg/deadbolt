@@ -49,4 +49,9 @@ class TestCase extends Orchestra
             DeadboltServiceProvider::class,
         ];
     }
+
+    protected function user(): User
+    {
+        return factory(User::class)->create();
+    }
 }

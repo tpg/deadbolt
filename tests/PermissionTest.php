@@ -147,9 +147,4 @@ class PermissionTest extends TestCase
         $this->assertTrue($user->deadbolt()->has('articles.edit'));
         $this->assertTrue($user->deadbolt()->hasAll(config('deadbolt.permissions')));
     }
-
-    protected function user(): User
-    {
-        return factory(User::class)->create();
-    }
 }
