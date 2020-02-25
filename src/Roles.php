@@ -33,7 +33,7 @@ class Roles
         $roles = Arr::flatten($roles);
 
         foreach ($roles as $role) {
-            if (!array_key_exists($role, $this->config['roles'])) {
+            if (! array_key_exists($role, $this->config['roles'])) {
                 throw new NoSuchRoleException($role);
             }
         }
@@ -72,7 +72,7 @@ class Roles
         $userPermissions = $this->user->deadbolt()->toArray();
         $rolePermissions = $this->config['roles'][$role];
 
-        return !count(array_diff($userPermissions, $rolePermissions));
+        return ! count(array_diff($userPermissions, $rolePermissions));
     }
 
     public function get(): array

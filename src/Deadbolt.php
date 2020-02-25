@@ -50,6 +50,6 @@ class Deadbolt
             return $this->permissions->{$name}(...$arguments);
         }
 
-        throw new \BadMethodCallException('Call to undefined method ' . $name);
+        throw new \BadMethodCallException('Call to undefined method '.$name);
     }
 }
