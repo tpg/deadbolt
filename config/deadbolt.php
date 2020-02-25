@@ -7,7 +7,7 @@ return [
 
 
     'permissions' => [
-        // You can specify how the defined permissions are sourced. Available options are "array", "database", "json"
+        // You can specify how the defined permissions are sourced. Available options are "array", "database".
         'driver' => 'array',
 
         'array' => [
@@ -23,18 +23,6 @@ return [
             'cache' => 3600,
 
         ],
-
-        // if "driver" is "json", specify the connection details here
-        'json' => [
-            'endpoint' => env('DEADBOLT_JSON_ENDPOINT'),
-            'cache' => 3600,
-            'query' => [
-                // Specify any additional query parameters
-            ],
-            'headers' => [
-                // Specify any additional headers to send with the request. Ex: 'Authorization'
-            ],
-        ]
     ],
 
 ];

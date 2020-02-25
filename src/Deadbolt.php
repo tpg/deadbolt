@@ -5,6 +5,7 @@ namespace TPG\Deadbolt;
 use TPG\Deadbolt\Drivers\ArrayDriver;
 use TPG\Deadbolt\Drivers\Contracts\PermissionSourceDriver;
 use TPG\Deadbolt\Drivers\DatabaseDriver;
+use TPG\Deadbolt\Drivers\JsonDriver;
 
 class Deadbolt
 {
