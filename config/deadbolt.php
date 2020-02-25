@@ -5,7 +5,6 @@ return [
     // Specify the column where permissions are stored on model table
     'column' => 'permissions',
 
-
     'permissions' => [
         // You can specify how the defined permissions are sourced. Available options are "array", "database".
         'driver' => 'array',

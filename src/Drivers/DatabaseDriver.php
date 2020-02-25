@@ -40,8 +40,9 @@ class DatabaseDriver implements PermissionSourceDriver
     protected function connection(): string
     {
         if ($this->config['connection'] === 'default') {
-            return app('config')->get('database.' . $this->config['connection']);
+            return app('config')->get('database.'.$this->config['connection']);
         }
+
         return $this->config['connnection'];
     }
 }
