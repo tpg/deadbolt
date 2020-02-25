@@ -1,0 +1,41 @@
+{
+    "name": "thepublicgood/deadbolt",
+    "description": "Dead simple permissions for Laravel",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "THEPUBLICGOOD",
+            "email": "makers@thepublicgood.co.za"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TPG\\Deadbolt\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TPG\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.2",
+        "ext-json": "*",
+        "phpunit/phpunit": "^8.5"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TPG\\Deadbolt\\DeadboltServiceProvider"
+            ],
+            "aliases": {
+                "Deadbolt": "TPG\\Deadbolt\\Facades\\Deadbolt"
+            }
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.6"
+    }
+}
