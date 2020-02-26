@@ -12,8 +12,8 @@ class ArrayDriver implements DriverInterface
      */
     protected $config;
 
+
     /**
-     * ArrayDriver constructor.
      * @param array $config
      */
     public function __construct(array $config)
@@ -21,6 +21,13 @@ class ArrayDriver implements DriverInterface
         $this->config = $config;
     }
 
+    /**
+     * Get an array of permission names.
+     *
+     * @param mixed ...$roles
+     *
+     * @return array
+     */
     public function permissions(...$roles): array
     {
         $roles = Arr::flatten($roles);
@@ -36,6 +43,11 @@ class ArrayDriver implements DriverInterface
         return $this->config['permissions'];
     }
 
+    /**
+     * Get an array of role permissions keyed by the role names.
+     *
+     * @return array
+     */
     public function roles(): array
     {
         return $this->config['roles'];

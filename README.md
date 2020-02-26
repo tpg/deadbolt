@@ -291,3 +291,60 @@ if (Deadbolt::user($user)->is('publisher')) {
     // ...
 }
 ```
+
+## Drivers
+Deadbolt is designed for simplicity, but sometimes you might need just a little more complexity. Deadbolt provides a simple driver system for providing permissions. This can be handy if you want to store your permissions in your database, for example.
+
+Deadbolt includes an `ArrayDriver` by default that sources permissions and roles from the `deadbolt` config. If you want to use a custom driver you can do so by passing a new driver instance to the `driver` method before calling `user()`:
+
+```php
+$driver = new DatabaseDriver($config);
+Deadbolt::driver($driver))->user($user)->give('...');
+```
+
+### Writing custom drivers.
+All custom drivers MUST implement `Drivers\Contracts\DriverInterface` which requires that a `permissions()` method and a `roles()` method exists.
+
+The `permissions` method must return an array of permission names, and a `roles` method must return the roles as array keys with the associated permissions.
+
+```php
+<?php
+
+namespace App\Drivers;
+
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
+
+class DatabaseDriver implements DriverInterface
+{
+    protected $config;
+
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
+    
+    public function permissions(...$roles): array
+    {
+        // return an array of permission names filtered by `$roles`
+        return ['articles.create', 'articles.edit', 'articles.delete'];
+    }
+    
+    public function roles(): array
+    {
+        //return an array of permissions keyed by role names.
+        return [
+            'publisher' => [
+                'articles.edit',
+                'articles.publish',
+            ],
+            'writer' => [
+                'articles.create',
+                'articles.edit',
+                'articles.delete',
+            ],
+        ];
+    }
+}
+```

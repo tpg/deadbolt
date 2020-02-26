@@ -22,7 +22,6 @@ class User
     protected $permissions;
 
     /**
-     * User constructor.
      * @param Model $user
      * @param array $permissions
      * @param array $config
@@ -34,6 +33,12 @@ class User
         $this->permissions = $permissions;
     }
 
+    /**
+     * Give the specified permissions.
+     *
+     * @param mixed ...$names
+     * @return $this
+     */
     public function give(...$names): self
     {
         $permissions = array_filter($this->getPermissions(Arr::flatten($names)), function ($permission) {
@@ -47,6 +52,13 @@ class User
         return $this;
     }
 
+    /**
+     * Merge the specified permissions with the current permissions.
+     *
+     * @param array $permissions
+     * @param bool $permanent
+     * @return $this
+     */
     protected function mergePermissions(array $permissions, bool $permanent = false): self
     {
         $this->user->permissions = json_encode($permissions);
@@ -57,6 +69,11 @@ class User
         return $this;
     }
 
+    /**
+     * Make a super user.
+     *
+     * @return $this
+     */
     public function super(): self
     {
         $this->give($this->permissions);
@@ -64,6 +81,12 @@ class User
         return $this;
     }
 
+    /**
+     * Revoke the specified permissions.
+     *
+     * @param mixed ...$names
+     * @return $this
+     */
     public function revoke(...$names): self
     {
         $names = $this->getPermissions(Arr::flatten($names));
@@ -77,6 +100,11 @@ class User
         return $this;
     }
 
+    /**
+     * Revoke all permissions.
+     *
+     * @return $this
+     */
     public function revokeAll(): self
     {
         $this->user->permissions = json_encode([]);
@@ -84,6 +112,11 @@ class User
         return $this;
     }
 
+    /**
+     * Save the current permission set.
+     *
+     * @return $this
+     */
     public function save(): self
     {
         $this->user->save();
@@ -91,6 +124,11 @@ class User
         return $this;
     }
 
+    /**
+     * Check if the current permission set is permanent.
+     *
+     * @return bool
+     */
     public function saved(): bool
     {
         $diff = array_diff(
@@ -101,6 +139,12 @@ class User
         return count($diff) === 0;
     }
 
+    /**
+     * Get an array of permissions from the assignment set.
+     *
+     * @param array $names
+     * @return array
+     */
     protected function getPermissions(array $names): array
     {
         $permissions = array_map(function ($name) {
@@ -114,6 +158,13 @@ class User
         return Arr::flatten($permissions);
     }
 
+    /**
+     * Check if an array is defined.
+     *
+     * @param string $permission
+     * @return bool
+     * @throws NoSuchPermissionException
+     */
     protected function exists(string $permission): bool
     {
         if (! $this->isPermission($permission)) {
@@ -123,31 +174,66 @@ class User
         return true;
     }
 
+    /**
+     * Check if the given name is a permission.
+     *
+     * @param string $name
+     * @return bool
+     */
     protected function isPermission(string $name): bool
     {
         return in_array($name, $this->permissions, true);
     }
 
+    /**
+     * Check if the given name is a role.
+     *
+     * @param string $name
+     * @return bool
+     */
     protected function isRole(string $name): bool
     {
         return array_key_exists($name, $this->config['roles']);
     }
 
+    /**
+     * Get the permissions from the specified role.
+     *
+     * @param string $name
+     * @return array
+     */
     protected function getRolePermissions(string $name): array
     {
         return Arr::get($this->config, 'roles.'.$name, []);
     }
 
+    /**
+     * Check if the specified permission is assigned.
+     *
+     * @param string $permission
+     * @return bool
+     */
     public function has(string $permission): bool
     {
         return in_array($permission, $this->userPermissions(), true);
     }
 
+    /**
+     * Get the permissions currently assigned to the user.
+     *
+     * @return array
+     */
     protected function userPermissions(): array
     {
         return json_decode($this->user->permissions, true) ?: [];
     }
 
+    /**
+     * Check if all the specified permissions are assigned.
+     *
+     * @param mixed ...$permissions
+     * @return bool
+     */
     public function hasAll(...$permissions): bool
     {
         $permissions = Arr::flatten($permissions);
@@ -161,6 +247,12 @@ class User
         return true;
     }
 
+    /**
+     * Check if any of the specified permissions are assigned.
+     *
+     * @param mixed ...$permissions
+     * @return bool
+     */
     public function hasAny(...$permissions): bool
     {
         $permissions = Arr::flatten($permissions);
@@ -174,11 +266,24 @@ class User
         return false;
     }
 
+    /**
+     * Check if none of the specified permissions are assigned.
+     *
+     * @param mixed ...$permissions
+     * @return bool
+     */
     public function hasNone(...$permissions): bool
     {
         return ! $this->hasAny($permissions);
     }
 
+    /**
+     *
+     * Check if the user has the specified role.
+     *
+     * @param $role
+     * @return bool
+     */
     public function is($role): bool
     {
         $permissions = Arr::get($this->config, 'roles.'.$role, []);
@@ -186,11 +291,21 @@ class User
         return $this->hasAll($permissions);
     }
 
+    /**
+     * Get an array of permissions assigned to the user.
+     *
+     * @return array
+     */
     public function permissions(): array
     {
         return $this->userPermissions();
     }
 
+    /**
+     * Get an array of deduced roles assigned to the user.
+     *
+     * @return array
+     */
     public function roles(): array
     {
         return array_values(array_filter(array_keys($this->config['roles']), function ($role) {
