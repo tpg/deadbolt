@@ -27,7 +27,7 @@ class ArrayDriver implements DriverInterface
 
         if (count($roles)) {
             $permissions = array_map(function ($role) {
-                return Arr::get($this->config, 'roles.' . $role);
+                return Arr::get($this->config, 'roles.'.$role);
             }, $roles);
 
             return Arr::flatten($permissions);
