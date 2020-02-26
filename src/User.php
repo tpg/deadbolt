@@ -16,16 +16,22 @@ class User
      * @var array
      */
     private $config;
+    /**
+     * @var array
+     */
+    protected $permissions;
 
     /**
      * User constructor.
      * @param Model $user
+     * @param array $permissions
      * @param array $config
      */
-    public function __construct(Model $user, array $config)
+    public function __construct(Model $user, array $permissions, array $config)
     {
         $this->user = $user;
         $this->config = $config;
+        $this->permissions = $permissions;
     }
 
     public function give(...$names): self
@@ -53,7 +59,7 @@ class User
 
     public function super(): self
     {
-        $this->give($this->config['permissions']);
+        $this->give($this->permissions);
 
         return $this;
     }
@@ -119,7 +125,7 @@ class User
 
     protected function isPermission(string $name): bool
     {
-        return in_array($name, $this->config['permissions'], true);
+        return in_array($name, $this->permissions, true);
     }
 
     protected function isRole(string $name): bool

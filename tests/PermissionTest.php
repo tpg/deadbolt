@@ -27,6 +27,7 @@ class PermissionTest extends TestCase
         Deadbolt::user($user)->give('articles.edit', 'articles.create');
 
         $this->assertTrue(Deadbolt::user($user)->has('articles.edit'));
+        $this->assertTrue(in_array('articles.create', Deadbolt::user($user)->permissions()));
     }
 
     /**
