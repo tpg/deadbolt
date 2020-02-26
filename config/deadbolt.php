@@ -10,5 +10,5 @@ return [
 
     'roles' => [
         // Define your roles and assign permissions...
-    ]
+    ],
 ];
