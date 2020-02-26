@@ -25,8 +25,8 @@ class RoleTest extends TestCase
             ],
             'publisher' => [
                 'articles.edit',
-                'articles.publish'
-            ]
+                'articles.publish',
+            ],
         ]);
     }
 

@@ -63,9 +63,7 @@ class User
         $names = $this->getPermissions(Arr::flatten($names));
 
         $permissions = array_filter($this->userPermissions(), function ($permission) use ($names) {
-
             return ! in_array($permission, $names, true);
-
         });
 
         $this->revokeAll()->give($permissions);
@@ -103,6 +101,7 @@ class User
             if ($this->isRole($name)) {
                 return $this->getRolePermissions($name);
             }
+
             return $name;
         }, $names);
 
@@ -111,7 +110,7 @@ class User
 
     protected function exists(string $permission): bool
     {
-        if (!$this->isPermission($permission)) {
+        if (! $this->isPermission($permission)) {
             throw new NoSuchPermissionException($permission);
         }
 
@@ -130,8 +129,7 @@ class User
 
     protected function getRolePermissions(string $name): array
     {
-
-        return Arr::get($this->config, 'roles.' . $name, []);
+        return Arr::get($this->config, 'roles.'.$name, []);
     }
 
     public function has(string $permission): bool
@@ -149,7 +147,7 @@ class User
         $permissions = Arr::flatten($permissions);
 
         foreach ($permissions as $permission) {
-            if (!in_array($permission, $this->userPermissions(), true)) {
+            if (! in_array($permission, $this->userPermissions(), true)) {
                 return false;
             }
         }
@@ -172,12 +170,12 @@ class User
 
     public function hasNone(...$permissions): bool
     {
-        return !$this->hasAny($permissions);
+        return ! $this->hasAny($permissions);
     }
 
     public function is($role): bool
     {
-        $permissions = Arr::get($this->config, 'roles.' . $role, []);
+        $permissions = Arr::get($this->config, 'roles.'.$role, []);
 
         return $this->hasAll($permissions);
     }

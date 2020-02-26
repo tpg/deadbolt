@@ -9,7 +9,7 @@ class PermissionTest extends TestCase
 {
     /**
      * Deadbolt::user($user)->give('articles.edit');
-     * Deadbolt::user($user)->give('publisher');
+     * Deadbolt::user($user)->give('publisher');.
      *
      * Deadbolt::user($user)->has('articles.edit');
      * Deadbolt::user($user)->is('publisher');
