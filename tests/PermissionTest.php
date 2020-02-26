@@ -8,14 +8,6 @@ use TPG\Deadbolt\Facades\Deadbolt;
 class PermissionTest extends TestCase
 {
     /**
-     * Deadbolt::user($user)->give('articles.edit');
-     * Deadbolt::user($user)->give('publisher');.
-     *
-     * Deadbolt::user($user)->has('articles.edit');
-     * Deadbolt::user($user)->is('publisher');
-     */
-
-    /**
      * @test
      */
     public function it_can_get_an_array_of_defined_permissions()
