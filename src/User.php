@@ -278,7 +278,6 @@ class User
     }
 
     /**
-     *
      * Check if the user has the specified role.
      *
      * @param $role
