@@ -7,8 +7,7 @@ use TPG\Deadbolt\Drivers\ArrayDriver;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
 /**
- * Class Deadbolt
- * @package TPG\Deadbolt
+ * Class Deadbolt.
  */
 class Deadbolt
 {

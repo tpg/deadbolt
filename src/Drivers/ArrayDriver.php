@@ -12,7 +12,6 @@ class ArrayDriver implements DriverInterface
      */
     protected $config;
 
-
     /**
      * @param array $config
      */
