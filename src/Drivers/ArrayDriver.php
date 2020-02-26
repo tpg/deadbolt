@@ -21,7 +21,7 @@ class ArrayDriver implements DriverInterface
         $this->config = $config;
     }
 
-    public function get(...$roles)
+    public function permissions(...$roles): array
     {
         $roles = Arr::flatten($roles);
 
@@ -34,5 +34,10 @@ class ArrayDriver implements DriverInterface
         }
 
         return $this->config['permissions'];
+    }
+
+    public function roles(): array
+    {
+        return $this->config['roles'];
     }
 }

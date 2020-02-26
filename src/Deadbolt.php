@@ -41,11 +41,11 @@ class Deadbolt
 
     public function permissions(): array
     {
-        return $this->driver->get();
+        return $this->driver->permissions();
     }
 
     public function roles(): array
     {
-        return $this->config['roles'];
+        return $this->driver->roles();
     }
 }
