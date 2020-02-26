@@ -7,6 +7,7 @@ use TPG\Deadbolt\User;
 
 /**
  * @method static User user($user)
+ * @method static array permissions()
  */
 class Deadbolt extends Facade
 {

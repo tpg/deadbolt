@@ -90,19 +90,33 @@ return [
 ```
 
 ## Usage
-Deadbolt can be accessed through the `deadbolt()` method on your user model. This will return an instance of the `Permissions` class.
+Deadbolt can be used through the `Deadbolt` facade.
 
-### Permanence
-Permissions are not permanent by default. Deadbolt will retain the permission set for the duration of the request or until the user is refreshed from the DB. At any time, you can make the permission changes permanent by calling the `makePermanent()` method:
+### The `User` instance
+Deadbolt works by assigning permissions to a user. By `user`, we mean any model that has a `permissions` column in the database table. It doesn't have to be an actual user.
+The `user()` method will return an instance of the `Deadbolt\User` class and is purely used to manipulate permissions on your models.
+
+For example, to get a new `Deadbolt\User` instance from the currently logged user, you could do:
 
 ```php
-$user->deadbolt()->makePermanent();
+$user = Deadbolt::user($request()->user());
 ```
 
-You can check if a permission set is permanent by calling the `isPermanent()` method:
+### Permanence
+Before continuing, just a note about permanence. Permissions are not permanent by default. Deadbolt will assign the permission set for the duration of the request or until the user is refreshed from the DB, but to make them permanent, you must call the `save()` method:
 
 ```php
-$user->deadbolt()->isPermanent();
+Deadbolt::user($user)->save();
+
+// or
+
+$user->save();
+```
+
+You can check if a permission set is permanent by calling the `saved()` method:
+
+```php
+Deadbolt::user($user)->saved();
 ```
 
 ### Give a user permissions
@@ -111,66 +125,64 @@ Use the `give()` method to assign permissions to a user.
 ```php
 $user = User::find(1);
 
-$user->deadbolt()->give('articles.edit', 'articles.create', 'articles.delete');
+Deadbolt::user($user)->give('articles.edit', 'articles.create', 'articles.delete');
 
-// or...
+// or you can pass in an array
 
-$user->deadbolt()->give(['articles.edit', 'articles.create']);
+$permissions = ['articles.edit', 'articles.delete'];
+Deadbolt::user($user)->give($permissions);
 ```
 
 You can also add ALL the defined permissions in one go by using the `super()` method:
 
 ```php
-$user->deadbolt()->super();
+Deadbolt::user($user)->super();
 ```
 
 Attempting to assign a permission that is not defined will throw a `NoSuchPermissionException`.
 
 ### Revoke a user permission
-Revoke permissions using the `revoke()` or `revokeAll()` methods:
+Revoke permissions using the `revoke()` method:
 
 ```php
-$user->deadbolt()->revoke('articles.delete');
-
-// To remove ALL permissions...
-$user->deadbolt()->revokeAll();
+Deadbolt::user($user)->revoke('articles.delete');
 ```
 
-## Asserting
+You can revoke ALL the users permissions by using the `revokeAll()` method:
+
+```php
+Deadbolt::user($user)->revokeAll();
+```
+
+## Testing Permissions
 Once a user has been given permissions you can test them using the following methods:
 
 ### has
 Check if a user has a single permission using the `has()` method:
 
 ```php
-$user->deadbolt()->has('articles.create');
+Deadbolt::user($user)->has('articles.create');
 ```
 
 ### hasAll
 Check if a user has all of the specified permissions:
 
 ```php
-$user->deadbolt()->hasAll('articles.create', 'articles.edit');
-```
-
-You can also pass an array to the `hasAll` method if you prefer:
-
-```php
-$user->deadblt()->hasAll(['articles.create', 'articles.edit']);
+Deadbolt::user($user)->hasAll('articles.create', 'articles.edit');
 ```
 
 ### hasAny
 If you need to check if a user has at least one of the specified permissions, you can use the `hasAny` method:
 
 ```php
-$user->deadbolt()->hasAny('articles.create', 'articles.edit');
+Deadbolt::user($user)->hasAny('articles.create', 'articles.edit', 'articles.delete');
 ```
 
 ### hasNone
 If you need to make sure that a user does NOT have any of the specified permissions, then the `hasNone` method can be used:
 
 ```php
-$user->deadbolt()->hasNone('articles.delete', 'articles.destroy');
+Deadbolt::user($user)->hasNone('articles.create', 'articles.edit');
 ```
 
 ## Using Laravel Policies
@@ -192,7 +204,7 @@ class ArticlePolicy
 
     public function create(User $user)
     {
-        return $user->deadbolt()->has('articles.create');
+        return Deadbolt::user($user)->has('articles.create');
     }
 }
 ```
@@ -208,12 +220,12 @@ This is handy if a policy needs to test for more than one permission:
 ```php
 public function update(User $user, Article $article)
 {
-    return $user->deadbolt()->hasAll('articles.create', 'articles.edit');
+    return Deadbolt::user($user)->hasAll('articles.create', 'articles.edit');
 }
 ```
 
 ## Roles
-Deadbolt provides a simple solution to grouping permissions together in some form of logical collection. For example, you might have a role named "Publisher" which has the permissions `create articles` and `edit articles` and `publish articles` but not `delete articles`. When assigning a role to a user, the permissions within the role are assigned instead.
+Deadbolt roles are a simple solution to grouping permissions together in some form of logical collection. For example, you might have a role named `publisher` which needs to have the permissions `edit articles` and `publish articles` but not `create articles` or `delete articles`. When assigning a role to a user, the permissions within the role are assigned instead.
 
 > It is considered bad practise to authorize a user based on their roles. Test for user permissions instead. Roles are a convenience tool used to group permissions together and those permissions can change at any time causing unexpected issues.
 
@@ -250,7 +262,7 @@ return [
 Assign roles to user with the `giveRoles` method:
 
 ```php
-$user->deadbolt()->roles()->give('publisher');
+Deadbolt::user($user)->roles()->give('publisher');
 ```
 
 The above will assign the `edit articles` and `publish articles` permissions.
@@ -259,23 +271,23 @@ The above will assign the `edit articles` and `publish articles` permissions.
 Roles can be used to remove groups of permissions. However, be careful when doing so. Deadbolt will remove all the permissions associated with that role regardless of any other roles that may have been assigned to the same user.
 
 ```php
-$user->deadbolt()->roles()->give('publisher', 'writer');
-$user->deadbolt()->roles()->revole('publisher');
+Deadbolt::user($user)->give('publisher', 'writer');
+Deadbolt::user($user)->revoke('publisher');
 ```
-The above will revoke the `edit articles` permission because it is in the `publisher` role. Even though the `writer` role wasn't revoked.
+The above will revoke the `edit articles` permission because it is in the `publisher` role. Even though the `writer` role, which has the same permission wasn't revoked.
 
 ### Getting a users roles
-You can also check what roles a user has by the permissions they have. Users don't actually get assigned roles, but we can deduce the role by their permissions.
+You can also check what roles a user has by the permissions they have. Users don't actually get assigned roles, but we can deduce the roles by their permissions.
 
 ```php
-$roles = $user->deadbolt()->roles()->get();
+$roles = Deadbolt::user()->roles();
 ```
 
 ### Check if a user has a role
 You can also check if a specific role is applied to a user:
 
 ```php
-if ($user->deadbolt()->roles()->has('publisher')) {
+if (Deadbolt::user($user)->is('publisher')) {
     // ...
 }
 ```

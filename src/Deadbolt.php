@@ -25,4 +25,14 @@ class Deadbolt
     {
         return new User($model, $this->config);
     }
+
+    public function permissions(): array
+    {
+        return $this->config['permissions'];
+    }
+
+    public function roles(): array
+    {
+        return $this->config['roles'];
+    }
 }

@@ -51,11 +51,50 @@ class User
         return $this;
     }
 
+    public function super(): self
+    {
+        $this->give($this->config['permissions']);
+
+        return $this;
+    }
+
+    public function revoke(...$names): self
+    {
+        $names = $this->getPermissions(Arr::flatten($names));
+
+        $permissions = array_filter($this->userPermissions(), function ($permission) use ($names) {
+
+            return ! in_array($permission, $names, true);
+
+        });
+
+        $this->revokeAll()->give($permissions);
+
+        return $this;
+    }
+
+    public function revokeAll(): self
+    {
+        $this->user->permissions = json_encode([]);
+
+        return $this;
+    }
+
     public function save(): self
     {
         $this->user->save();
 
         return $this;
+    }
+
+    public function saved(): bool
+    {
+        $diff = array_diff(
+            $this->userPermissions(),
+            json_decode($this->user->getOriginal('permissions'), true)
+        );
+
+        return count($diff) === 0;
     }
 
     protected function getPermissions(array $names): array
@@ -91,7 +130,8 @@ class User
 
     protected function getRolePermissions(string $name): array
     {
-        return Arr::get('roles.' . $name, $this->config);
+
+        return Arr::get($this->config, 'roles.' . $name, []);
     }
 
     public function has(string $permission): bool
@@ -101,7 +141,7 @@ class User
 
     protected function userPermissions(): array
     {
-        return json_decode($this->user->permissions, true);
+        return json_decode($this->user->permissions, true) ?: [];
     }
 
     public function hasAll(...$permissions): bool
@@ -109,7 +149,7 @@ class User
         $permissions = Arr::flatten($permissions);
 
         foreach ($permissions as $permission) {
-            if (! in_array($permission, $this->userPermissions(), true)) {
+            if (!in_array($permission, $this->userPermissions(), true)) {
                 return false;
             }
         }
@@ -133,5 +173,24 @@ class User
     public function hasNone(...$permissions): bool
     {
         return !$this->hasAny($permissions);
+    }
+
+    public function is($role): bool
+    {
+        $permissions = Arr::get($this->config, 'roles.' . $role, []);
+
+        return $this->hasAll($permissions);
+    }
+
+    public function permissions(): array
+    {
+        return $this->userPermissions();
+    }
+
+    public function roles(): array
+    {
+        return array_values(array_filter(array_keys($this->config['roles']), function ($role) {
+            return $this->hasAll($this->config['roles'][$role]);
+        }));
     }
 }

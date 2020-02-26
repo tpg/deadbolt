@@ -18,6 +18,16 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
+    public function it_can_get_an_array_of_defined_permissions()
+    {
+        $permissions = Deadbolt::permissions();
+
+        $this->assertCount(0, array_diff($permissions, config('deadbolt.permissions')));
+    }
+
+    /**
+     * @test
+     */
     public function users_can_have_permissions()
     {
         $user = $this->user();
@@ -72,5 +82,53 @@ class PermissionTest extends TestCase
 
         $this->expectException(NoSuchPermissionException::class);
         Deadbolt::user($user)->give('articles.change');
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_make_a_permission_set_permanent()
+    {
+        $user = $this->user();
+        Deadbolt::user($user)->give('articles.edit', 'articles.delete')->save();
+
+        $this->assertTrue(Deadbolt::user($user)->saved());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_make_a_super_user()
+    {
+        $user = $this->user();
+        Deadbolt::user($user)->super();
+
+        $this->assertTrue(Deadbolt::user($user)->hasAll(Deadbolt::permissions()));
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_revoke_permissions_from_a_user()
+    {
+        $user = $this->user();
+        Deadbolt::user($user)->super();
+
+        Deadbolt::user($user)->revoke('articles.edit');
+
+        $this->assertFalse(Deadbolt::user($user)->has('articles.edit'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_revoke_all_permissions_from_a_user()
+    {
+        $user = $this->user();
+        Deadbolt::user($user)->super();
+
+        Deadbolt::user($user)->revokeAll();
+
+        $this->assertTrue(Deadbolt::user($user)->hasNone(Deadbolt::permissions()));
     }
 }
