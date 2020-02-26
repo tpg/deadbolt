@@ -3,148 +3,74 @@
 namespace TPG\Tests;
 
 use TPG\Deadbolt\Exceptions\NoSuchPermissionException;
+use TPG\Deadbolt\Facades\Deadbolt;
 
 class PermissionTest extends TestCase
 {
     /**
+     * Deadbolt::user($user)->give('articles.edit');
+     * Deadbolt::user($user)->give('publisher');
+     *
+     * Deadbolt::user($user)->has('articles.edit');
+     * Deadbolt::user($user)->is('publisher');
+     */
+
+    /**
      * @test
      */
-    public function a_user_can_have_permissions()
+    public function users_can_have_permissions()
     {
         $user = $this->user();
 
-        $user->deadbolt()->give('articles.create', 'articles.edit');
+        Deadbolt::user($user)->give('articles.edit', 'articles.create');
 
-        $this->assertTrue($user->deadbolt()->has('articles.create'));
-        $this->assertTrue($user->deadbolt()->has('articles.edit'));
+        $this->assertTrue(Deadbolt::user($user)->has('articles.edit'));
     }
 
     /**
      * @test
      */
-    public function permissions_can_be_made_permanent()
+    public function it_can_test_that_a_user_has_all_the_specified_permissions()
     {
         $user = $this->user();
+        Deadbolt::user($user)->give('articles.edit', 'articles.create');
 
-        $user->deadbolt()->give('articles.create', 'articles.edit');
-        $this->assertFalse($user->deadbolt()->isPermanent());
-
-        $user->deadbolt()->makePermanent();
-        $this->assertTrue($user->deadbolt()->isPermanent());
+        $this->assertTrue(Deadbolt::user($user)->hasAll('articles.edit', 'articles.create'));
+        $this->assertFalse(Deadbolt::user($user)->hasAll('articles.edit', 'articles.delete'));
     }
 
     /**
      * @test
      */
-    public function permissions_can_be_revoked()
+    public function it_can_test_that_a_user_has_any_of_the_specified_permissions()
     {
         $user = $this->user();
+        Deadbolt::user($user)->give('articles.edit');
 
-        $user->deadbolt()->give('articles.create', 'articles.edit', 'articles.delete');
-        $user->deadbolt()->makePermanent();
-
-        $user->deadbolt()->revoke('articles.delete');
-
-        $this->assertFalse($user->deadbolt()->has('articles.delete'));
-        $this->assertTrue($user->deadbolt()->has('articles.create'));
-
-        $user->deadbolt()->makePermanent();
-
-        $user = User::find(1);
-
-        $this->assertFalse($user->deadbolt()->has('articles.delete'));
+        $this->assertTrue(Deadbolt::user($user)->hasAny('articles.edit', 'articles.create'));
+        $this->assertFalse(Deadbolt::user($user)->hasAny('articles.create', 'articles.delete'));
     }
 
     /**
      * @test
      */
-    public function all_permissions_can_be_revoked()
+    public function it_can_test_that_a_user_has_none_of_the_specified_permissions()
     {
         $user = $this->user();
+        Deadbolt::user($user)->give('articles.edit');
 
-        $user->deadbolt()->give('articles.create', 'articles.edit', 'articles.delete');
-        $user->deadbolt()->makePermanent();
-
-        $user->deadbolt()->revokeAll();
-
-        $this->assertEquals([], $user->deadbolt()->toArray());
+        $this->assertTrue(Deadbolt::user($user)->hasNone('articles.create', 'articles.delete'));
+        $this->assertFalse(Deadbolt::user($user)->hasNone('articles.edit', 'articles.create'));
     }
 
     /**
      * @test
      */
-    public function it_can_check_if_a_user_has_all_permissions()
-    {
-        $user = $this->user();
-
-        $user->deadbolt()->give('articles.create', 'articles.edit');
-
-        $this->assertTrue($user->deadbolt()->hasAll('articles.create', 'articles.edit'));
-        $this->assertFalse($user->deadbolt()->hasAll('articles.create', 'articles.edit', 'articles.delete'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_check_if_a_user_has_any_permissions()
-    {
-        $user = $this->user();
-
-        $user->deadbolt()->give('articles.create');
-
-        $this->assertTrue($user->deadbolt()->hasAny('articles.edit', 'articles.create', 'articles.delete'));
-        $this->assertFalse($user->deadbolt()->hasAny('articles.edit', 'articles.delete'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_check_if_a_user_has_none_of_the_permissions()
-    {
-        $user = $this->user();
-
-        $user->deadbolt()->give('articles.delete');
-
-        $this->assertTrue($user->deadbolt()->hasNone('articles.edit', 'articles.create'));
-        $this->assertFalse($user->deadbolt()->hasNone('articles.edit', 'articles.delete'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_make_a_super_user()
-    {
-        $user = $this->user();
-
-        $user->deadbolt()->super()->makePermanent();
-
-        $this->assertTrue($user->deadbolt()->hasAll(config('deadbolt.permissions')));
-    }
-
-    /**
-     * @test
-     */
-    public function it_will_throw_an_exception_when_giving_an_undefined_permission()
+    public function it_will_throw_an_exception_if_the_permission_does_not_exist()
     {
         $user = $this->user();
 
         $this->expectException(NoSuchPermissionException::class);
-        $user->deadbolt()->give('articles.update');
-    }
-
-    /**
-     * @test
-     */
-    public function user_permissions_can_be_cast_as_json()
-    {
-        $user = $this->user();
-        $user->permissions = json_decode($user->permissions, true);
-        $user->deadbolt()->super()->makePermanent();
-
-        $user = User::find(1);
-        $user->permissions = json_decode($user->permissions, true);
-
-        $this->assertTrue($user->deadbolt()->has('articles.edit'));
-        $this->assertTrue($user->deadbolt()->hasAll(config('deadbolt.permissions')));
+        Deadbolt::user($user)->give('articles.change');
     }
 }

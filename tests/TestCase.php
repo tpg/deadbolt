@@ -6,6 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use TPG\Deadbolt\DeadboltServiceProvider;
+use TPG\Deadbolt\Facades\Deadbolt;
 
 class TestCase extends Orchestra
 {
@@ -47,6 +48,13 @@ class TestCase extends Orchestra
     {
         return [
             DeadboltServiceProvider::class,
+        ];
+    }
+
+    protected function getPackageAliases($app)
+    {
+        return [
+            'Deadbolt' => Deadbolt::class,
         ];
     }
 

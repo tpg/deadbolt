@@ -8,4 +8,7 @@ return [
         // Define your permissions here...
     ],
 
+    'roles' => [
+        // Define your roles and assign permissions...
+    ]
 ];
