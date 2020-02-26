@@ -17,9 +17,9 @@ return [
 
     // If driver is 'database', make sure to configure the connection settings here...
     'database' => [
-//        'connection' => 'default',
-//        'table' => 'permissions',
-//        'column' => 'name',
-//        'cache' => 3600,
-    ]
+        //        'connection' => 'default',
+        //        'table' => 'permissions',
+        //        'column' => 'name',
+        //        'cache' => 3600,
+    ],
 ];

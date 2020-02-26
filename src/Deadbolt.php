@@ -3,7 +3,6 @@
 namespace TPG\Deadbolt;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use TPG\Deadbolt\Drivers\ArrayDriver;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
@@ -36,6 +35,7 @@ class Deadbolt
     public function driver(DriverInterface $driver): self
     {
         $this->driver = $driver;
+
         return $this;
     }
 
