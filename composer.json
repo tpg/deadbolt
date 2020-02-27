@@ -1,7 +1,12 @@
 {
     "name": "thepublicgood/deadbolt",
     "description": "Dead simple permissions for Laravel",
+    "keywords": ["permissions", "authorization", "deadbolt", "laravel"],
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/tpg/deadbolt/issues",
+        "source": "https://github.com/tpg/deadbolt"
+    },
     "authors": [
         {
             "name": "THEPUBLICGOOD",
@@ -41,5 +46,8 @@
     },
     "require-dev": {
         "orchestra/testbench": "^4.6"
+    },
+    "suggest": {
+        "spatie/laravel-permission": "For a more feature rich permissions solution"
     }
 }
