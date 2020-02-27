@@ -293,7 +293,7 @@ if (Deadbolt::user($user)->is('publisher')) {
 ```
 
 ## Drivers
-Deadbolt is designed for simplicity, but sometimes you might need just a little more complexity. Deadbolt provides a simple driver system for providing permissions. This can be handy if you want to store your permissions in your database, for example.
+Deadbolt is designed for simplicity, but sometimes you might need just a little more flexibility. Deadbolt provides a simple driver system for sourcing permissions. This can be handy if you want to store your permissions in your database, for example.
 
 Deadbolt includes an `ArrayDriver` by default that sources permissions and roles from the `deadbolt` config. If you want to use a custom driver you can do so by passing a new driver instance to the `driver` method before calling `user()`:
 

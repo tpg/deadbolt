@@ -7,6 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2] 25-02-2020
 ### Additions
 - New driver based permissions and roles source
-
+    
 ## [0.1] 25-02-2020
 - New Facade based API. Keeps things cleaner.
