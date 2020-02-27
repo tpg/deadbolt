@@ -225,6 +225,10 @@ class User
      */
     protected function userPermissions(): array
     {
+        if (is_array($this->user->permissions)) {
+            return $this->user->permissions;
+        }
+
         return json_decode($this->user->permissions, true) ?: [];
     }
 
