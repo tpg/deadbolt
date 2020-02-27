@@ -56,11 +56,12 @@ class Deadbolt
     /**
      * Get an array of permissions.
      *
+     * @param mixed $roles
      * @return array
      */
-    public function permissions(): array
+    public function permissions(...$roles): array
     {
-        return $this->driver->permissions();
+        return $this->driver->permissions($roles);
     }
 
     /**

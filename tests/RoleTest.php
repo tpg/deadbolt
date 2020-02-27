@@ -45,6 +45,18 @@ class RoleTest extends TestCase
     /**
      * @test
      */
+    public function it_can_get_the_permissions_in_a_role()
+    {
+        $permissions = Deadbolt::permissions('writer');
+
+        $diff = array_diff($permissions, config('deadbolt.roles.writer'));
+
+        $this->assertCount(0, $diff);
+    }
+
+    /**
+     * @test
+     */
     public function it_can_assign_permissions_by_giving_a_role()
     {
         $user = $this->user();
