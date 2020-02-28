@@ -31,26 +31,7 @@ Schema::create('users', function (Blueprint $table) {
 
 Depending on the number of permissions you have, you might need to increase the size of the column.
 
-Add the `Deadbolted` trait to your user model:
-
-```php
-<?php
-
-namespace App;
-
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use TPG\Deadbolt\Traits\Deadbolted;
-
-class User extends Authenticatable
-{
-    use Notifiable, Deadbolted;
-    
-    // ...
-}
-```
-
-If you want to add permissions to other models, just follow the same steps.
+If you want to add permissions to other models, just make sure you have a `permissions` column in the database table.
 
 ## Configuration
 Make sure you publish the Deadbolt config file with:
