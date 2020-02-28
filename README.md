@@ -31,8 +31,6 @@ Schema::create('users', function (Blueprint $table) {
 
 Depending on the number of permissions you have, you might need to increase the size of the column.
 
-> What?!? No database table for permissions? Well, we don't think that's such a 
-
 Add the `Deadbolted` trait to your user model:
 
 ```php
