@@ -238,16 +238,18 @@ return [
 ```
 
 ### Assigning roles
-Assign roles to user with the `giveRoles` method:
+Assign roles to user with the `give` method in the same way you assign permissions:
 
 ```php
-Deadbolt::user($user)->roles()->give('publisher');
+Deadbolt::user($user)->give('publisher');
 ```
+
+Deadbolt will be able to figure out if the name is a permission or a role (permissions take precidence) and will assign the permissions from that role.
 
 The above will assign the `edit articles` and `publish articles` permissions.
 
 ### Revoking roles
-Roles can be used to remove groups of permissions. However, be careful when doing so. Deadbolt will remove all the permissions associated with that role regardless of any other roles that may have been assigned to the same user.
+In the same way you use the standard `give` method, you can use the same `revoke` method to remove permissions based on roles. Be careful when doing so. Deadbolt will remove all the permissions associated with that role regardless of any other roles that may have been assigned to the same user. For example:
 
 ```php
 Deadbolt::user($user)->give('publisher', 'writer');
@@ -263,7 +265,7 @@ $roles = Deadbolt::user()->roles();
 ```
 
 ### Check if a user has a role
-You can also check if a specific role is applied to a user:
+You can also check if a specific role is applied to a user using the `is` method:
 
 ```php
 if (Deadbolt::user($user)->is('publisher')) {
@@ -272,7 +274,7 @@ if (Deadbolt::user($user)->is('publisher')) {
 ```
 
 ## Drivers
-Deadbolt is designed for simplicity, but sometimes you might need just a little more flexibility. Deadbolt provides a simple driver system for sourcing permissions. This can be handy if you really do want to store your permissions in your database, for example.
+Deadbolt is designed for simplicity, but sometimes you might need just a little more power. Deadbolt provides a simple driver system for sourcing permissions, so you can provide your own custom drivers. This can be handy if you really do want to store your permissions in your database.
 
 Deadbolt includes an `ArrayDriver` by default that sources permissions and roles from the `deadbolt` config. If you want to use a custom driver you can do so by passing a new driver instance to the `driver` method before calling `user()`:
 
@@ -284,7 +286,7 @@ Deadbolt::driver($driver))->user($user)->give('...');
 ### Writing custom drivers.
 All custom drivers MUST implement `Drivers\Contracts\DriverInterface` which requires that a `permissions()` method and a `roles()` method exists.
 
-The `permissions` method must return an array of permission names, and a `roles` method must return the roles as array keys with the associated permissions.
+The `permissions` method must return an array of permission names, and a `roles` method must return the an array of roles, each an array of permissions.
 
 ```php
 <?php
@@ -327,3 +329,5 @@ class DatabaseDriver implements DriverInterface
     }
 }
 ```
+
+How the permissions and roles are sourced is up to you. You could created a `DatabaseDriver` or even an `HttpDriver`.
