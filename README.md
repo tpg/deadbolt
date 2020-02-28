@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/tpg/deadbolt.svg?branch=master)](https://travis-ci.org/tpg/deadbolt)
 
-> NOTE! Deadbolt is sparkly new. Don't use this in production yet. We're still figuring out things and it's going to change a lot in the early stages. Breaking changes between versions are likely.
-
 ## Why another authorization package?
 Because we wanted something way simpler than the other solutions. We've used many of the current top authorization packages, and will continue to use them in the future, but in a number of cases they're just a little over the top.
 
@@ -32,6 +30,8 @@ Schema::create('users', function (Blueprint $table) {
 ```
 
 Depending on the number of permissions you have, you might need to increase the size of the column.
+
+> What?!? No database table for permissions? Well, we don't think that's such a 
 
 Add the `Deadbolted` trait to your user model:
 
@@ -293,7 +293,7 @@ if (Deadbolt::user($user)->is('publisher')) {
 ```
 
 ## Drivers
-Deadbolt is designed for simplicity, but sometimes you might need just a little more flexibility. Deadbolt provides a simple driver system for sourcing permissions. This can be handy if you want to store your permissions in your database, for example.
+Deadbolt is designed for simplicity, but sometimes you might need just a little more flexibility. Deadbolt provides a simple driver system for sourcing permissions. This can be handy if you really do want to store your permissions in your database, for example.
 
 Deadbolt includes an `ArrayDriver` by default that sources permissions and roles from the `deadbolt` config. If you want to use a custom driver you can do so by passing a new driver instance to the `driver` method before calling `user()`:
 
