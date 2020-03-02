@@ -13,12 +13,12 @@ class CustomDriver implements DriverInterface
 
     protected $roles = [
         'role' => [
-            'test permission'
-        ]
+            'test permission',
+        ],
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(...$roles): array
     {
@@ -27,7 +27,6 @@ class CustomDriver implements DriverInterface
         $roles = Arr::flatten($roles);
 
         if ($roles) {
-
             foreach ($roles as $role) {
                 $permissions[] = $this->roles[$role];
             }
@@ -39,7 +38,7 @@ class CustomDriver implements DriverInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function roles(): array
     {
