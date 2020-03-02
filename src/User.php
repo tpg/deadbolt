@@ -20,17 +20,23 @@ class User
      * @var array
      */
     protected $permissions;
+    /**
+     * @var array
+     */
+    protected $roles;
 
     /**
      * @param Model $user
      * @param array $permissions
+     * @param array $roles
      * @param array $config
      */
-    public function __construct(Model $user, array $permissions, array $config)
+    public function __construct(Model $user, array $permissions, array $roles, array $config)
     {
         $this->user = $user;
         $this->config = $config;
         $this->permissions = $permissions;
+        $this->roles = $roles;
     }
 
     /**
@@ -193,7 +199,7 @@ class User
      */
     protected function isRole(string $name): bool
     {
-        return array_key_exists($name, $this->config['roles']);
+        return array_key_exists($name, $this->roles);
     }
 
     /**
@@ -204,7 +210,7 @@ class User
      */
     protected function getRolePermissions(string $name): array
     {
-        return Arr::get($this->config, 'roles.'.$name, []);
+        return Arr::get($this->roles, $name, []);
     }
 
     /**
@@ -289,7 +295,7 @@ class User
      */
     public function is($role): bool
     {
-        $permissions = Arr::get($this->config, 'roles.'.$role, []);
+        $permissions = Arr::get($this->roles, $role, []);
 
         return $this->hasAll($permissions);
     }
@@ -311,8 +317,8 @@ class User
      */
     public function roles(): array
     {
-        return array_values(array_filter(array_keys($this->config['roles']), function ($role) {
-            return $this->hasAll($this->config['roles'][$role]);
+        return array_values(array_filter(array_keys($this->roles), function ($role) {
+            return $this->hasAll($this->roles[$role]);
         }));
     }
 }

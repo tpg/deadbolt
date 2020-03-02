@@ -12,14 +12,9 @@ return [
         // Define your roles and assign permissions...
     ],
 
-    // Where do you store your permissions? Choices are 'array' (default) or 'database'...
+    // Where do you store your permissions? By default this will be the included `ArrayDriver`.
+    // Provide the class path of the driver you want to use instead
+    // 'driver' => \App\Drivers\DatabaseDriver::class,
     'driver' => null,
 
-    // If driver is 'database', make sure to configure the connection settings here...
-    'database' => [
-        //        'connection' => 'default',
-        //        'table' => 'permissions',
-        //        'column' => 'name',
-        //        'cache' => 3600,
-    ],
 ];

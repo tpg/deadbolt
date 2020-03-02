@@ -3,6 +3,7 @@
 namespace TPG\Deadbolt;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use TPG\Deadbolt\Drivers\ArrayDriver;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
@@ -26,7 +27,12 @@ class Deadbolt
     public function __construct(array $config)
     {
         $this->config = $config;
-        $this->driver = new ArrayDriver($config);
+
+        if ($driver = Arr::get($this->config, 'driver')) {
+            $this->driver(new $driver);
+        } else {
+            $this->driver(new ArrayDriver($config));
+        }
     }
 
     /**
@@ -37,7 +43,7 @@ class Deadbolt
      */
     public function user(Model $model): User
     {
-        return new User($model, $this->permissions(), $this->config);
+        return new User($model, $this->permissions(), $this->roles(), $this->config);
     }
 
     /**
