@@ -81,6 +81,24 @@ For example, to get a new `Deadbolt\User` instance from the currently logged use
 $deadbolt = Deadbolt::user($request()->user());
 ```
 
+> **Make sure you don't cast the permissions column in your user model. For example, it's common to do something like this:**
+
+```php
+class User extends Model
+{
+    protected $casts = [
+        'permissions' => 'json',
+    ];
+}
+```
+
+Doing so will cause some unexpected results. A fix will be implemented in a later release. As a workaround, you can do this:
+
+```php
+$permissions = Deadbolt::user($user)->permissions();
+```
+
+
 ### Permanence
 Before continuing, just a note about permanence. Permissions are not permanent by default. Deadbolt will assign the permission set for the duration of the request or until the user is refreshed from the DB, but to make them permanent, you must call the `save()` method:
 
