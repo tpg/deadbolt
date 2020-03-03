@@ -53,7 +53,7 @@ class User
             return true;
         });
 
-        $this->mergePermissions($permissions, false);
+        $this->assignPermissions($permissions, false);
 
         return $this;
     }
@@ -65,14 +65,19 @@ class User
      * @param bool $permanent
      * @return $this
      */
-    protected function mergePermissions(array $permissions, bool $permanent = false): self
+    protected function assignPermissions(array $permissions, bool $permanent = false): self
     {
-        $this->user->permissions = json_encode($permissions);
+        $this->user->{$this->config['column']} = $this->permissionsAreCast() ? $permissions : json_encode($permissions);
         if ($permanent) {
             return $this->save();
         }
 
         return $this;
+    }
+
+    protected function permissionsAreCast(): bool
+    {
+        return Arr::get($this->user->getCasts(), $this->config['column']) === 'json';
     }
 
     /**
@@ -113,7 +118,7 @@ class User
      */
     public function revokeAll(): self
     {
-        $this->user->permissions = json_encode([]);
+        $this->user->{$this->config['column']} = json_encode([]);
 
         return $this;
     }
@@ -231,11 +236,12 @@ class User
      */
     protected function userPermissions(): array
     {
-        if (is_array($this->user->permissions)) {
-            return $this->user->permissions;
+        $permissions = $this->user->{$this->config['column']};
+        if (is_array($permissions)) {
+            return $permissions;
         }
 
-        return json_decode($this->user->permissions, true) ?: [];
+        return json_decode($permissions, true) ?: [];
     }
 
     /**

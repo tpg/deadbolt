@@ -11,7 +11,7 @@ class DriverTest extends TestCase
      */
     public function it_can_use_a_custom_driver()
     {
-        $this->app['config']->set('deadbolt', ['driver' => CustomDriver::class]);
+        $this->app['config']->set('deadbolt.driver', CustomDriver::class);
 
         $this->assertEquals((new CustomDriver())->permissions(), Deadbolt::permissions());
         $this->assertEquals((new CustomDriver())->permissions('role'), Deadbolt::permissions('role'));

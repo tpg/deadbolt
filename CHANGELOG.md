@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.3] 03-03-2020
+## [0.2.4] 03-03-2020
+### Changes
+- Fixed a bug that was not assigning permissions correctly when the attribute was cast to `json`.
+- Fixed a bug that was not using the `column` config option correctly.
+- Renamed the `User::mergePermissions` method to `User::assignPermissions`.
+
+## [0.2.3] 02-03-2020
 ### Changes
 - Fixed a bug that was not sourcing roles from the supplied driver correctly.
 
