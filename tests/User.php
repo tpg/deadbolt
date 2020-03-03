@@ -10,6 +10,6 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $casts = [
-        'permissions' => 'json'
+        'permissions' => 'json',
     ];
 }
