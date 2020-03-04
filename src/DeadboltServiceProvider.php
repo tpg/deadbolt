@@ -32,7 +32,7 @@ class DeadboltServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/deadbolt.php', 'deadbolt');
 
         $this->app->bind('deadbolt.facade', function () {
-            return new Deadbolt($this->app['config']->get('deadbolt'));
+            return new DeadboltService($this->app['config']->get('deadbolt'));
         });
     }
 }

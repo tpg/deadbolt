@@ -10,7 +10,7 @@ use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 /**
  * Class Deadbolt.
  */
-class Deadbolt
+class DeadboltService
 {
     /**
      * @var array
