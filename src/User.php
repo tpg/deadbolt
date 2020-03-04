@@ -142,9 +142,13 @@ class User
      */
     public function saved(): bool
     {
+        $originalPermissions = $this->user->getOriginal($this->config['column']);
+
         $diff = array_diff(
             $this->userPermissions(),
-            json_decode($this->user->getOriginal('permissions'), true)
+            $this->permissionsAreCast()
+                ? $originalPermissions
+                : json_decode($originalPermissions, true)
         );
 
         return count($diff) === 0;

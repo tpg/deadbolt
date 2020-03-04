@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.5] 04-03-2020
 ### Changes
 - Updated dependencies to support Laravel 7.
+- Fixed a bug in the `User::saved()` method that was not pulling the column name correctly.
+- Fixed a bug in the `User::saved()` method that was causing problems with cast permissions columns.
 
 ## [0.2.4] 03-03-2020
 ### Changes
