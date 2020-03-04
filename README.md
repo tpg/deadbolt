@@ -16,6 +16,7 @@ Install the Deadbolt package through Composer:
 composer require thepublicgood/deadbolt
 ```
 
+> Deadbolt supports Laravel 6 and Laravel 7.
 
 ## Getting Started
 Deadbolt works by setting permissions in a JSON array in a column on your users table.
