@@ -38,7 +38,7 @@ class CustomDriver implements DriverInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function describe(...$permissions): array
     {
