@@ -36,10 +36,12 @@ class ArrayDriver implements DriverInterface
                 return Arr::get($this->config, 'roles.'.$role);
             }, $roles);
 
-            return Arr::flatten($permissions);
+            $names = Arr::flatten($permissions);
+        } else {
+            $names = $this->getPermissionNames($this->config['permissions']);
         }
 
-        return $this->getPermissionNames($this->config['permissions']);
+        return $this->getDescriptions($names);
     }
 
     /**
@@ -60,22 +62,11 @@ class ArrayDriver implements DriverInterface
     }
 
     /**
-     * Get descriptions for the provided permission names.
+     * Return the permission names with the descriptions.
      *
-     * @param mixed ...$permissions
+     * @param array $permissions
      * @return array
      */
-    public function describe(...$permissions): array
-    {
-        $names = Arr::flatten($permissions);
-
-        if (empty($names)) {
-            $names = $this->getPermissionNames($this->config['permissions']);
-        }
-
-        return $this->getDescriptions($names);
-    }
-
     protected function getDescriptions(array $permissions): array
     {
         $res = [];

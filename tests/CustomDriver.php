@@ -22,17 +22,23 @@ class CustomDriver implements DriverInterface
      */
     public function permissions(...$roles): array
     {
-        $permissions = array_keys($this->permissions);
+        $permissions = $this->permissions;
 
         $roles = Arr::flatten($roles);
 
         if ($roles) {
+            $permissions = [];
             foreach ($roles as $role) {
-                $permissions[] = $this->roles[$role];
+                $names[] = $this->roles[$role];
             }
 
-            $permissions = Arr::flatten($permissions);
+            $names = Arr::flatten($names);
+
+            foreach ($names as $name) {
+                $permissions[$name] = Arr::get($this->permissions, $name);
+            }
         }
+
 
         return $permissions;
     }

@@ -67,12 +67,22 @@ class DeadboltService
      */
     public function permissions(...$roles): array
     {
-        return $this->driver->permissions($roles);
+        return array_keys($this->driver->permissions($roles));
     }
 
     public function describe(...$permissions): array
     {
-        return $this->driver->describe($permissions);
+        $filter = Arr::flatten($permissions);
+
+        $permissions = $this->driver->permissions();
+
+        if (!empty($filter)) {
+            $permissions = array_filter($permissions, function ($description, $permission) use ($filter) {
+                return in_array($permission, $filter, true);
+            }, ARRAY_FILTER_USE_BOTH);
+        }
+
+        return $permissions;
     }
 
     /**
