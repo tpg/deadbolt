@@ -39,7 +39,6 @@ class CustomDriver implements DriverInterface
             }
         }
 
-
         return $permissions;
     }
 

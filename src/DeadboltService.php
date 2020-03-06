@@ -76,7 +76,7 @@ class DeadboltService
 
         $permissions = $this->driver->permissions();
 
-        if (!empty($filter)) {
+        if (! empty($filter)) {
             $permissions = array_filter($permissions, function ($description, $permission) use ($filter) {
                 return in_array($permission, $filter, true);
             }, ARRAY_FILTER_USE_BOTH);
