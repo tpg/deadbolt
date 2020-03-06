@@ -130,6 +130,20 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
+    public function it_can_sync_permissions()
+    {
+        $user = $this->user();
+        Deadbolt::user($user)->give('articles.edit');
+
+        Deadbolt::user($user)->sync('articles.create', 'articles.delete');
+
+        $this->assertTrue(Deadbolt::user($user)->hasAll('articles.create', 'articles.delete'));
+        $this->assertTrue(Deadbolt::user($user)->hasNone('articles.edit'));
+    }
+
+    /**
+     * @test
+     */
     public function it_allows_a_different_column_name()
     {
         $this->app['config']->set('deadbolt.column', 'rights');

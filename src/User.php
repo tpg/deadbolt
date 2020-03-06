@@ -124,6 +124,17 @@ class User
     }
 
     /**
+     * Sync permissions with the names provided.
+     *
+     * @param mixed ...$names
+     * @return $this
+     */
+    public function sync(...$names): self
+    {
+        return $this->revokeAll()->give($names);
+    }
+
+    /**
      * Save the current permission set.
      *
      * @return $this

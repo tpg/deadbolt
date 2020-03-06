@@ -136,6 +136,13 @@ You can revoke ALL the users permissions by using the `revokeAll()` method:
 Deadbolt::user($user)->revokeAll();
 ```
 
+### Syncing permissions
+There is also a `sync` method which will sync the permissions on the user with the permissions provided. Permissions that are currently assigned to the user will be removed. This is a convenience method and performs the same tasks as `revokeAll` and `give` in that order.
+
+```php
+Deadbolt::user($user)->sync('articles.edit', 'articles.delete');
+```
+
 ## Testing Permissions
 Once a user has been given permissions you can test them using the following methods:
 
