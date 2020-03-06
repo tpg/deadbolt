@@ -51,13 +51,11 @@ class ArrayDriver implements DriverInterface
     protected function getPermissionNames(array $permissions): array
     {
         return array_map(function ($permission) use ($permissions) {
-
             if (is_numeric($permission)) {
                 return $permissions[$permission];
             }
 
             return $permission;
-
         }, array_keys($permissions));
     }
 
