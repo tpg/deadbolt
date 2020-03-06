@@ -70,6 +70,11 @@ class DeadboltService
         return $this->driver->permissions($roles);
     }
 
+    public function describe(...$permissions): array
+    {
+        return $this->driver->describe($permissions);
+    }
+
     /**
      * Get an array of role permissions keyed by role names.
      *

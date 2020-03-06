@@ -5,11 +5,25 @@ return [
     'column' => 'permissions',
 
     'permissions' => [
-        // Define your permissions here...
+        /*
+         * // Define your permissions here...
+         * 'articles.create' => 'Create articles',
+         * 'articles.edit',
+         * 'articles.delete',
+         * // ...
+         */
+
     ],
 
     'roles' => [
-        // Define your roles and assign permissions...
+        /*
+         * // Define your roles and assign permissions...
+         * 'writer' => [
+         *     'articles.create',
+         *     'articles.edit',
+         * ],
+         * // ...
+         */
     ],
 
     // Where do you store your permissions? By default this will be the included `ArrayDriver`.

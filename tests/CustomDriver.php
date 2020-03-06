@@ -8,7 +8,7 @@ use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 class CustomDriver implements DriverInterface
 {
     protected $permissions = [
-        'test permission',
+        'test permission' => 'Testing',
     ];
 
     protected $roles = [
@@ -22,7 +22,7 @@ class CustomDriver implements DriverInterface
      */
     public function permissions(...$roles): array
     {
-        $permissions = $this->permissions;
+        $permissions = array_keys($this->permissions);
 
         $roles = Arr::flatten($roles);
 
@@ -35,6 +35,14 @@ class CustomDriver implements DriverInterface
         }
 
         return $permissions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function describe(...$permissions): array
+    {
+        return $this->permissions;
     }
 
     /**

@@ -9,6 +9,7 @@ use TPG\Deadbolt\User;
 /**
  * @method static User user($user)
  * @method static array permissions(...$roles)
+ * @method static array describe(...$permissions)
  * @method static array roles()
  * @method static \TPG\Deadbolt\DeadboltService driver(DriverInterface $driver)
  */

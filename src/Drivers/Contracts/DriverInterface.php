@@ -14,6 +14,14 @@ interface DriverInterface
     public function permissions(...$roles): array;
 
     /**
+     * Get descriptions for the provided permission names.
+     *
+     * @param mixed ...$permissions
+     * @return array
+     */
+    public function describe(...$permissions): array;
+
+    /**
      * Get an array of role permissions keyed by the role names.
      *
      * @return array

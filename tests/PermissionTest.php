@@ -16,7 +16,20 @@ class PermissionTest extends TestCase
     {
         $permissions = Deadbolt::permissions();
 
-        $this->assertCount(0, array_diff($permissions, config('deadbolt.permissions')));
+        $this->assertEquals($permissions, [
+            'articles.create',
+            'articles.edit',
+            'articles.delete',
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_describe_the_specified_permissions()
+    {
+        $this->assertEquals(['articles.create' => 'Create Articles'], Deadbolt::describe('articles.create'));
+        $this->assertEquals(['articles.edit' => null], Deadbolt::describe('articles.edit'));
     }
 
     /**
