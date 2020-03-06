@@ -16,7 +16,7 @@ Install the Deadbolt package through Composer:
 composer require thepublicgood/deadbolt
 ```
 
-> Deadbolt works fine Laravel 7.
+> Deadbolt works fine with Laravel 7.
 
 ## Getting Started
 Deadbolt works by setting permissions in a JSON array in a column on your users table.
@@ -210,6 +210,8 @@ public function update(User $user, Article $article)
 Deadbolt roles are a simple solution to grouping permissions together in some form of logical collection. For example, you might have a role named `publisher` which needs to have the permissions `edit articles` and `publish articles` but not `create articles` or `delete articles`. When assigning a role to a user, the permissions within the role are assigned instead.
 
 > It is considered bad practise to authorize a user based on their roles. Test for user permissions instead. Roles are a convenience tool used to group permissions together and those permissions can change at any time causing unexpected issues.
+>
+> Deadbolt roles are not actually assigned to users. Instead the permissions are assigned to users, so it's important to note that the permissions in a role change, the users who were originally assigned that role will not gain the same permissions. If you need better support for roles, then Deadbolt is not for you.
 
 ### Defining roles
 Define roles in the `deadbolt.php` config file and assign the permissions you want in the role.
