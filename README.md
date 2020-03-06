@@ -69,8 +69,41 @@ return [
 ];
 ```
 
+You can also describe your permissions which is handy when you need to show a list of permissions and you want to include something a little more friendly in a user interface.
+
+```php
+return [
+
+    'permissions' => [
+        'articles.create' => 'Create articles',
+        'articles.edit' => 'Edit articles',
+        'articles.delete' => 'Delete articles',
+    ],
+
+];
+```
+
+You don't need to describe ALL your permissions. Deadbolt will be able to figure out when permissions have descriptions and which don't.
+
 ## Usage
 Deadbolt can be used through the `Deadbolt` facade.
+
+### Getting the defined permissions
+You can easily grab a list of permissions:
+
+```php
+$permissions = Deadbolt::permissions();
+```
+
+This will return an array of permission names. If you also want the descriptions included with the array of permission names, you can use the `describe` method:
+
+```php
+$permissions = Deadbolt::describe();
+
+// You can also filter the description array;
+
+$permissions = Deadbolt::describe('articles.create', 'articles.edit');
+```
 
 ### The `User` instance
 Deadbolt works by assigning permissions to a user. By `user`, we mean any model that has a `permissions` column in the database table. It doesn't have to be an actual user.
