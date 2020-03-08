@@ -12,4 +12,9 @@ class User extends Authenticatable
     protected $casts = [
         'permissions' => 'json',
     ];
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
 }

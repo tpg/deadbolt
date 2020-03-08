@@ -23,18 +23,18 @@ class ArrayDriver implements DriverInterface
     /**
      * Get an array of permission names.
      *
-     * @param mixed ...$roles
+     * @param mixed ...$groups
      *
      * @return array
      */
-    public function permissions(...$roles): array
+    public function permissions(...$groups): array
     {
-        $roles = Arr::flatten($roles);
+        $groups = Arr::flatten($groups);
 
-        if (count($roles)) {
+        if (count($groups)) {
             $permissions = array_map(function ($role) {
-                return Arr::get($this->config, 'roles.'.$role);
-            }, $roles);
+                return Arr::get($this->config, 'groups.'.$role);
+            }, $groups);
 
             $names = Arr::flatten($permissions);
         } else {
@@ -78,12 +78,12 @@ class ArrayDriver implements DriverInterface
     }
 
     /**
-     * Get an array of role permissions keyed by the role names.
+     * Get an array of permissions keyed by group names.
      *
      * @return array
      */
-    public function roles(): array
+    public function groups(): array
     {
-        return $this->config['roles'];
+        return $this->config['groups'];
     }
 }

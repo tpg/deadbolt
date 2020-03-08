@@ -246,15 +246,15 @@ public function update(User $user, Article $article)
 }
 ```
 
-## Roles
-Deadbolt roles are a simple solution to grouping permissions together in some form of logical collection. For example, you might have a role named `publisher` which needs to have the permissions `edit articles` and `publish articles` but not `create articles` or `delete articles`. When assigning a role to a user, the permissions within the role are assigned instead.
+## Groups
+Deadbolt groups are a simple solution to grouping permissions together in some form of logical collection. For example, you might have a group named `publisher` which contains the permissions `edit articles` and `publish articles` but not `create articles` or `delete articles`. When assigning a group to a user, the permissions within the group are assigned instead.
 
-> It is considered bad practise to authorize a user based on their roles. Test for user permissions instead. Roles are a convenience tool used to group permissions together and those permissions can change at any time causing unexpected issues.
+> It is considered bad practise to authorize a user based on their groups. Test for user permissions instead. Groups are a convenience tool used to collect permissions together and those permissions can change at any time causing unexpected issues.
 >
-> Deadbolt roles are not actually assigned to users. Instead the permissions are assigned to users, so it's important to note that the permissions in a role change, the users who were originally assigned that role will not gain the same permissions. If you need better support for roles, then Deadbolt is not for you.
+> Deadbolt groups are not actually assigned to users. Instead the permissions are assigned to users, so it's important to note that if the permissions in a group change, the users who were originally assigned that group will not gain the changed permissions. Groups are not roles. If you're looking for a way to implement roles, we have a wiki article about how to implement roles with Deadbolt. Otherwise, you may need to look for an alternative solution.
 
-### Defining roles
-Define roles in the `deadbolt.php` config file and assign the permissions you want in the role.
+### Defining groups
+Define groups in the `deadbolt.php` config file and assign the permissions you want in the group.
 
 ```php
 return [
@@ -266,7 +266,7 @@ return [
         'delete articls',
     ]
     
-    'roles' => [
+    'groups' => [
     
         'writer' => [
             'create articles',
@@ -282,50 +282,50 @@ return [
 ];
 ```
 
-### Assigning roles
-There's no need for another API just to manage roles. You can assign roles to user with the `give` method in the same way you assign permissions:
+### Assigning grups
+There's no need for another API just to manage groups. You can assign groups to user with the `give` method in the same way you assign permissions:
 
 ```php
 Deadbolt::user($user)->give('publisher');
 ```
 
-Deadbolt will figure out if the name is a permission or a role (permissions take precidence) and will assign the permissions from that role.
+Deadbolt will figure out if the name is a permission or a group (permissions take precidence) and will assign the permissions from that group.
 
 The above will assign the `edit articles` and `publish articles` permissions.
 
-### Revoking roles
-In the same way you use the `give` method to assign both roles and permissions, you can use the same `revoke` method to remove both permissions and roles.
+### Revoking groups
+In the same way you use the `give` method to assign both groups and permissions, you can use the same `revoke` method to remove them.
 
-However, be careful when revoking roles. Deadbolt will remove all the permissions associated with that role regardless of any other roles that may have been assigned to the same user. For example:
+However, be careful when revoking groups. Deadbolt will remove all the permissions associated with that group regardless of any other groups that may have been assigned to the same user. For example:
 
 ```php
 Deadbolt::user($user)->give('publisher', 'writer');
 Deadbolt::user($user)->revoke('publisher');
 ```
-The above will revoke the `edit articles` permission because it is in the `publisher` role. Even though the `writer` role, which has the same permission wasn't revoked.
+The above will revoke the `edit articles` permission because it is in the `publisher` group. Even though the `writer` group, which has the same permission wasn't revoked.
 
-### Mixing permissions and roles
-Both the `give` and `revoke` methods will accept role and permission names in one call. For example, if you need to assign the `publisher` role, but also give a user the `articles.delete` permission, you can do so by calling `give` once:
+### Mixing permissions and groups
+Both the `give` and `revoke` methods will accept group and permission names in one go. For example, if you need to assign the `publisher` group, but also give a user the `articles.delete` permission, you can do so by calling `give` once:
 
 ```php
 Deadbolt::user($user)->give('publisher', 'articles.delete');
 ```
 
-Likewize, if you need to revoke the a role as well as an additional permission:
+Likewize, if you need to revoke the a group as well as an additional permission:
 
 ```php
 Deadbolt::user($user)->revoke('publisher', 'articles.delete');
 ```
 
-### Getting a users roles
-You can also check what roles a user has by the permissions they have. Users don't actually get assigned roles, but we can deduce the roles by their permissions.
+### Getting a users groups
+You can also check what groups a user has by the permissions they have. Users don't actually get assigned groups, but we can deduce the groups by their permissions.
 
 ```php
-$roles = Deadbolt::user()->roles();
+$groups = Deadbolt::user()->groups();
 ```
 
-### Check if a user has a role
-You can also check if a specific role is applied to a user using the `is` method:
+### Check if a user has a group
+You can also check if a specific group is applied to a user using the `is` method:
 
 ```php
 if (Deadbolt::user($user)->is('publisher')) {
@@ -333,10 +333,45 @@ if (Deadbolt::user($user)->is('publisher')) {
 }
 ```
 
-## Drivers
-Deadbolt is designed for simplicity, but sometimes you might need something just a little more flexible. Deadbolt uses a simple driver system for sourcing roles and permissions, so you can provide your own custom implementations. This can be handy if you really do want to store your permissions in your database.
+## Multiple Users
+Deadbolt allows you to modify the permissions of multiple users at the same time. The `Deadbolt` facade provides access to a `users` method that takes a collection of users (can be a `Collection` instance or an array, etc). The `users` method returns a `UserCollection` instance that provides a few simple methods for working with all the users in the collection at the same time. The same methods work on the collection. For example, you can give all the users the same set of permissions in one go:
 
-Deadbolt includes an `ArrayDriver` by default that sources permissions and roles from the `deadbolt` config. If you want to use a custom driver you can do so by passing a new driver instance to the `driver` method before calling `user()`:
+```php
+$users = User::all();
+
+Deadbolt::users($users)->give('articles.create');
+```
+
+You can revoke permissions in the same way:
+
+```php
+Deadbolt::users($users)->revoke('articles.create');
+```
+
+The `UserCollection` class also provides some handy methods for testing permissions on the colection. Test test that all the users have the specified permissions, you can use the `allHave` method:
+
+```php
+Deadbolt::users($users)->allHave('articles.edit');
+```
+
+Or if you need to test that any of the users have a specified permission regardless of if the others have it or not, you can use the `anyHave` method:
+
+```php
+Deadbolt::users($users)->anyHave('articles.edit');
+```
+
+There is also a `noneHave` method to test if none of the users have the specified permissions:
+
+```php
+Deadbolt::users($users)->noneHave('articles.edit');
+```
+
+> Using these tools, it's possible to create a very flexible roles system for you app. Take a look at the post about doing exactly that [here]().
+
+## Drivers
+Deadbolt is designed for simplicity, but sometimes you might need something just a little more flexible. Deadbolt uses a simple driver system for sourcing groups and permissions, so you can provide your own custom implementations. This can be handy if you really do want to store your permissions in your database.
+
+Deadbolt includes an `ArrayDriver` by default that sources permissions and groups from the `deadbolt` config. If you want to use a custom driver you can do so by passing a new driver instance to the `driver` method before calling `user()`:
 
 ```php
 $driver = new DatabaseDriver($config);
@@ -356,9 +391,9 @@ return [
 The deadbolt config file will always be passed to the constructor of the custom driver in this case, so you can use it to include any custom config you have.
 
 ### Writing custom drivers.
-All custom drivers MUST implement `Drivers\Contracts\DriverInterface` which requires that a `permissions()` method and a `roles()` method exists.
+All custom drivers MUST implement `Drivers\Contracts\DriverInterface` which requires that a `permissions()` and a `groups()` method exists.
 
-The `permissions` method must return an array of permission names, and a `roles` method must return the an array of roles, each an array of permissions.
+The `permissions` method must return an array of permission names, and a `groups` method must return the an array of groups, each an array of permissions.
 
 ```php
 <?php
@@ -378,15 +413,20 @@ class DatabaseDriver implements DriverInterface
         $this->config = $config;
     }
     
-    public function permissions(...$roles): array
+    public function permissions(...$groups): array
     {
-        // return an array of permission names filtered by `$roles`
-        return ['articles.create', 'articles.edit', 'articles.delete'];
+        // return an array of permission names filtered by `$groups`
+        // Descriptions MUST be included, or null, even if not set.
+        return [
+            'articles.create' => 'Create articles',
+            'articles.edit' => null,
+            'articles.delete' => null,
+        ];
     }
-    
-    public function roles(): array
+
+    public function groups(): array
     {
-        //return an array of permissions keyed by role names.
+        //return an array of permissions keyed by group names.
         return [
             'publisher' => [
                 'articles.edit',
@@ -402,4 +442,4 @@ class DatabaseDriver implements DriverInterface
 }
 ```
 
-How the permissions and roles are sourced is up to you. You could created a `DatabaseDriver` or even an `HttpDriver`.
+How the permissions and groups are sourced is up to you. You could created a `DatabaseDriver` or even an `HttpDriver`.

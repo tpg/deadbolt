@@ -14,9 +14,9 @@ class DriverTest extends TestCase
         $this->app['config']->set('deadbolt.driver', CustomDriver::class);
 
         $this->assertEquals((new CustomDriver())->permissions(), Deadbolt::describe());
-        $this->assertEquals(array_keys((new CustomDriver())->permissions('role')), Deadbolt::permissions('role'));
+        $this->assertEquals(array_keys((new CustomDriver())->permissions('group')), Deadbolt::permissions('group'));
 
-        $this->assertEquals((new CustomDriver())->roles(), Deadbolt::roles());
+        $this->assertEquals((new CustomDriver())->groups(), Deadbolt::groups());
 
         $user = $this->user();
 

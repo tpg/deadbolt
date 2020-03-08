@@ -15,9 +15,9 @@ return [
 
     ],
 
-    'roles' => [
+    'groups' => [
         /*
-         * // Define your roles and assign permissions...
+         * // Define your groups of permissions...
          * 'writer' => [
          *     'articles.create',
          *     'articles.edit',

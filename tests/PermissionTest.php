@@ -180,4 +180,30 @@ class PermissionTest extends TestCase
         $this->assertTrue(Deadbolt::user($user)->has('articles.edit'));
         $this->assertContains('articles.create', Deadbolt::user($user)->permissions());
     }
+
+    /**
+     * @test
+     */
+    public function it_can_assign_permissioins_to_multiple_users()
+    {
+        $users = $this->getUserCollection();
+
+        Deadbolt::users($users)->give('articles.create');
+        Deadbolt::user($users[1])->give('articles.edit');
+
+        $this->assertTrue(Deadbolt::user($users[0])->has('articles.create'));
+        $this->assertTrue(Deadbolt::user($users[1])->has('articles.create'));
+
+        $this->assertTrue(Deadbolt::users($users)->allHave('articles.create'));
+        $this->assertFalse(Deadbolt::users($users)->allHave('articles.edit'));
+        $this->assertTrue(Deadbolt::users($users)->anyHave('articles.edit'));
+    }
+
+    protected function getUserCollection(): array
+    {
+        return [
+            $this->user(),
+            $this->user(),
+        ];
+    }
 }

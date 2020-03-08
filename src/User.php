@@ -23,20 +23,20 @@ class User
     /**
      * @var array
      */
-    protected $roles;
+    protected $groups;
 
     /**
      * @param Model $user
      * @param array $permissions
-     * @param array $roles
+     * @param array $groups
      * @param array $config
      */
-    public function __construct(Model $user, array $permissions, array $roles, array $config)
+    public function __construct(Model $user, array $permissions, array $groups, array $config)
     {
         $this->user = $user;
         $this->config = $config;
         $this->permissions = $permissions;
-        $this->roles = $roles;
+        $this->groups = $groups;
     }
 
     /**
@@ -53,7 +53,7 @@ class User
             return true;
         });
 
-        $this->assignPermissions($permissions, false);
+        $this->assignPermissions(array_merge($this->userPermissions(), $permissions), false);
 
         return $this;
     }
@@ -174,8 +174,8 @@ class User
     protected function getPermissions(array $names): array
     {
         $permissions = array_map(function ($name) {
-            if ($this->isRole($name)) {
-                return $this->getRolePermissions($name);
+            if ($this->isGroup($name)) {
+                return $this->getGroupPermissions($name);
             }
 
             return $name;
@@ -212,25 +212,25 @@ class User
     }
 
     /**
-     * Check if the given name is a role.
+     * Check if the given name is a group.
      *
      * @param string $name
      * @return bool
      */
-    protected function isRole(string $name): bool
+    protected function isGroup(string $name): bool
     {
-        return array_key_exists($name, $this->roles);
+        return array_key_exists($name, $this->groups);
     }
 
     /**
-     * Get the permissions from the specified role.
+     * Get the permissions from the specified group.
      *
      * @param string $name
      * @return array
      */
-    protected function getRolePermissions(string $name): array
+    protected function getGroupPermissions(string $name): array
     {
-        return Arr::get($this->roles, $name, []);
+        return Arr::get($this->groups, $name, []);
     }
 
     /**
@@ -309,14 +309,14 @@ class User
     }
 
     /**
-     * Check if the user has the specified role.
+     * Check if the user belongs to the specified group of permissions.
      *
-     * @param $role
+     * @param string $group
      * @return bool
      */
-    public function is($role): bool
+    public function is(string $group): bool
     {
-        $permissions = Arr::get($this->roles, $role, []);
+        $permissions = Arr::get($this->groups, $group, []);
 
         return $this->hasAll($permissions);
     }
@@ -332,14 +332,14 @@ class User
     }
 
     /**
-     * Get an array of deduced roles assigned to the user.
+     * Get an array of deduced groups assigned to the user.
      *
      * @return array
      */
-    public function roles(): array
+    public function groups(): array
     {
-        return array_values(array_filter(array_keys($this->roles), function ($role) {
-            return $this->hasAll($this->roles[$role]);
+        return array_values(array_filter(array_keys($this->groups), function ($group) {
+            return $this->hasAll($this->groups[$group]);
         }));
     }
 }

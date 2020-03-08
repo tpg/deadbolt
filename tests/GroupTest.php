@@ -4,7 +4,7 @@ namespace TPG\Tests;
 
 use TPG\Deadbolt\Facades\Deadbolt;
 
-class RoleTest extends TestCase
+class GroupTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -17,7 +17,7 @@ class RoleTest extends TestCase
             'articles.publish',
         ]);
 
-        $this->app['config']->set('deadbolt.roles', [
+        $this->app['config']->set('deadbolt.groups', [
             'writer' => [
                 'articles.create',
                 'articles.edit',
@@ -33,11 +33,11 @@ class RoleTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_an_array_of_roles()
+    public function it_can_get_an_array_of_groups()
     {
-        $roles = Deadbolt::roles();
+        $groups = Deadbolt::groups();
 
-        $diff = array_diff(array_keys($roles), array_keys(config('deadbolt.roles')));
+        $diff = array_diff(array_keys($groups), array_keys(config('deadbolt.groups')));
 
         $this->assertCount(0, $diff);
     }
@@ -45,11 +45,11 @@ class RoleTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_the_permissions_in_a_role()
+    public function it_can_get_the_permissions_in_a_group()
     {
         $permissions = Deadbolt::permissions('writer');
 
-        $diff = array_diff($permissions, config('deadbolt.roles.writer'));
+        $diff = array_diff($permissions, config('deadbolt.groups.writer'));
 
         $this->assertCount(0, $diff);
     }
@@ -57,7 +57,7 @@ class RoleTest extends TestCase
     /**
      * @test
      */
-    public function it_can_assign_permissions_by_giving_a_role()
+    public function it_can_assign_permissions_by_giving_a_group()
     {
         $user = $this->user();
 
@@ -70,7 +70,7 @@ class RoleTest extends TestCase
     /**
      * @test
      */
-    public function it_can_give_more_than_one_role()
+    public function it_can_give_more_than_one_group()
     {
         $user = $this->user();
 
@@ -83,7 +83,7 @@ class RoleTest extends TestCase
     /**
      * @test
      */
-    public function it_can_combine_permissions_and_roles()
+    public function it_can_combine_permissions_and_groups()
     {
         $user = $this->user();
         Deadbolt::user($user)->give('publisher', 'articles.delete');
@@ -95,7 +95,7 @@ class RoleTest extends TestCase
     /**
      * @test
      */
-    public function it_can_revoke_permissions_by_role()
+    public function it_can_revoke_permissions_by_group()
     {
         $user = $this->user();
         Deadbolt::user($user)->super();
@@ -109,21 +109,21 @@ class RoleTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_the_users_roles()
+    public function it_can_get_the_users_groups()
     {
         $user = $this->user();
 
-        $this->assertEquals([], Deadbolt::user($user)->roles());
+        $this->assertEquals([], Deadbolt::user($user)->groups());
 
         Deadbolt::user($user)->give('publisher');
 
-        $this->assertEquals(['publisher'], Deadbolt::user($user)->roles());
+        $this->assertEquals(['publisher'], Deadbolt::user($user)->groups());
     }
 
     /**
      * @test
      */
-    public function it_can_check_if_a_user_has_a_specified_role()
+    public function it_can_check_if_a_user_has_a_specified_group()
     {
         $user = $this->user();
 

@@ -11,8 +11,8 @@ class CustomDriver implements DriverInterface
         'test permission' => 'Testing',
     ];
 
-    protected $roles = [
-        'role' => [
+    protected $groups = [
+        'group' => [
             'test permission',
         ],
     ];
@@ -20,16 +20,16 @@ class CustomDriver implements DriverInterface
     /**
      * {@inheritdoc}
      */
-    public function permissions(...$roles): array
+    public function permissions(...$groups): array
     {
         $permissions = $this->permissions;
 
-        $roles = Arr::flatten($roles);
+        $groups = Arr::flatten($groups);
 
-        if ($roles) {
+        if ($groups) {
             $permissions = [];
-            foreach ($roles as $role) {
-                $names[] = $this->roles[$role];
+            foreach ($groups as $role) {
+                $names[] = $this->groups[$role];
             }
 
             $names = Arr::flatten($names);
@@ -53,8 +53,8 @@ class CustomDriver implements DriverInterface
     /**
      * {@inheritdoc}
      */
-    public function roles(): array
+    public function groups(): array
     {
-        return $this->roles;
+        return $this->groups;
     }
 }
