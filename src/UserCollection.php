@@ -73,7 +73,7 @@ class UserCollection
     public function allHave(...$permissions): bool
     {
         foreach ($this->users as $user) {
-            if (!$user->hasAll($permissions)) {
+            if (! $user->hasAll($permissions)) {
                 return false;
             }
         }
@@ -102,5 +102,4 @@ class UserCollection
 
         return true;
     }
-
 }
