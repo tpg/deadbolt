@@ -92,6 +92,11 @@ class UserCollection
         return false;
     }
 
+    public function has(string $permission): bool
+    {
+        return $this->anyHave($permission);
+    }
+
     public function noneHave(...$permissions): bool
     {
         foreach ($this->users as $user) {

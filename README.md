@@ -251,7 +251,7 @@ Deadbolt groups are a simple solution to grouping permissions together in some f
 
 > It is considered bad practise to authorize a user based on their groups. Test for user permissions instead. Groups are a convenience tool used to collect permissions together and those permissions can change at any time causing unexpected issues.
 >
-> Deadbolt groups are not actually assigned to users. Instead the permissions are assigned to users, so it's important to note that if the permissions in a group change, the users who were originally assigned that group will not gain the changed permissions. Groups are not roles. If you're looking for a way to implement roles, we have a wiki article about how to implement roles with Deadbolt. Otherwise, you may need to look for an alternative solution.
+> Deadbolt groups are not actually assigned to users. Instead the permissions are assigned to users, so it's important to note that if the permissions in a group change, the users who were originally assigned that group will not gain the changed permissions. Groups are not roles. If you're looking for a way to implement roles, we have a wiki article about how to implement [roles](https://github.com/tpg/deadbolt/wiki/2.-Roles). Otherwise, you may need to look for an alternative solution.
 
 ### Defining groups
 Define groups in the `deadbolt.php` config file and assign the permissions you want in the group.
@@ -442,4 +442,4 @@ class DatabaseDriver implements DriverInterface
 }
 ```
 
-How the permissions and groups are sourced is up to you. You could created a `DatabaseDriver` or even an `HttpDriver`.
+How the permissions and groups are sourced is up to you. You could created a `DatabaseDriver` or even an `HttpDriver`. A simple example of a custom `DatabaseDeadboltDriver` can be found [here](https://github.com/tpg/deadbolt/wiki/3.-Custom-Database-Driver).
