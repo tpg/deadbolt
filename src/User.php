@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TPG\Deadbolt;
 
@@ -251,7 +252,7 @@ class User
      */
     protected function userPermissions(): array
     {
-        $permissions = $this->user->{$this->config['column']};
+        $permissions = $this->user->{$this->config['column']} ?: [];
         if (is_array($permissions)) {
             return $permissions;
         }
