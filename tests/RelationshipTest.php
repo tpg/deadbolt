@@ -37,7 +37,7 @@ class RelationshipTest extends TestCase
         ]);
 
         $publisher = Role::create([
-            'name' => 'publisher'
+            'name' => 'publisher',
         ]);
 
         Deadbolt::user($writer)->give('articles.create', 'articles.edit', 'articles.delete')->save();
