@@ -53,8 +53,16 @@ class CustomDriver implements DriverInterface
     /**
      * {@inheritdoc}
      */
-    public function groups(): array
+    public function groups(bool $describe = false): array
     {
-        return $this->groups;
+        $groups = $this->groups;
+
+        if (! $describe) {
+            return $groups;
+        }
+
+        return array_map(function ($group) {
+            return $this->describe($group);
+        }, $groups);
     }
 }
