@@ -45,6 +45,26 @@ class GroupTest extends TestCase
     /**
      * @test
      */
+    public function it_can_get_an_array_of_groups_with_permission_descriptions()
+    {
+        $this->app['config']->set('deadbolt.permissions', [
+            'articles.create' => 'Create articles',
+            'articles.edit' => 'Edit articles',
+            'articles.delete' => 'Delete articles',
+        ]);
+
+        $groups = Deadbolt::groups(true);
+
+        $this->assertSame([
+            'articles.create' => 'Create articles',
+            'articles.edit' => 'Edit articles',
+            'articles.delete' => 'Delete articles',
+        ], $groups['writer']);
+    }
+
+    /**
+     * @test
+     */
     public function it_can_get_the_permissions_in_a_group()
     {
         $permissions = Deadbolt::permissions('writer');

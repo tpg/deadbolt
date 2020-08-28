@@ -97,10 +97,11 @@ class DeadboltService
     /**
      * Get an array of permissions keyed by group names.
      *
+     * @param bool $describe
      * @return array
      */
-    public function groups(): array
+    public function groups(bool $describe = false): array
     {
-        return $this->driver->groups();
+        return $this->driver->groups($describe);
     }
 }

@@ -82,10 +82,19 @@ class ArrayDriver implements DriverInterface
     /**
      * Get an array of permissions keyed by group names.
      *
+     * @param bool $describe
      * @return array
      */
-    public function groups(): array
+    public function groups(bool $describe = false): array
     {
-        return $this->config['groups'];
+        $groups = $this->config['groups'];
+
+        if (! $describe) {
+            return $groups;
+        }
+
+        return array_map(function ($group) {
+            return $this->getDescriptions($group);
+        }, $groups);
     }
 }
