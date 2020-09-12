@@ -27,7 +27,7 @@
         "php": "^7.2",
         "ext-json": "*",
         "phpunit/phpunit": "^8.5",
-        "laravel/framework": "^6.0|^7.0"
+        "laravel/framework": "^6.0|^7.0|^8.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -45,7 +45,8 @@
         }
     },
     "require-dev": {
-        "orchestra/testbench": "^4.6|^5.0"
+        "orchestra/testbench": "^4.6|^5.0",
+        "roave/security-advisories": "dev-master"
     },
     "suggest": {
         "spatie/laravel-permission": "For a more feature rich permissions solution"
