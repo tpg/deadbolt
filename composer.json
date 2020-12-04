@@ -24,10 +24,10 @@
         }
     },
     "require": {
-        "php": "^7.2",
+        "php": "^7.2|^8.0",
         "ext-json": "*",
-        "phpunit/phpunit": "^8.5|^9.3",
-        "laravel/framework": "^6.0|^7.0|^8.0"
+        "laravel/framework": "^6.0|^7.0|^8.0",
+        "laravel/legacy-factories": "^1.1"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -45,7 +45,8 @@
         }
     },
     "require-dev": {
-        "orchestra/testbench": "^4.6|^5.0",
+        "orchestra/testbench": "^4.6|^5.0|^6.0",
+        "phpunit/phpunit": "^8.5|^9.3",
         "roave/security-advisories": "dev-master"
     },
     "suggest": {
