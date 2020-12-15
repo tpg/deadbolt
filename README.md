@@ -1,3 +1,5 @@
+![Run Tests](https://github.com/tpg/deadbolt/workflows/Run%20Tests/badge.svg)
+
 # Dead simple user permissions for Laravel
 
 ## Why another authorization package?
