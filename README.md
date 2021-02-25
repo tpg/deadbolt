@@ -263,6 +263,8 @@ public function update(User $user, Article $article)
 
 ## Groups
 
+> The groups system will be removed from version 2. I feel that the groups feature makes Deadbolt more complex than it was intended, so I'm going back to the basics and looking at what Deadbolt was supposed to be. Groups don't offer the same value as proper roles. Deadbolt is meant to be a simple permissions library and groups don't fit well with that idea.
+
 Deadbolt groups are a simple solution to grouping permissions together in some form of logical collection. For example, you might have a group named `publisher` which contains the permissions `edit articles` and `publish articles` but not `create articles` or `delete articles`. When assigning a group to a user, the permissions within the group are assigned instead.
 
 It is considered bad practice to authorize a user based on groups. You should test for user permissions instead. Groups are a convenience tool used to collect permissions together and those permissions can change at any time causing unexpected issues. Deadbolt groups are not assigned to users but rather the permissions they collect. It's important to note that if the permissions in a group change, the users who were originally assigned that group will not gain the changed permissions.

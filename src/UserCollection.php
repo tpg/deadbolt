@@ -13,11 +13,11 @@ class UserCollection
      */
     protected $users;
 
-    public function __construct($users, array $permissions, array $roles, array $config)
+    public function __construct($users, array $permissions, array $config)
     {
         $users = collect($users);
-        $this->users = $users->map(function ($user) use ($permissions, $roles, $config) {
-            return new User($user, $permissions, $roles, $config);
+        $this->users = $users->map(function ($user) use ($permissions, $config) {
+            return new User($user, $permissions, $config);
         });
     }
 

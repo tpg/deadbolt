@@ -22,23 +22,17 @@ class User
      * @var array
      */
     protected $permissions;
-    /**
-     * @var array
-     */
-    protected $groups;
 
     /**
      * @param Model $user
      * @param array $permissions
-     * @param array $groups
      * @param array $config
      */
-    public function __construct(Model $user, array $permissions, array $groups, array $config)
+    public function __construct(Model $user, array $permissions, array $config)
     {
         $this->user = $user;
         $this->config = $config;
         $this->permissions = $permissions;
-        $this->groups = $groups;
     }
 
     /**
@@ -176,10 +170,6 @@ class User
     protected function getPermissions(array $names): array
     {
         $permissions = array_map(function ($name) {
-            if ($this->isGroup($name)) {
-                return $this->getGroupPermissions($name);
-            }
-
             return $name;
         }, $names);
 
@@ -211,28 +201,6 @@ class User
     protected function isPermission(string $name): bool
     {
         return in_array($name, $this->permissions, true);
-    }
-
-    /**
-     * Check if the given name is a group.
-     *
-     * @param string $name
-     * @return bool
-     */
-    protected function isGroup(string $name): bool
-    {
-        return array_key_exists($name, $this->groups);
-    }
-
-    /**
-     * Get the permissions from the specified group.
-     *
-     * @param string $name
-     * @return array
-     */
-    protected function getGroupPermissions(string $name): array
-    {
-        return Arr::get($this->groups, $name, []);
     }
 
     /**
@@ -311,19 +279,6 @@ class User
     }
 
     /**
-     * Check if the user belongs to the specified group of permissions.
-     *
-     * @param string $group
-     * @return bool
-     */
-    public function is(string $group): bool
-    {
-        $permissions = Arr::get($this->groups, $group, []);
-
-        return $this->hasAll($permissions);
-    }
-
-    /**
      * Get an array of permissions assigned to the user.
      *
      * @return array
@@ -331,17 +286,5 @@ class User
     public function permissions(): array
     {
         return $this->userPermissions();
-    }
-
-    /**
-     * Get an array of deduced groups assigned to the user.
-     *
-     * @return array
-     */
-    public function groups(): array
-    {
-        return array_values(array_filter(array_keys($this->groups), function ($group) {
-            return $this->hasAll($this->groups[$group]);
-        }));
     }
 }
