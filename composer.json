@@ -26,8 +26,13 @@
     "require": {
         "php": "^7.2|^8.0",
         "ext-json": "*",
-        "laravel/framework": "^6.0|^7.0|^8.0",
-        "laravel/legacy-factories": "^1.1"
+        "laravel/framework": "^6.0|^7.0|^8.0"
+    },
+    "require-dev": {
+        "laravel/legacy-factories": "^1.1",
+        "orchestra/testbench": "^4.6|^5.0|^6.0",
+        "phpunit/phpunit": "^8.5|^9.3",
+        "roave/security-advisories": "dev-master"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -43,13 +48,5 @@
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
-    },
-    "require-dev": {
-        "orchestra/testbench": "^4.6|^5.0|^6.0",
-        "phpunit/phpunit": "^8.5|^9.3",
-        "roave/security-advisories": "dev-master"
-    },
-    "suggest": {
-        "spatie/laravel-permission": "For a more feature rich permissions solution"
     }
 }
