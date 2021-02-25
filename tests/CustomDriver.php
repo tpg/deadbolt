@@ -2,7 +2,6 @@
 
 namespace TPG\Tests;
 
-use Illuminate\Support\Arr;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
 class CustomDriver implements DriverInterface
