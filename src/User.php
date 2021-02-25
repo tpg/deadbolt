@@ -315,6 +315,8 @@ class User
      *
      * @param string $group
      * @return bool
+     *
+     * @deprecated 1.1.1    Groups will be removed in version 2.
      */
     public function is(string $group): bool
     {
@@ -337,6 +339,8 @@ class User
      * Get an array of deduced groups assigned to the user.
      *
      * @return array
+     *
+     * @deprecated 1.1.1    Groups will be removed in version 2.
      */
     public function groups(): array
     {

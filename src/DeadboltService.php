@@ -99,6 +99,8 @@ class DeadboltService
      *
      * @param bool $describe
      * @return array
+     *
+     * @deprecated 1.1.1    Will be removed removed in version 2.
      */
     public function groups(bool $describe = false): array
     {
