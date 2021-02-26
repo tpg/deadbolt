@@ -31,8 +31,7 @@ class DeadboltServiceProvider extends ServiceProvider
     protected function publishMigrations(): void
     {
         $this->publishes([
-            __DIR__.'/../database/add_deadbolt_permissions_column.php'
-            => $this->getMigrationFilename('add_deadbolt_permissions_column'),
+            __DIR__.'/../database/add_deadbolt_permissions_column.php' => $this->getMigrationFilename('add_deadbolt_permissions_column'),
         ]);
     }
 
@@ -41,8 +40,8 @@ class DeadboltServiceProvider extends ServiceProvider
         $timestamp = date('Y_m_d_His');
 
         return collect(
-            glob($this->app->databasePath().'/migrations/*' . $migrationName . '.php'))
-            ->push($this->app->databasePath().'/migrations/'. $timestamp . '_' . $migrationName . '.php')
+            glob($this->app->databasePath().'/migrations/*'.$migrationName.'.php'))
+            ->push($this->app->databasePath().'/migrations/'.$timestamp.'_'.$migrationName.'.php')
             ->first();
     }
 
