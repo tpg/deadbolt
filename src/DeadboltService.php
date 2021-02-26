@@ -45,14 +45,14 @@ class DeadboltService
      */
     public function user(Model $model): User
     {
-        return new User($model, $this->permissions(), $this->config);
+        return new User($model, $this->all(), $this->config);
     }
 
     public function users(...$users): UserCollection
     {
         $users = Arr::flatten($users);
 
-        return new UserCollection($users, $this->permissions(), $this->config);
+        return new UserCollection($users, $this->all(), $this->config);
     }
 
     /**
@@ -71,12 +71,11 @@ class DeadboltService
     /**
      * Get an array of permissions.
      *
-     * @param mixed $groups
      * @return array
      */
-    public function permissions(...$groups): array
+    public function all(): array
     {
-        return array_keys($this->driver->permissions($groups));
+        return array_keys($this->driver->permissions());
     }
 
     public function describe(...$permissions): array
