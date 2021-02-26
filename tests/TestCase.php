@@ -37,7 +37,7 @@ class TestCase extends Orchestra
 
     protected function setPermissions(): void
     {
-        $this->app['config']->set('deadbolt.permissions', [
+        $this->app['config']->set('permissions.permissions', [
             'articles.create' => 'Create Articles',
             'articles.edit',
             'articles.delete',

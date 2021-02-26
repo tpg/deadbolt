@@ -16,11 +16,11 @@ class PermissionTest extends TestCase
     {
         $permissions = Deadbolt::permissions();
 
-        $this->assertEquals($permissions, [
+        $this->assertEquals([
             'articles.create',
             'articles.edit',
             'articles.delete',
-        ]);
+        ], $permissions);
     }
 
     /**
@@ -159,7 +159,7 @@ class PermissionTest extends TestCase
      */
     public function it_allows_a_different_column_name()
     {
-        $this->app['config']->set('deadbolt.column', 'rights');
+        $this->app['config']->set('permissions.column', 'rights');
 
         Schema::drop('users');
         Schema::create('users', function (Blueprint $table) {

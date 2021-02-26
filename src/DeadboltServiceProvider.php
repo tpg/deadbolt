@@ -5,36 +5,53 @@ declare(strict_types=1);
 namespace TPG\Deadbolt;
 
 use Illuminate\Support\ServiceProvider;
+use TPG\Deadbolt\Console\InstallCommand;
 
 class DeadboltServiceProvider extends ServiceProvider
 {
-    /**
-     * Boot the package.
-     */
-    public function boot()
+    public function boot(): void
     {
-        $this->publish();
+        $this->publicConfig();
+        $this->publishMigrations();
+
+        if ($this->app->runningInConsole() && ! file_exists(config_path('permissions.php'))) {
+            $this->commands([
+                InstallCommand::class,
+            ]);
+        }
     }
 
-    /**
-     * Publish the packages assets.
-     */
-    protected function publish(): void
+    protected function publicConfig(): void
     {
         $this->publishes([
-            __DIR__.'/../config/deadbolt.php' => config_path('deadbolt.php'),
+            __DIR__.'/../config/permissions.php' => config_path('permissions.php'),
         ], 'deadbolt');
     }
 
-    /**
-     * Register anything needed into the container.
-     */
-    public function register()
+    protected function publishMigrations(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/deadbolt.php', 'deadbolt');
+        $this->publishes([
+            __DIR__.'/../database/add_deadbolt_permissions_column.php'
+            => $this->getMigrationFilename('add_deadbolt_permissions_column'),
+        ]);
+    }
+
+    protected function getMigrationFilename(string $migrationName): string
+    {
+        $timestamp = date('Y_m_d_His');
+
+        return collect(
+            glob($this->app->databasePath().'/migrations/*' . $migrationName . '.php'))
+            ->push($this->app->databasePath().'/migrations/'. $timestamp . '_' . $migrationName . '.php')
+            ->first();
+    }
+
+    public function register(): void
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/permissions.php', 'permissions');
 
         $this->app->bind('deadbolt.facade', function () {
-            return new DeadboltService($this->app['config']->get('deadbolt'));
+            return new DeadboltService($this->app['config']->get('permissions'));
         });
     }
 }

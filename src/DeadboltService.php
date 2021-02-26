@@ -31,7 +31,7 @@ class DeadboltService
         $this->config = $config;
 
         if ($driver = Arr::get($this->config, 'driver')) {
-            $this->driver(new $driver);
+            $this->driver(new $driver($config));
         } else {
             $this->driver(new ArrayDriver($config));
         }
