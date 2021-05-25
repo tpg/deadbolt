@@ -42,5 +42,6 @@ return [
     |
     */
     'driver' => TPG\Deadbolt\Drivers\ArrayDriver::class,
+    // 'driver' => TPG\Deadbolt\Drivers\DatabaseDriver::class,
 
 ];
