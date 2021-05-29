@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TPG\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use TPG\Deadbolt\Facades\Deadbolt;
