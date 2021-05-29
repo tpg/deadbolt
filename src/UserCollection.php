@@ -8,8 +8,7 @@ use Illuminate\Support\Collection;
 use TPG\Deadbolt\Contracts\UserCollectionInterface;
 
 /**
- * Class UserCollection
- * @package TPG\Deadbolt
+ * Class UserCollection.
  */
 class UserCollection implements UserCollectionInterface
 {
@@ -107,7 +106,7 @@ class UserCollection implements UserCollectionInterface
     }
 
     /**
-     * Call the
+     * Call the.
      * @param string $name
      * @param mixed|null $arguments
      * @return UserCollectionInterface
@@ -137,7 +136,6 @@ class UserCollection implements UserCollectionInterface
 
         return true;
     }
-
 
     /**
      * Check if any of the users have all the specified permissions.

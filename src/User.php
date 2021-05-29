@@ -6,9 +6,7 @@ namespace TPG\Deadbolt;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Cache;
 use JsonException;
-use TPG\Deadbolt\Contracts\PermissionCacheInterface;
 use TPG\Deadbolt\Contracts\UserInterface;
 use TPG\Deadbolt\Exceptions\NoSuchPermissionException;
 
@@ -114,12 +112,12 @@ class User implements UserInterface
         return $this->save();
     }
 
-        /**
-         * Sync permissions with the names provided.
-         *
-         * @param mixed ...$names
-         * @return UserInterface
-         */
+    /**
+     * Sync permissions with the names provided.
+     *
+     * @param mixed ...$names
+     * @return UserInterface
+     */
     public function sync(...$names): UserInterface
     {
         return $this->revokeAll()->give($names);
