@@ -47,7 +47,7 @@ class RelationshipTest extends TestCase
 
         $user->load('roles');
 
-        $this->assertTrue(Permissions::users($user->roles)->anyHave('articles.create'));
+        $this->assertTrue(Permissions::users($user->roles)->anyHave('articles.edit'));
         $this->assertFalse(Permissions::users($user->roles)->allHave('articles.delete'));
     }
 }

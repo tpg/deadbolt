@@ -6,13 +6,14 @@ namespace TPG\Deadbolt;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use TPG\Deadbolt\Contracts\DeadboltServiceInterface;
 use TPG\Deadbolt\Drivers\ArrayDriver;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
 /**
  * Class Deadbolt.
  */
-class DeadboltService
+class DeadboltService implements DeadboltServiceInterface
 {
     /**
      * @var array
@@ -38,7 +39,7 @@ class DeadboltService
     }
 
     /**
-     * Set the user.
+     * A user.
      *
      * @param Model $model
      * @return User
@@ -48,6 +49,12 @@ class DeadboltService
         return new User($model, $this->all(), $this->config);
     }
 
+    /**
+     * A collection of users.
+     *
+     * @param ...$users
+     * @return UserCollection
+     */
     public function users(...$users): UserCollection
     {
         $users = Arr::flatten($users);
@@ -56,12 +63,12 @@ class DeadboltService
     }
 
     /**
-     * Set an instance of the driver.
+     * Set permissions the driver.
      *
      * @param DriverInterface $driver
-     * @return $this
+     * @return DeadboltServiceInterface
      */
-    public function driver(DriverInterface $driver): self
+    public function driver(DriverInterface $driver): DeadboltServiceInterface
     {
         $this->driver = $driver;
 
@@ -78,6 +85,12 @@ class DeadboltService
         return array_keys($this->driver->permissions());
     }
 
+    /**
+     * Get the permission descriptions.
+     *
+     * @param ...$permissions
+     * @return array
+     */
     public function describe(...$permissions): array
     {
         $filter = Arr::flatten($permissions);

@@ -11,6 +11,7 @@ return [
     | this is set to "permissions", but it can be anything you like.
     |
     */
+
     'column' => 'permissions',
 
     /*
@@ -23,8 +24,28 @@ return [
     | be anything you like and you can provide a description.
     |
     */
+
     'permissions' => [
         // 'articles.create' => 'Create new articles',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Permissions caching
+    |--------------------------------------------------------------------------
+    |
+    | Deadbolt can make use of the Laravel Cache system to cache user
+    | permissions. This can help to increase performance. If you don't want
+    | to use caching, you can disable it here.
+    |
+    */
+
+    'cache' => [
+
+        'enabled' => true,
+        'prefix' => 'deadbolt_permissions_',
+        'ttl' => 3600,
+
     ],
 
     /*
@@ -41,7 +62,7 @@ return [
     | details on it's use.
     |
     */
+
     'driver' => TPG\Deadbolt\Drivers\ArrayDriver::class,
-    // 'driver' => TPG\Deadbolt\Drivers\DatabaseDriver::class,
 
 ];

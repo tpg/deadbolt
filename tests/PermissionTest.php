@@ -16,7 +16,7 @@ class PermissionTest extends TestCase
     {
         $permissions = Permissions::all();
 
-        $this->assertEquals([
+        self::assertEquals([
             'articles.create',
             'articles.edit',
             'articles.delete',
@@ -28,8 +28,8 @@ class PermissionTest extends TestCase
      */
     public function it_can_describe_the_specified_permissions()
     {
-        $this->assertEquals(['articles.create' => 'Create Articles'], Permissions::describe('articles.create'));
-        $this->assertEquals(['articles.edit' => null], Permissions::describe('articles.edit'));
+        self::assertEquals(['articles.create' => 'Create Articles'], Permissions::describe('articles.create'));
+        self::assertEquals(['articles.edit' => null], Permissions::describe('articles.edit'));
     }
 
     /**
@@ -41,8 +41,8 @@ class PermissionTest extends TestCase
 
         Permissions::user($user)->give('articles.edit', 'articles.create');
 
-        $this->assertTrue(Permissions::user($user)->has('articles.edit'));
-        $this->assertTrue(in_array('articles.create', Permissions::user($user)->permissions()));
+        self::assertTrue(Permissions::user($user)->has('articles.edit'));
+        self::assertTrue(in_array('articles.create', Permissions::user($user)->all()));
     }
 
     /**
@@ -53,8 +53,8 @@ class PermissionTest extends TestCase
         $user = $this->user();
         Permissions::user($user)->give('articles.edit', 'articles.create');
 
-        $this->assertTrue(Permissions::user($user)->hasAll('articles.edit', 'articles.create'));
-        $this->assertFalse(Permissions::user($user)->hasAll('articles.edit', 'articles.delete'));
+        self::assertTrue(Permissions::user($user)->hasAll('articles.edit', 'articles.create'));
+        self::assertFalse(Permissions::user($user)->hasAll('articles.edit', 'articles.delete'));
     }
 
     /**
@@ -65,8 +65,8 @@ class PermissionTest extends TestCase
         $user = $this->user();
         Permissions::user($user)->give('articles.edit');
 
-        $this->assertTrue(Permissions::user($user)->hasAny('articles.edit', 'articles.create'));
-        $this->assertFalse(Permissions::user($user)->hasAny('articles.create', 'articles.delete'));
+        self::assertTrue(Permissions::user($user)->hasAny('articles.edit', 'articles.create'));
+        self::assertFalse(Permissions::user($user)->hasAny('articles.create', 'articles.delete'));
     }
 
     /**
@@ -77,8 +77,8 @@ class PermissionTest extends TestCase
         $user = $this->user();
         Permissions::user($user)->give('articles.edit');
 
-        $this->assertTrue(Permissions::user($user)->hasNone('articles.create', 'articles.delete'));
-        $this->assertFalse(Permissions::user($user)->hasNone('articles.edit', 'articles.create'));
+        self::assertTrue(Permissions::user($user)->hasNone('articles.create', 'articles.delete'));
+        self::assertFalse(Permissions::user($user)->hasNone('articles.edit', 'articles.create'));
     }
 
     /**
@@ -95,23 +95,12 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_make_a_permission_set_permanent()
-    {
-        $user = $this->user();
-        Permissions::user($user)->give('articles.edit', 'articles.delete')->save();
-
-        $this->assertTrue(Permissions::user($user)->saved());
-    }
-
-    /**
-     * @test
-     */
     public function it_can_make_a_super_user()
     {
         $user = $this->user();
         Permissions::user($user)->super();
 
-        $this->assertTrue(Permissions::user($user)->hasAll(Permissions::all()));
+        self::assertTrue(Permissions::user($user)->hasAll(Permissions::all()));
     }
 
     /**
@@ -124,7 +113,7 @@ class PermissionTest extends TestCase
 
         Permissions::user($user)->revoke('articles.edit');
 
-        $this->assertFalse(Permissions::user($user)->has('articles.edit'));
+        self::assertFalse(Permissions::user($user)->has('articles.edit'));
     }
 
     /**
@@ -137,7 +126,7 @@ class PermissionTest extends TestCase
 
         Permissions::user($user)->revokeAll();
 
-        $this->assertTrue(Permissions::user($user)->hasNone(Permissions::all()));
+        self::assertTrue(Permissions::user($user)->hasNone(Permissions::all()));
     }
 
     /**
@@ -150,8 +139,8 @@ class PermissionTest extends TestCase
 
         Permissions::user($user)->sync('articles.create', 'articles.delete');
 
-        $this->assertTrue(Permissions::user($user)->hasAll('articles.create', 'articles.delete'));
-        $this->assertTrue(Permissions::user($user)->hasNone('articles.edit'));
+        self::assertTrue(Permissions::user($user)->hasAll('articles.create', 'articles.delete'));
+        self::assertTrue(Permissions::user($user)->hasNone('articles.edit'));
     }
 
     /**
@@ -177,8 +166,8 @@ class PermissionTest extends TestCase
 
         Permissions::user($user)->give('articles.create', 'articles.edit')->save();
 
-        $this->assertTrue(Permissions::user($user)->has('articles.edit'));
-        $this->assertContains('articles.create', Permissions::user($user)->permissions());
+        self::assertTrue(Permissions::user($user)->has('articles.edit'));
+        self::assertContains('articles.create', Permissions::user($user)->all());
     }
 
     /**
@@ -191,12 +180,12 @@ class PermissionTest extends TestCase
         Permissions::users($users)->give('articles.create');
         Permissions::user($users[1])->give('articles.edit');
 
-        $this->assertTrue(Permissions::user($users[0])->has('articles.create'));
-        $this->assertTrue(Permissions::user($users[1])->has('articles.create'));
+        self::assertTrue(Permissions::user($users[0])->has('articles.create'));
+        self::assertTrue(Permissions::user($users[1])->has('articles.create'));
 
-        $this->assertTrue(Permissions::users($users)->allHave('articles.create'));
-        $this->assertFalse(Permissions::users($users)->allHave('articles.edit'));
-        $this->assertTrue(Permissions::users($users)->anyHave('articles.edit'));
+        self::assertTrue(Permissions::users($users)->allHave('articles.create'));
+        self::assertFalse(Permissions::users($users)->allHave('articles.edit'));
+        self::assertTrue(Permissions::users($users)->anyHave('articles.create'));
     }
 
     protected function getUserCollection(): array
