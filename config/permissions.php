@@ -31,25 +31,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Permissions caching
-    |--------------------------------------------------------------------------
-    |
-    | Deadbolt can make use of the Laravel Cache system to cache user
-    | permissions. This can help to increase performance. If you don't want
-    | to use caching, you can disable it here.
-    |
-    */
-
-    'cache' => [
-
-        'enabled' => true,
-        'prefix' => 'deadbolt_permissions_',
-        'ttl' => 3600,
-
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Permission driver
     |--------------------------------------------------------------------------
     |
