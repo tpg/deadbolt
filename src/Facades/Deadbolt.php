@@ -12,12 +12,12 @@ use TPG\Deadbolt\UserCollection;
 /**
  * @method static User user($user)
  * @method static UserCollection users($users)
- * @method static array all(...$roles)
+ * @method static array all()
  * @method static array describe(...$permissions)
  * @method static array groups()
  * @method static \TPG\Deadbolt\DeadboltService driver(DriverInterface $driver)
  */
-class Permissions extends Facade
+class Deadbolt extends Facade
 {
     protected static function getFacadeAccessor(): string
     {

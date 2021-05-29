@@ -5,7 +5,7 @@ namespace TPG\Tests;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use TPG\Deadbolt\Exceptions\NoSuchPermissionException;
-use TPG\Deadbolt\Facades\Permissions;
+use TPG\Deadbolt\Facades\Deadbolt;
 
 class PermissionTest extends TestCase
 {
@@ -14,7 +14,7 @@ class PermissionTest extends TestCase
      */
     public function it_can_get_an_array_of_defined_permissions()
     {
-        $permissions = Permissions::all();
+        $permissions = Deadbolt::all();
 
         self::assertEquals([
             'articles.create',
@@ -28,8 +28,8 @@ class PermissionTest extends TestCase
      */
     public function it_can_describe_the_specified_permissions()
     {
-        self::assertEquals(['articles.create' => 'Create Articles'], Permissions::describe('articles.create'));
-        self::assertEquals(['articles.edit' => null], Permissions::describe('articles.edit'));
+        self::assertEquals(['articles.create' => 'Create Articles'], Deadbolt::describe('articles.create'));
+        self::assertEquals(['articles.edit' => null], Deadbolt::describe('articles.edit'));
     }
 
     /**
@@ -39,10 +39,10 @@ class PermissionTest extends TestCase
     {
         $user = $this->user();
 
-        Permissions::user($user)->give('articles.edit', 'articles.create');
+        Deadbolt::user($user)->give('articles.edit', 'articles.create');
 
-        self::assertTrue(Permissions::user($user)->has('articles.edit'));
-        self::assertTrue(in_array('articles.create', Permissions::user($user)->all()));
+        self::assertTrue(Deadbolt::user($user)->has('articles.edit'));
+        self::assertTrue(in_array('articles.create', Deadbolt::user($user)->all()));
     }
 
     /**
@@ -51,10 +51,10 @@ class PermissionTest extends TestCase
     public function it_can_test_that_a_user_has_all_the_specified_permissions()
     {
         $user = $this->user();
-        Permissions::user($user)->give('articles.edit', 'articles.create');
+        Deadbolt::user($user)->give('articles.edit', 'articles.create');
 
-        self::assertTrue(Permissions::user($user)->hasAll('articles.edit', 'articles.create'));
-        self::assertFalse(Permissions::user($user)->hasAll('articles.edit', 'articles.delete'));
+        self::assertTrue(Deadbolt::user($user)->hasAll('articles.edit', 'articles.create'));
+        self::assertFalse(Deadbolt::user($user)->hasAll('articles.edit', 'articles.delete'));
     }
 
     /**
@@ -63,10 +63,10 @@ class PermissionTest extends TestCase
     public function it_can_test_that_a_user_has_any_of_the_specified_permissions()
     {
         $user = $this->user();
-        Permissions::user($user)->give('articles.edit');
+        Deadbolt::user($user)->give('articles.edit');
 
-        self::assertTrue(Permissions::user($user)->hasAny('articles.edit', 'articles.create'));
-        self::assertFalse(Permissions::user($user)->hasAny('articles.create', 'articles.delete'));
+        self::assertTrue(Deadbolt::user($user)->hasAny('articles.edit', 'articles.create'));
+        self::assertFalse(Deadbolt::user($user)->hasAny('articles.create', 'articles.delete'));
     }
 
     /**
@@ -75,10 +75,10 @@ class PermissionTest extends TestCase
     public function it_can_test_that_a_user_has_none_of_the_specified_permissions()
     {
         $user = $this->user();
-        Permissions::user($user)->give('articles.edit');
+        Deadbolt::user($user)->give('articles.edit');
 
-        self::assertTrue(Permissions::user($user)->hasNone('articles.create', 'articles.delete'));
-        self::assertFalse(Permissions::user($user)->hasNone('articles.edit', 'articles.create'));
+        self::assertTrue(Deadbolt::user($user)->hasNone('articles.create', 'articles.delete'));
+        self::assertFalse(Deadbolt::user($user)->hasNone('articles.edit', 'articles.create'));
     }
 
     /**
@@ -89,7 +89,7 @@ class PermissionTest extends TestCase
         $user = $this->user();
 
         $this->expectException(NoSuchPermissionException::class);
-        Permissions::user($user)->give('articles.change');
+        Deadbolt::user($user)->give('articles.change');
     }
 
     /**
@@ -98,9 +98,9 @@ class PermissionTest extends TestCase
     public function it_can_make_a_super_user()
     {
         $user = $this->user();
-        Permissions::user($user)->super();
+        Deadbolt::user($user)->super();
 
-        self::assertTrue(Permissions::user($user)->hasAll(Permissions::all()));
+        self::assertTrue(Deadbolt::user($user)->hasAll(Deadbolt::all()));
     }
 
     /**
@@ -109,11 +109,11 @@ class PermissionTest extends TestCase
     public function it_can_revoke_permissions_from_a_user()
     {
         $user = $this->user();
-        Permissions::user($user)->super();
+        Deadbolt::user($user)->super();
 
-        Permissions::user($user)->revoke('articles.edit');
+        Deadbolt::user($user)->revoke('articles.edit');
 
-        self::assertFalse(Permissions::user($user)->has('articles.edit'));
+        self::assertFalse(Deadbolt::user($user)->has('articles.edit'));
     }
 
     /**
@@ -122,11 +122,11 @@ class PermissionTest extends TestCase
     public function it_can_revoke_all_permissions_from_a_user()
     {
         $user = $this->user();
-        Permissions::user($user)->super();
+        Deadbolt::user($user)->super();
 
-        Permissions::user($user)->revokeAll();
+        Deadbolt::user($user)->revokeAll();
 
-        self::assertTrue(Permissions::user($user)->hasNone(Permissions::all()));
+        self::assertTrue(Deadbolt::user($user)->hasNone(Deadbolt::all()));
     }
 
     /**
@@ -135,12 +135,12 @@ class PermissionTest extends TestCase
     public function it_can_sync_permissions()
     {
         $user = $this->user();
-        Permissions::user($user)->give('articles.edit');
+        Deadbolt::user($user)->give('articles.edit');
 
-        Permissions::user($user)->sync('articles.create', 'articles.delete');
+        Deadbolt::user($user)->sync('articles.create', 'articles.delete');
 
-        self::assertTrue(Permissions::user($user)->hasAll('articles.create', 'articles.delete'));
-        self::assertTrue(Permissions::user($user)->hasNone('articles.edit'));
+        self::assertTrue(Deadbolt::user($user)->hasAll('articles.create', 'articles.delete'));
+        self::assertTrue(Deadbolt::user($user)->hasNone('articles.edit'));
     }
 
     /**
@@ -148,7 +148,7 @@ class PermissionTest extends TestCase
      */
     public function it_allows_a_different_column_name()
     {
-        $this->app['config']->set('permissions.column', 'rights');
+        $this->app['config']->set('deadbolt.column', 'rights');
 
         Schema::drop('users');
         Schema::create('users', function (Blueprint $table) {
@@ -164,10 +164,10 @@ class PermissionTest extends TestCase
 
         $user = $this->user();
 
-        Permissions::user($user)->give('articles.create', 'articles.edit')->save();
+        Deadbolt::user($user)->give('articles.create', 'articles.edit')->save();
 
-        self::assertTrue(Permissions::user($user)->has('articles.edit'));
-        self::assertContains('articles.create', Permissions::user($user)->all());
+        self::assertTrue(Deadbolt::user($user)->has('articles.edit'));
+        self::assertContains('articles.create', Deadbolt::user($user)->all());
     }
 
     /**
@@ -177,15 +177,15 @@ class PermissionTest extends TestCase
     {
         $users = $this->getUserCollection();
 
-        Permissions::users($users)->give('articles.create');
-        Permissions::user($users[1])->give('articles.edit');
+        Deadbolt::users($users)->give('articles.create');
+        Deadbolt::user($users[1])->give('articles.edit');
 
-        self::assertTrue(Permissions::user($users[0])->has('articles.create'));
-        self::assertTrue(Permissions::user($users[1])->has('articles.create'));
+        self::assertTrue(Deadbolt::user($users[0])->has('articles.create'));
+        self::assertTrue(Deadbolt::user($users[1])->has('articles.create'));
 
-        self::assertTrue(Permissions::users($users)->allHave('articles.create'));
-        self::assertFalse(Permissions::users($users)->allHave('articles.edit'));
-        self::assertTrue(Permissions::users($users)->anyHave('articles.create'));
+        self::assertTrue(Deadbolt::users($users)->allHave('articles.create'));
+        self::assertFalse(Deadbolt::users($users)->allHave('articles.edit'));
+        self::assertTrue(Deadbolt::users($users)->anyHave('articles.create'));
     }
 
     protected function getUserCollection(): array

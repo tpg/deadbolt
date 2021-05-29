@@ -1,8 +1,6 @@
-# Dead simple user permissions for Laravel
+# README
 
-[![Run Tests](https://github.com/tpg/deadbolt/actions/workflows/php.yml/badge.svg?branch=2.x)](https://github.com/tpg/deadbolt/actions/workflows/php.yml)
-
-> Deadbolt version 2 brings a number of changes to the library, but it's not ready for use yet. This document is by no means a final version and will likely change before version 2 is finally released.
+- Deadbolt version 2 brings a number of changes, and some of them are not backward compatible. It's not quite ready for production use just yet, but it should be fairly stable. There are some notes on upgrading at the bottom of this document.
 
 ## Why another authorization package?
 
@@ -31,13 +29,13 @@ php ./artisan deadbolt:install
 This will do two things...
 
 1. Create a new migration named `add_deadbolt_permissions_column`,
-2. Place a copy of the Deadbolt config at `config/permissions.php`.
+2. Place a copy of the Deadbolt config at `config/deadbolt.php`.
 
 You can alter the migration if you need to, but the default will add a column named `permissions` to the `users` table.
 
-You can now define your permissions in the `permissions.php` config file. That's it.
+You can now define your permissions in the `deadbolt.php` config file. That's it.
 
-The `deadbolt:install` command is only available if the `permissions.php` file does not exist in the `config` directory. However, if you need to, you can always get the same result by running:
+The `deadbolt:install` command is only available if the `deadbolt.php` file does not exist in the `config` directory. However, if you need to, you can always get the same result by running:
 
 ```bash
 php ./artisan vendor:publish --provider=TPG\\Deadbolt\\DeadboltServiceProvider
@@ -45,7 +43,7 @@ php ./artisan vendor:publish --provider=TPG\\Deadbolt\\DeadboltServiceProvider
 
 ## Permissions
 
-Permissions are defined in the `permissions.php` config file,  in the appropriately named `$permissions` array. Permissions can be named anything you like, for example:
+Permissions are defined in the `deadbolt.php` config file,  in the appropriately named `$permissions` array. Permissions can be named anything you like, for example:
 
 ```php
 $permissions = [
@@ -341,7 +339,7 @@ $user->can('update', $article);
 
 Deadbolt is designed for simplicity, but sometimes you might need something just a little more flexible. Deadbolt uses a simple driver system for sourcing permissions, so it's easy to provide your own custom implementations. This can be handy if you really do want to store your permissions in your database, for example.
 
-Deadbolt includes an `ArrayDriver` by default that sources permissions from the default `permissions.php` config file. If you want to write a custom driver you can do so by passing a new driver instance to the driver method before calling `user()`:
+Deadbolt includes an `ArrayDriver` by default that sources permissions from the default `deadbolt.php` config file. If you want to write a custom driver you can do so by passing a new driver instance to the driver method before calling `user()`:
 
 ```php
 $driver = new DatabaseDriver($config);
@@ -396,3 +394,10 @@ class DatabaseDriver implements DriverInterface
 ```
 
 How the `permissions` method sources permissions is up to you. It could a database request, or even a remote API request.
+
+## Upgrading from version 1
+
+If you're upgrading Deadbolt from version that is already used on a project, there are a few things to take note of. Firstly, there are no Groups anymore. If you have used groups in your project, upgrading might be a little complex. However, if you have not, then you're in luck.
+
+1. If you are using a custom Driver, the removal of groups will affect the the method signatures. The original `groups` method has been removed, and the `permissions` method no longer takes any parameters.
+2. The `Deadbolt` facade has been renamed to `Permissions`.

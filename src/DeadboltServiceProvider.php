@@ -24,7 +24,7 @@ class DeadboltServiceProvider extends ServiceProvider
     protected function publicConfig(): void
     {
         $this->publishes([
-            __DIR__.'/../config/permissions.php' => config_path('permissions.php'),
+            __DIR__.'/../config/deadbolt.php' => config_path('deadbolt.php'),
         ], 'deadbolt');
     }
 
@@ -47,10 +47,10 @@ class DeadboltServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/permissions.php', 'permissions');
+        $this->mergeConfigFrom(__DIR__.'/../config/deadbolt.php', 'deadbolt');
 
         $this->app->bind('deadbolt.facade', function () {
-            return new DeadboltService($this->app['config']->get('permissions'));
+            return new DeadboltService($this->app['config']->get('deadbolt'));
         });
     }
 }

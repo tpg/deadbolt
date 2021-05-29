@@ -2,7 +2,7 @@
 
 namespace TPG\Tests;
 
-use TPG\Deadbolt\Facades\Permissions;
+use TPG\Deadbolt\Facades\Deadbolt;
 
 class DriverTest extends TestCase
 {
@@ -11,16 +11,16 @@ class DriverTest extends TestCase
      */
     public function it_can_use_a_custom_driver()
     {
-        $this->app['config']->set('permissions.driver', CustomDriver::class);
+        $this->app['config']->set('deadbolt.driver', CustomDriver::class);
 
-        $this->assertEquals((new CustomDriver())->permissions(), Permissions::describe());
-        $this->assertEquals(array_keys((new CustomDriver())->permissions()), Permissions::all());
+        $this->assertEquals((new CustomDriver())->permissions(), Deadbolt::describe());
+        $this->assertEquals(array_keys((new CustomDriver())->permissions()), Deadbolt::all());
 
         $user = $this->user();
 
-        Permissions::user($user)->give('test permission');
+        Deadbolt::user($user)->give('test permission');
 
-        $this->assertTrue(Permissions::user($user)->has('test permission'));
+        $this->assertTrue(Deadbolt::user($user)->has('test permission'));
     }
 
     /**
@@ -30,8 +30,8 @@ class DriverTest extends TestCase
     {
         $user = $this->user();
 
-        Permissions::driver(new CustomDriver())->user($user)->give('test permission');
+        Deadbolt::driver(new CustomDriver())->user($user)->give('test permission');
 
-        $this->assertTrue(Permissions::driver(new CustomDriver())->user($user)->has('test permission'));
+        $this->assertTrue(Deadbolt::driver(new CustomDriver())->user($user)->has('test permission'));
     }
 }

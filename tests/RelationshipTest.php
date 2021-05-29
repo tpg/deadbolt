@@ -4,7 +4,7 @@ namespace TPG\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use TPG\Deadbolt\Facades\Permissions;
+use TPG\Deadbolt\Facades\Deadbolt;
 
 class RelationshipTest extends TestCase
 {
@@ -40,14 +40,14 @@ class RelationshipTest extends TestCase
             'name' => 'publisher',
         ]);
 
-        Permissions::user($writer)->give('articles.create', 'articles.edit', 'articles.delete')->save();
-        Permissions::user($publisher)->give('articles.edit')->save();
+        Deadbolt::user($writer)->give('articles.create', 'articles.edit', 'articles.delete')->save();
+        Deadbolt::user($publisher)->give('articles.edit')->save();
 
         $user->roles()->attach([$writer->id, $publisher->id]);
 
         $user->load('roles');
 
-        $this->assertTrue(Permissions::users($user->roles)->anyHave('articles.edit'));
-        $this->assertFalse(Permissions::users($user->roles)->allHave('articles.delete'));
+        $this->assertTrue(Deadbolt::users($user->roles)->anyHave('articles.edit'));
+        $this->assertFalse(Deadbolt::users($user->roles)->allHave('articles.delete'));
     }
 }
