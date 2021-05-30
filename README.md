@@ -1,6 +1,8 @@
 # README
 
-- Deadbolt version 2 brings a number of changes, and some of them are not backward compatible. It's not quite ready for production use just yet, but it should be fairly stable. There are some notes on upgrading at the bottom of this document.
+[![Run Tests](https://github.com/tpg/deadbolt/actions/workflows/php.yml/badge.svg?branch=2.x)](https://github.com/tpg/deadbolt/actions/workflows/php.yml)
+
+> Deadbolt version 2 brings a number of changes, and some of them are not backward compatible. It's not quite ready for production use just yet, but it should be fairly stable. There are some notes on upgrading at the bottom of this document.
 
 ## Why another authorization package?
 
