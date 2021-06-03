@@ -399,7 +399,8 @@ How the `permissions` method sources permissions is up to you. It could a databa
 
 ## Upgrading from version 1
 
-If you're upgrading Deadbolt from version that is already used on a project, there are a few things to take note of. Firstly, there are no Groups anymore. If you have used groups in your project, upgrading might be a little complex. However, if you have not, then you're in luck.
+If you're upgrading Deadbolt from version that is already used on a project, then you should be able to simply replace Deadbolt 1 with Deadbolt 2. However, if you have used the "groups" feature Deadbolt 1 you will need to look at an alternative since groups are no longer available as of Deadbolt 2.
 
-1. If you are using a custom Driver, the removal of groups will affect the the method signatures. The original `groups` method has been removed, and the `permissions` method no longer takes any parameters.
-2. The `Deadbolt` facade has been renamed to `Permissions`.
+In addition, if you are using a custom Driver, the removal of groups will affect the method signatures. The original `groups` method has been removed, and the `permissions` method no longer takes any parameters.
+
+Deadbolt 2 only supports PHP 7.3 and up, and Laravel 7.0 and up.
