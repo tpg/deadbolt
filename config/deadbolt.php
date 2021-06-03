@@ -37,10 +37,8 @@ return [
     | The permission driver feature allows you to specify how permissions
     | are sourced. By default, the provided "ArrayDriver" will source
     | permissions from this file, however you can provide your own custom
-    | driver to source permissions from a database, or an API endpoint.
-    |
-    | A default DatabaseDriver is also provided. See the documentation for
-    | details on it's use.
+    | driver to source permissions from a database, or an API endpoint. See
+    | the README.md for details on creating custom drivers.
     |
     */
 
