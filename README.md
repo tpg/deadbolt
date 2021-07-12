@@ -120,6 +120,16 @@ For example, to get a new `Deadbolt\\User` instance from the currently logged us
 $deadbolt = Deadbolt::user($request()->user());
 ```
 
+### Getting the users permissions
+
+You can easily grab a list of permissions the user has asigned to them:
+
+```php
+$permissions = Deadbolt::user($user)->permissions();
+```
+
+This will return an array of permission names the user has asigned to them.
+
 ### Permanence
 
 Before continuing, just a note about permanence. Permissions are not permanent by default. Deadbolt will assign the permission set for the duration of the request or until the user is refreshed from the DB, but to make them permanent, you must call the `save()` method:
