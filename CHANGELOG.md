@@ -10,8 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 - The `save()` method no longer needs to be called when persisting permission changes.
-- The `deadbolt.php` config file has been renamed as `permissions.php`.
-- The `Deadbolt::permissions()` method has been renamed as `Permissions::all()`.
 
 ## [1.1.1] 2021-02-25
 ## Changed
