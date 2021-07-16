@@ -2,7 +2,6 @@
 
 namespace TPG\Tests;
 
-use Illuminate\Support\Arr;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
 class CustomDriver implements DriverInterface
@@ -11,35 +10,12 @@ class CustomDriver implements DriverInterface
         'test permission' => 'Testing',
     ];
 
-    protected $groups = [
-        'group' => [
-            'test permission',
-        ],
-    ];
-
     /**
      * {@inheritdoc}
      */
-    public function permissions(...$groups): array
+    public function permissions(): array
     {
-        $permissions = $this->permissions;
-
-        $groups = Arr::flatten($groups);
-
-        if ($groups) {
-            $permissions = [];
-            foreach ($groups as $role) {
-                $names[] = $this->groups[$role];
-            }
-
-            $names = Arr::flatten($names);
-
-            foreach ($names as $name) {
-                $permissions[$name] = Arr::get($this->permissions, $name);
-            }
-        }
-
-        return $permissions;
+        return $this->permissions;
     }
 
     /**
@@ -48,21 +24,5 @@ class CustomDriver implements DriverInterface
     public function describe(...$permissions): array
     {
         return $this->permissions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function groups(bool $describe = false): array
-    {
-        $groups = $this->groups;
-
-        if (! $describe) {
-            return $groups;
-        }
-
-        return array_map(function ($group) {
-            return $this->describe($group);
-        }, $groups);
     }
 }

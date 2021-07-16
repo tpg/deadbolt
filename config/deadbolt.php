@@ -2,33 +2,46 @@
 
 return [
 
+    /*
+    |--------------------------------------------------------------------------
+    | The name of the permissions column
+    |--------------------------------------------------------------------------
+    |
+    | This is the name of the column where permissions are stored. By default
+    | this is set to "permissions", but it can be anything you like.
+    |
+    */
+
     'column' => 'permissions',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Defined permissions
+    |--------------------------------------------------------------------------
+    |
+    | Only the permissions defined in this array are permitted. This gives
+    | you a single source of truth and avoids errors. Permission names can
+    | be anything you like and you can provide a description.
+    |
+    */
+
     'permissions' => [
-        /*
-         * // Define your permissions here...
-         * 'articles.create' => 'Create articles',
-         * 'articles.edit',
-         * 'articles.delete',
-         * // ...
-         */
-
+        // 'articles.create' => 'Create new articles',
     ],
 
-    'groups' => [
-        /*
-         * // Define your groups of permissions...
-         * 'writer' => [
-         *     'articles.create',
-         *     'articles.edit',
-         * ],
-         * // ...
-         */
-    ],
+    /*
+    |--------------------------------------------------------------------------
+    | Permission driver
+    |--------------------------------------------------------------------------
+    |
+    | The permission driver feature allows you to specify how permissions
+    | are sourced. By default, the provided "ArrayDriver" will source
+    | permissions from this file, however you can provide your own custom
+    | driver to source permissions from a database, or an API endpoint. See
+    | the README.md for details on creating custom drivers.
+    |
+    */
 
-    // Where do you store your permissions? By default this will be the included `ArrayDriver`.
-    // Provide the class path of the driver you want to use instead
-    // 'driver' => \App\Drivers\DatabaseDriver::class,
-    'driver' => null,
+    'driver' => TPG\Deadbolt\Drivers\ArrayDriver::class,
 
 ];

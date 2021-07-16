@@ -25,23 +25,11 @@ class ArrayDriver implements DriverInterface
     /**
      * Get an array of permission names.
      *
-     * @param mixed ...$groups
-     *
      * @return array
      */
-    public function permissions(...$groups): array
+    public function permissions(): array
     {
-        $groups = Arr::flatten($groups);
-
-        if (count($groups)) {
-            $permissions = array_map(function ($role) {
-                return Arr::get($this->config, 'groups.'.$role);
-            }, $groups);
-
-            $names = Arr::flatten($permissions);
-        } else {
-            $names = $this->getPermissionNames($this->config['permissions']);
-        }
+        $names = $this->getPermissionNames($this->config['permissions']);
 
         return $this->getDescriptions($names);
     }
@@ -54,7 +42,7 @@ class ArrayDriver implements DriverInterface
      */
     protected function getPermissionNames(array $permissions): array
     {
-        return array_map(function ($permission) use ($permissions) {
+        return array_map(static function ($permission) use ($permissions) {
             if (is_numeric($permission)) {
                 return $permissions[$permission];
             }
@@ -77,24 +65,5 @@ class ArrayDriver implements DriverInterface
         }
 
         return $res;
-    }
-
-    /**
-     * Get an array of permissions keyed by group names.
-     *
-     * @param bool $describe
-     * @return array
-     */
-    public function groups(bool $describe = false): array
-    {
-        $groups = $this->config['groups'];
-
-        if (! $describe) {
-            return $groups;
-        }
-
-        return array_map(function ($group) {
-            return $this->getDescriptions($group);
-        }, $groups);
     }
 }

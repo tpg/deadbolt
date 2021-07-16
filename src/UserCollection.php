@@ -5,65 +5,113 @@ declare(strict_types=1);
 namespace TPG\Deadbolt;
 
 use Illuminate\Support\Collection;
+use TPG\Deadbolt\Contracts\UserCollectionInterface;
 
-class UserCollection
+/**
+ * Class UserCollection.
+ */
+class UserCollection implements UserCollectionInterface
 {
     /**
      * @var Collection
      */
     protected $users;
 
-    public function __construct($users, array $permissions, array $roles, array $config)
+    /**
+     * @param  array  $users
+     * @param  array  $permissions
+     * @param  array  $config
+     */
+    public function __construct(array $users, array $permissions, array $config)
     {
-        $users = collect($users);
-        $this->users = $users->map(function ($user) use ($permissions, $roles, $config) {
-            return new User($user, $permissions, $roles, $config);
+        $collection = collect($users);
+        $this->users = $collection->map(function ($user) use ($permissions, $config) {
+            return new User($user, $permissions, $config);
         });
     }
 
-    public function give(...$names): self
+    /**
+     * Give the specified permissions to the user collection.
+     *
+     * @param ...$names
+     * @return UserCollectionInterface
+     */
+    public function give(...$names): UserCollectionInterface
     {
         $this->callOnEachUser('give', $names);
 
         return $this;
     }
 
-    public function super(): self
+    /**
+     * Give all permissions to the user collection.
+     *
+     * @return UserCollectionInterface
+     */
+    public function super(): UserCollectionInterface
     {
         $this->callOnEachUser('super');
 
         return $this;
     }
 
-    public function revoke(...$names): self
+    /**
+     * Revoke the specified permissions from the user collection.
+     *
+     * @param ...$names
+     * @return UserCollectionInterface
+     */
+    public function revoke(...$names): UserCollectionInterface
     {
         $this->callOnEachUser('revoke', $names);
 
         return $this;
     }
 
-    public function revokeAll(): self
+    /**
+     * Revoke all permissions from the user collection.
+     *
+     * @return UserCollectionInterface
+     */
+    public function revokeAll(): UserCollectionInterface
     {
         $this->callOnEachUser('revokeAll');
 
         return $this;
     }
 
-    public function sync(...$names): self
+    /**
+     * Sync the specified permissions with the user collection.
+     *
+     * @param ...$names
+     * @return UserCollectionInterface
+     */
+    public function sync(...$names): UserCollectionInterface
     {
         $this->callOnEachUser('sync', $names);
 
         return $this;
     }
 
-    public function save(): self
+    /**
+     * Save the user collection.
+     *
+     * @return UserCollectionInterface
+     */
+    public function save(): UserCollectionInterface
     {
         $this->callOnEachUser('save');
 
         return $this;
     }
 
-    protected function callOnEachUser($name, $arguments = null): self
+    /**
+     * Call the.
+     * @param string $name
+     * @param mixed|null $arguments
+     * @return UserCollectionInterface
+     */
+    protected function callOnEachUser(string $name, $arguments = null): UserCollectionInterface
     {
         $this->users->each(function (User $user) use ($name, $arguments) {
             $user->{$name}($arguments);
@@ -72,6 +120,12 @@ class UserCollection
         return $this;
     }
 
+    /**
+     * Check if all the users have the specified permissions.
+     *
+     * @param ...$permissions
+     * @return bool
+     */
     public function allHave(...$permissions): bool
     {
         foreach ($this->users as $user) {
@@ -83,6 +137,12 @@ class UserCollection
         return true;
     }
 
+    /**
+     * Check if any of the users have all the specified permissions.
+     *
+     * @param ...$permissions
+     * @return bool
+     */
     public function anyHave(...$permissions): bool
     {
         foreach ($this->users as $user) {
@@ -94,11 +154,12 @@ class UserCollection
         return false;
     }
 
-    public function has(string $permission): bool
-    {
-        return $this->anyHave($permission);
-    }
-
+    /**
+     * Check if none of the users have the specified permissions.
+     *
+     * @param ...$permissions
+     * @return bool
+     */
     public function noneHave(...$permissions): bool
     {
         foreach ($this->users as $user) {

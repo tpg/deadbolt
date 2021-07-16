@@ -6,13 +6,14 @@ namespace TPG\Deadbolt;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use TPG\Deadbolt\Contracts\DeadboltServiceInterface;
 use TPG\Deadbolt\Drivers\ArrayDriver;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
 /**
  * Class Deadbolt.
  */
-class DeadboltService
+class DeadboltService implements DeadboltServiceInterface
 {
     /**
      * @var array
@@ -31,37 +32,43 @@ class DeadboltService
         $this->config = $config;
 
         if ($driver = Arr::get($this->config, 'driver')) {
-            $this->driver(new $driver);
+            $this->driver(new $driver($config));
         } else {
             $this->driver(new ArrayDriver($config));
         }
     }
 
     /**
-     * Set the user.
+     * A user.
      *
      * @param Model $model
      * @return User
      */
     public function user(Model $model): User
     {
-        return new User($model, $this->permissions(), $this->groups(), $this->config);
+        return new User($model, $this->all(), $this->config);
     }
 
+    /**
+     * A collection of users.
+     *
+     * @param ...$users
+     * @return UserCollection
+     */
     public function users(...$users): UserCollection
     {
         $users = Arr::flatten($users);
 
-        return new UserCollection($users, $this->permissions(), $this->groups(), $this->config);
+        return new UserCollection($users, $this->all(), $this->config);
     }
 
     /**
-     * Set an instance of the driver.
+     * Set permissions the driver.
      *
      * @param DriverInterface $driver
-     * @return $this
+     * @return DeadboltServiceInterface
      */
-    public function driver(DriverInterface $driver): self
+    public function driver(DriverInterface $driver): DeadboltServiceInterface
     {
         $this->driver = $driver;
 
@@ -71,14 +78,19 @@ class DeadboltService
     /**
      * Get an array of permissions.
      *
-     * @param mixed $groups
      * @return array
      */
-    public function permissions(...$groups): array
+    public function all(): array
     {
-        return array_keys($this->driver->permissions($groups));
+        return array_keys($this->driver->permissions());
     }
 
+    /**
+     * Get the permission descriptions.
+     *
+     * @param ...$permissions
+     * @return array
+     */
     public function describe(...$permissions): array
     {
         $filter = Arr::flatten($permissions);
@@ -92,18 +104,5 @@ class DeadboltService
         }
 
         return $permissions;
-    }
-
-    /**
-     * Get an array of permissions keyed by group names.
-     *
-     * @param bool $describe
-     * @return array
-     *
-     * @deprecated 1.1.1    Will be removed removed in version 2.
-     */
-    public function groups(bool $describe = false): array
-    {
-        return $this->driver->groups($describe);
     }
 }

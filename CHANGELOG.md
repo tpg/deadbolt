@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.x Unreleased]
+## Removed
+- The entire groups system has been removed. Deadbolt is supposed to be simple, but groups makes it more complex than it needs to be. Going back to basics for version 2.
+
+## Changed
+- Renamed `Deadbolt` facade to `Permissions`.
+- The `save()` method no longer needs to be called when persisting permission changes.
+- The `deadbolt.php` config file has been renamed as `permissions.php`.
+- The `Deadbolt::permissions()` method has been renamed as `Permissions::all()`.
+
 ## [1.1.1] 2021-02-25
 ## Changed
 - Some documentation clean up.

@@ -1,231 +1,295 @@
-![Run Tests](https://github.com/tpg/deadbolt/workflows/Run%20Tests/badge.svg)
+# README
 
-# Dead simple user permissions for Laravel
+[![Tests](https://github.com/tpg/deadbolt/actions/workflows/php.yml/badge.svg?branch=2.x)](https://github.com/tpg/deadbolt/actions/workflows/php.yml)
+
+> Deadbolt version 2 brings a number of changes, and some of them are not backward compatible. It's not quite ready for production use just yet, but it should be fairly stable. There are some notes on upgrading at the bottom of this document.
 
 ## Why another authorization package?
 
-Because I wanted something way simpler than the other solutions. I've used many of the current top authorization packages, and will continue to use them in the future, but in a number of cases they're just a little over the top.
+There are plenty of authorization packages around. But I wanted something that was way simpler than what was on offer and something that I could use easily with my current stack which includes plenty of JavaScript. I've used many of the current top authorisation packages, and will likely use them in the future, but in some cases they're just a little over the top.
 
-Deadbolt is "dead" simple. you define your permissions in the config file, and you can assign them to your users (or any model you like). All you need to do is add a `permissions` column. No need for any additional migrations or complicated configurations.
+Deadbolt is "dead" simple. It's in the name. You define your permissions in the config file (just so you have some source of truth), and you can assign them to your users. The only required database change is a `permissions` column on your `users` table. No need for any additional migrations or complicated configurations.
 
-Deadbolt is simple by design. If you need something more feature rich, take a look at Spatie's `laravel-permission` package [here](https://github.com/spatie/laravel-permission).
+Deadbolt is simple by design. If you need something more feature rich, there are plenty of other choices. If this doesn't fit the bill, then my go to package is Spatie's [laravel-permission](https://github.com/spatie/laravel-permission) package.
 
 ## Installation
 
-Install the Deadbolt package through Composer:
+Deadbolt can be installed via Composer:
 
-```
-composer require thepublicgood/deadbolt
+```bash
+composer require thepublicgood/deadbolt=2.x-dev
 ```
 
 ## Getting Started
 
-Deadbolt works by setting permissions in a JSON array in a column on your users table.
+Deadbolt works by setting permissions in a JSON array in a column on your users table. So before you can use Deadbolt, you'll need to add that column. Deadbolt comes with a simple Artisan command that will do this for you:
 
-To get started quickly, add a nullable string column to your users table:
+```bash
+php ./artisan deadbolt:install
+```
+
+This will do two things...
+
+1. Create a new migration named `add_deadbolt_permissions_column`,
+2. Place a copy of the Deadbolt config at `config/deadbolt.php`.
+
+You can alter the migration if you need to, but the default will add a column named `permissions` to the `users` table.
+
+You can now define your permissions in the `deadbolt.php` config file. That's it.
+
+The `deadbolt:install` command is only available if the `deadbolt.php` file does not exist in the `config` directory. However, if you need to, you can always get the same result by running:
+
+```bash
+php ./artisan vendor:publish --provider=TPG\\Deadbolt\\DeadboltServiceProvider
+```
+
+## Permissions
+
+Permissions are defined in the `deadbolt.php` config file,  in the appropriately named `$permissions` array. Permissions can be named anything you like, for example:
 
 ```php
-Schema::create('users', function (Blueprint $table) {
-    // ...
-    $table->string('permissions')->nullable();
-});
-```
-
-Depending on the number of permissions you have, you might need to increase the size of the column.
-
-If you want to add permissions to other models, just make sure you have a `permissions` column in the database table.
-
-## Configuration
-
-Make sure you publish the Deadbolt config file with:
-
-```
-php ./artisan vendor:publish --tag=deadbolt
-```
-
-This will put a `deadbolt.php` file in your config directory. Define your permissions by adding them to the `permissions` array:
-
-```php
-return [
-
-    'permissions' => [
-        'articles.create',
-        'articles.edit',
-        'articles.delete',
-    ],
-
+$permissions = [
+	'Create Articles',
+	'Edit Articles',
+	'Delete Articles',
 ];
 ```
 
-You can name your permissions anything you like. There is no requirement to follow the dot notation like this example. You could do something like this:
+However, naming permissions this way could lead to errors later on. So Deadbolt provides a way to create simpler permissions names and provide a description for each permission:
 
 ```php
-return [
-
-    'permissions' => [
-        'create articles',
-        'edit articles',
-        'delete articles',
-    ],
-
+$permissions = [
+	'articles.create' => 'Create Articles',
+	'articles.edit' => 'Edit Articles',
+	'articles.delete' => 'Delete Articles',
 ];
 ```
 
-You can also describe your permissions which is handy when you need to show a list of permissions and you want to include something a little more friendly in a user interface.
+The point of defining your permissions here is to create a single source of truth for your permissions. Assigning a permission to a user that does not exist in this array will throw an exception. Similarly, checking if a user has a permission that does not exist will also throw an exception.
 
-```php
-return [
+## Working with permissions
 
-    'permissions' => [
-        'articles.create' => 'Create articles',
-        'articles.edit' => 'Edit articles',
-        'articles.delete' => 'Delete articles',
-    ],
+### The `Permissions` facade
 
-];
-```
-
-You don't need to describe ALL your permissions. Deadbolt will be able to figure out when permissions have descriptions and which don't.
-
-## Usage
-
-Deadbolt can be used through the `Deadbolt` facade.
+Deadbolt provides a Laravel facade named `Permissions`. Anything that Deadbolt can do can be handled through the use of this facade.
 
 ### Getting the defined permissions
 
 You can easily grab a list of permissions:
 
 ```php
-$permissions = Deadbolt::permissions();
+$permissions = Permissions::all();
+
+/*
+[
+	'articles.create',
+	'articles.edit',
+	'articles.delete',
+]
+*/
 ```
 
-This will return an array of permission names. If you also want the descriptions included with the array of permission names, you can use the `describe` method:
+This will return an array of permission names. If you also want the descriptions you defined for each permission, you can use the describe method:
 
 ```php
-$permissions = Deadbolt::describe();
+$permissions = Permissions::describe();
 
-// You can also filter the description array;
-
-$permissions = Deadbolt::describe('articles.create', 'articles.edit');
+/*
+[
+	'articles.create' => 'Create Articles',
+	'articles.edit' => 'Edit Articles',
+	'articles.delete' => 'Delete Articles',
+]
+*/
 ```
 
-### The `User` instance
-
-Deadbolt works by assigning permissions to a user. By `user`, we mean any model that has a `permissions` column in the database table. It doesn't have to be an actual user.
-The `user()` method will return an instance of the `Deadbolt\\User` class and is purely used to manipulate permissions on your models.
-
-For example, to get a new `Deadbolt\\User` instance from the currently logged user, you could do:
+You can also use the describe method to get the description for just one permission, or a sub-set of permissions:
 
 ```php
-$deadbolt = Deadbolt::user($request()->user());
+$permission = Permission::describe('articles.create');
+// $permission = 'Create Articles';
+
+$permissions = Permissions::describe(['articles.create', 'articles.edit']);
+
+/*
+[
+	'articles.create' => 'Create Articles',
+	'articles.edit' => 'Edit Articles',
+]
+*/
 ```
 
-### Permanence
+### Assigning permissions
 
-Before continuing, just a note about permanence. Permissions are not permanent by default. Deadbolt will assign the permission set for the duration of the request or until the user is refreshed from the DB, but to make them permanent, you must call the `save()` method:
+Deadbolt uses the word "User" to mean any model that has permissions. Meaning any Laravel model that has a "permissions" column, but it doesn't have to your actual `User` model. It could be `Role` model, or an `Organisation` model, for example.
+
+To work with permissions on a "user" Deadbolt provides a `user()` method on the `Permissions` facade to which you need to pass your Laravel model:
 
 ```php
-Deadbolt::user($user)->save();
-
-// since changes are made directly to the model, you can also do...
-
-$user->save();
+$deadbolt = Permissions::user($request->user());
 ```
 
-You can check if a permission set is permanent by calling the `saved()` method:
+There are two main methods you can use to assign permissions. The `give()` method can be used to assign specific permissions, and the `super()` method is a quick way to assign ALL permissions.
 
 ```php
-Deadbolt::user($user)->saved();
+// Give a single permission
+Permissions::user($user)->give('articles.create');
+
+// Give muliple permissions
+Permissions::user($user)->give('articles.create', 'articles.edit');
+
+// Give an array of permissions
+Permissions::user($user)->give($arrayOfPermissions);
 ```
 
-This simply compares the in-memory model to the original. If they're different, the `saved()` method will return false.
-
-### Give a user permissions
-
-Use the `give()` method to assign permissions to a user.
+The `super()` method is really just a shortcut for `give(Permissions::all())`:
 
 ```php
-$user = User::find(1);
-
-Deadbolt::user($user)->give('articles.edit', 'articles.create', 'articles.delete');
-
-// or you can pass in an array
-
-$permissions = ['articles.edit', 'articles.delete'];
-Deadbolt::user($user)->give($permissions);
+Permissions::user($user)->super();
 ```
 
-You can also add ALL the defined permissions in one go by using the `super()` method:
+If you attempt to assign a non-existent permission you'll get a `NoSuchPermissionException`.
 
 ```php
-Deadbolt::user($user)->super();
+Permissions::user($user)->give('articles.publish');
+// Throws a NoSuchPermissionException.
 ```
 
-Attempting to assign a permission that is not defined will throw a `NoSuchPermissionException`.
+### Taking permissions away
 
-### Revoke a user permission
-
-Revoke permissions using the `revoke()` method:
+You can take permissions away from a user with the `revoke` method. It works in much the same way as `give`:
 
 ```php
-Deadbolt::user($user)->revoke('articles.delete');
+// Revoke a single permission
+Permissions::user($user)->revoke('articles.edit');
+
+// Revoke multiple permissions
+Permissions::user($user)->revoke('articles.edit', 'articles.delete');
+
+// Revoke an array of permissions
+Permissions::user($user)->revoke($arrayOfArticles);
 ```
 
-You can revoke ALL the users permissions by using the `revokeAll()` method:
+Again, trying to revoke a permission that is not defined will throw a `NoSuchPermissionException`, however attempting to a permission DOES exist but not assigned to the user, the `revoke` method will do nothing.
+
+In addition there is also a `revokeAll` method which is simply remove all permissions currently assigned to the user.
 
 ```php
-Deadbolt::user($user)->revokeAll();
+Permissions::user($user)->revokeAll();
 ```
 
 ### Syncing permissions
 
-There is also a `sync` method which will sync the permissions on the user with the permissions provided. Permissions that are currently assigned to the user will be removed. This is a convenience method and performs the same tasks as `revokeAll` and `give` in that order.
+Sometimes it can be useful to synchronise a users permissions. You can do this with the `sync` method, which will revoke permissions NOT in the passed array and assign permissions that are not already assigned:
 
 ```php
-Deadbolt::user($user)->sync('articles.edit', 'articles.delete');
+Permissions::user($user)->sync($arrayOfPermissions);
 ```
 
-## Testing permissions
+Essentially, this is the same as doing `revokeAll()->give($arrayOfPermissions)`.
 
-Once a user has been given permissions you can test them using the following methods:
+## Testing for permissions
+
+Now that you have users with permissions, you need to be able to test for those permissions. Deadbolt provides a simple set of methods for this.
 
 ### has
 
-Check if a user has a single permission using the `has()` method:
+Use the `has` method to check if a user has *ALL* of the specified permissions:
 
 ```php
-Deadbolt::user($user)->has('articles.create');
+// Check if a user has a permission
+Permissions::user($user)->has('articles.create');
+
+// Check that a user has ALL of the permissions
+Permissions::user($user)->has('articles.create', 'articles.edit');
 ```
 
-### hasAll
+### any
 
-Check if a user has all of the specified permissions:
+Use the `any` method to check if a user has ANY of the permissions specified:
 
 ```php
-Deadbolt::user($user)->hasAll('articles.create', 'articles.edit');
+// Will be true even if only one of the permissions is assigned.
+Permissions::user($user)->any('articles.edit', 'articles.delete');
 ```
 
-### hasAny
+### none
 
-If you need to check if a user has at least one of the specified permissions, you can use the `hasAny` method:
+Use the `none` method to ensure that a user has NONE of the permissions specified:
 
 ```php
-Deadbolt::user($user)->hasAny('articles.create', 'articles.edit', 'articles.delete');
+// Will be false if the user has any of the specified permissions
+Permissions::user($user)->none('articles.create', 'articles.delete');
 ```
 
-### hasNone
+## Multiple users
 
-If you need to make sure that a user does NOT have any of the specified permissions, then the `hasNone` method can be used:
+Deadbolt also allows you to deal with permissions across multiple users at the same time. By using the `users` method on the `Permissions` facade, you can use the same set of methods to work with more than one user at a time by passing a collection of user models:
 
 ```php
-Deadbolt::user($user)->hasNone('articles.create', 'articles.edit');
+// Give all the users a permission
+Permissions::users($users)->give('articles.edit');
+
+// Remove the specified permisssions from all users.
+Permissions::users($users)->revoke('articles.delete');
 ```
+
+For testing permissions there are special set of methods specifically for testing across multiple users.
+
+### have
+
+Use the `have` method to test that all the users have the specified permissions:
+
+```php
+// All the users MUST HAVE all of the permissions
+Permissions::users($users)->have($arrayOfPermissions);
+```
+
+### dontHave
+
+Use the `dontHave` method to ensure that NONE of the users have the specified permissions:
+
+```php
+Permissions::users($users)->dontHave($arrayOfPermissions);
+```
+
+### any
+
+## The `HasPermissions` Trait
+
+Deadbolt also comes with a simple `HasPermissions` trait which you can add to your `User` model (or whichever model is given permissions. It works by simply doing the `Permissions::user($user)` part for you. To get started, simply add the `HasPermissions` trait to your model:
+
+```php
+class User extends Authenticatable
+{
+    use HasPermissions;
+
+		//...
+}
+```
+
+Now you have access to Deadbolt directly on the user model through the `permissions()` method:
+
+```php
+$user = User::find(1);
+
+// Give a permission
+$user->permissions()->give('articles.edit');
+
+// Or revoke a permission
+$user->permissions()->revoke('articles.edit');
+
+// Or test for a permission
+$canEdit = $user->permissions()->has('articles.edit');
+```
+
+The `HasPermissions` trait is optional and there is no requirement for you to use it instead of using the `Permissions` facade directly. Either way is correct and you can choose whichever feels better.
 
 ## Laravel Policies
 
-Laravel policies are a great way to deal with user abilities associated with your different models, and deadbolt works perfectly with policies. You can read the Laravel documentation about policies [here](https://laravel.com/docs/6.x/authorization#creating-policies).
+Laravel policies are a great way to deal with user abilities associated with your different models, and Deadbolt works perfectly with Laravel policies. You can read the Laravel documentation about policies [here](https://laravel.com/docs/authorization#creating-policies).
 
-Once you have a policy in place, you can do something like this:
+A simple policy that uses Deadbolt could look something like this:
 
 ```php
 <?php
@@ -242,6 +306,9 @@ class ArticlePolicy
     public function create(User $user)
     {
         return Deadbolt::user($user)->has('articles.create');
+
+				// Or if you're using the HasPermissions trait:
+				return $user->permissions()->has('articles.create');
     }
 }
 ```
@@ -252,158 +319,36 @@ And you can test the policy with:
 $user->can('create', Article::class);
 ```
 
-This is handy if a policy needs to test for more than one permission:
+And if a policy needs to test for more than one permission:
 
 ```php
 public function update(User $user, Article $article)
 {
     return Deadbolt::user($user)->hasAll('articles.create', 'articles.edit');
+
+		// Or if you're using the HasPermissions trait:
+		return $user->hasAll('articles.create', 'articles.edit');
 }
 ```
 
-## Groups
-
-> The groups system will be removed from version 2. I feel that the groups feature makes Deadbolt more complex than it was intended, so I'm going back to the basics and looking at what Deadbolt was supposed to be. Groups don't offer the same value as proper roles. Deadbolt is meant to be a simple permissions library and groups don't fit well with that idea.
-
-Deadbolt groups are a simple solution to grouping permissions together in some form of logical collection. For example, you might have a group named `publisher` which contains the permissions `edit articles` and `publish articles` but not `create articles` or `delete articles`. When assigning a group to a user, the permissions within the group are assigned instead.
-
-It is considered bad practice to authorize a user based on groups. You should test for user permissions instead. Groups are a convenience tool used to collect permissions together and those permissions can change at any time causing unexpected issues. Deadbolt groups are not assigned to users but rather the permissions they collect. It's important to note that if the permissions in a group change, the users who were originally assigned that group will not gain the changed permissions.
-
-Although they may appear similar, Deadbolt groups are not roles. If you're looking for a way to implement proper roles, there is a wiki article [here](https://github.com/tpg/deadbolt/wiki/2.-Roles) about how Deadbolt can still be used to do so. Otherwise, you may need to look for an alternative solution.
-
-### Defining groups
-
-Define groups in the `deadbolt.php` config file and assign the permissions you want in the group.
+Policies can be used to test abilities like this:
 
 ```php
-return [
-
-    'permissions' => [
-        'create articles',
-        'edit articles',
-        'publish articles',
-        'delete articls',
-    ]
-
-    'groups' => [
-
-        'writer' => [
-            'create articles',
-            'edit articles',
-            'delete articles',
-        ],
-        'publisher' => [
-            'edit articles',
-            'publish articles',
-        ]
-    ]
-
-];
-```
-
-### Assigning groups
-
-There's no need for another API just to manage groups. You can assign groups to user with the `give` method in the same way you assign permissions:
-
-```php
-Deadbolt::user($user)->give('publisher');
-```
-
-Deadbolt will figure out if the name is a permission or a group (permissions take precidence) and will assign the permissions from that group.
-
-The above will assign the `edit articles` and `publish articles` permissions.
-
-### Revoking groups
-
-In the same way you use the `give` method to assign both groups and permissions, you can use the same `revoke` method to remove them.
-
-However, be careful when revoking groups. Deadbolt will remove all the permissions associated with that group regardless of any other groups that may have been assigned to the same user. For example:
-
-```php
-Deadbolt::user($user)->give('publisher', 'writer');
-Deadbolt::user($user)->revoke('publisher');
-```
-
-The above will revoke the `edit articles` permission because it is in the `publisher` group. Even though the `writer` group, which has the same permission wasn't revoked.
-
-### Mixing permissions and groups
-
-Both the `give` and `revoke` methods will accept group and permission names in one go. For example, if you need to assign the `publisher` group, but also give a user the `articles.delete` permission, you can do so by calling `give` once:
-
-```php
-Deadbolt::user($user)->give('publisher', 'articles.delete');
-```
-
-Likewize, if you need to revoke the a group as well as an additional permission:
-
-```php
-Deadbolt::user($user)->revoke('publisher', 'articles.delete');
-```
-
-### Getting a users groups
-
-You can also check what groups a user has by the permissions they have. Users don't actually get assigned groups, but we can deduce the groups by their permissions.
-
-```php
-$groups = Deadbolt::user()->groups();
-```
-
-### Check if a user has a group
-
-You can also check if a specific group is applied to a user using the `is` method:
-
-```php
-if (Deadbolt::user($user)->is('publisher')) {
-    // ...
-}
-```
-
-## Multiple users
-
-Deadbolt allows you to modify the permissions of multiple users at the same time. The `Deadbolt` facade provides access to a `users` method that takes a collection of users (can be a `Collection` instance or an array, etc). The `users` method returns a `UserCollection` instance that provides a few simple methods for working with all the users in the collection at the same time. The same methods work on the collection. For example, you can give all the users the same set of permissions in one go:
-
-```php
-$users = User::all();
-
-Deadbolt::users($users)->give('articles.create');
-```
-
-You can revoke permissions in the same way:
-
-```php
-Deadbolt::users($users)->revoke('articles.create');
-```
-
-The `UserCollection` class also provides some handy methods for testing permissions on the colection. Test test that all the users have the specified permissions, you can use the `allHave` method:
-
-```php
-Deadbolt::users($users)->allHave('articles.edit');
-```
-
-Or if you need to test that any of the users have a specified permission regardless of if the others have it or not, you can use the `anyHave` method:
-
-```php
-Deadbolt::users($users)->anyHave('articles.edit');
-```
-
-There is also a `noneHave` method to test if none of the users have the specified permissions:
-
-```php
-Deadbolt::users($users)->noneHave('articles.edit');
+$user->can('update', $article);
 ```
 
 ## Drivers
 
-Deadbolt is designed for simplicity, but sometimes you might need something just a little more flexible. Deadbolt uses a simple driver system for sourcing groups and permissions, so you can provide your own custom implementations. This can be handy if you really do want to store your permissions in your database.
+Deadbolt is designed for simplicity, but sometimes you might need something just a little more flexible. Deadbolt uses a simple driver system for sourcing permissions, so it's easy to provide your own custom implementations. This can be handy if you really do want to store your permissions in your database, for example.
 
-Deadbolt includes an `ArrayDriver` by default that sources permissions and groups from the `deadbolt` config. If you want to use a custom driver you can do so by passing a new driver instance to the `driver` method before calling `user()`:
+Deadbolt includes an `ArrayDriver` by default that sources permissions from the default `deadbolt.php` config file. If you want to write a custom driver you can do so by passing a new driver instance to the driver method before calling `user()`:
 
 ```php
 $driver = new DatabaseDriver($config);
 Deadbolt::driver($driver))->user($user)->give('...');
 ```
 
-If you don't want to call the `driver` method everytime you use Deadbolt, then you can se the custom driver in the `deadbolt` config file:
+It's annoying to call the `driver` method every time you use Deadbolt, so you can set the custom driver in the config file:
 
 ```php
 return [
@@ -413,13 +358,11 @@ return [
 ];
 ```
 
-The deadbolt config file will always be passed to the constructor of the custom driver in this case, so you can use it to include any custom config you have.
+### Custom Drivers
 
-### Writing custom drivers
+If, for example, you need to source a list of permissions from your database, you can write your own driver. A custom driver class needs to implement `Drivers\Contacts\DriverInterface` and the only requirement is to implement a `permissions` method.
 
-All custom drivers MUST implement `Drivers\\Contracts\\DriverInterface` which requires that a `permissions()` and a `groups()` method exists.
-
-The `permissions` method must return an array of permission names, and a `groups` method must return the an array of groups, each an array of permissions.
+The `permissions` method must return an array of permission names:
 
 ```php
 <?php
@@ -439,7 +382,7 @@ class DatabaseDriver implements DriverInterface
         $this->config = $config;
     }
 
-    public function permissions(...$groups): array
+    public function permissions(): array
     {
         // return an array of permission names filtered by `$groups`
         // Descriptions MUST be included, or null, even if not set.
@@ -447,25 +390,17 @@ class DatabaseDriver implements DriverInterface
             'articles.create' => 'Create articles',
             'articles.edit' => null,
             'articles.delete' => null,
-        ];
-    }
-
-    public function groups(): array
-    {
-        //return an array of permissions keyed by group names.
-        return [
-            'publisher' => [
-                'articles.edit',
-                'articles.publish',
-            ],
-            'writer' => [
-                'articles.create',
-                'articles.edit',
-                'articles.delete',
-            ],
-        ];
+        ];        
     }
 }
 ```
 
-How the permissions and groups are sourced is up to you. You could created a `DatabaseDriver` or even an `HttpDriver`. A simple example of a custom `DatabaseDeadboltDriver` can be found [here](https://github.com/tpg/deadbolt/wiki/3.-Custom-Database-Driver).
+How the `permissions` method sources permissions is up to you. It could a database request, or even a remote API request.
+
+## Upgrading from version 1
+
+If you're upgrading Deadbolt from version that is already used on a project, then you should be able to simply replace Deadbolt 1 with Deadbolt 2. However, if you have used the "groups" feature Deadbolt 1 you will need to look at an alternative since groups are no longer available as of Deadbolt 2.
+
+In addition, if you are using a custom Driver, the removal of groups will affect the method signatures. The original `groups` method has been removed, and the `permissions` method no longer takes any parameters.
+
+Deadbolt 2 only supports PHP 7.3 and up, and Laravel 7.0 and up.

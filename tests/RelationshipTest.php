@@ -47,7 +47,7 @@ class RelationshipTest extends TestCase
 
         $user->load('roles');
 
-        $this->assertTrue(Deadbolt::users($user->roles)->anyHave('articles.create'));
+        $this->assertTrue(Deadbolt::users($user->roles)->anyHave('articles.edit'));
         $this->assertFalse(Deadbolt::users($user->roles)->allHave('articles.delete'));
     }
 }
