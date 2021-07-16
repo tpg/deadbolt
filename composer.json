@@ -44,9 +44,6 @@
             "aliases": {
                 "Deadbolt": "Permissions"
             }
-        },
-        "branch-alias": {
-            "dev-master": "2.0-dev"
         }
     }
 }
