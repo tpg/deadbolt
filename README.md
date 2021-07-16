@@ -153,6 +153,12 @@ Deadbolt::user($user)->give('articles.publish');
 // Throws a NoSuchPermissionException.
 ```
 
+You can always get an array of permissions that are currently assigned to the user using the `all` method:
+
+```php
+$permissions = Deadbolt::user($user)->all();
+```
+
 ### Taking permissions away
 
 You can take permissions away from a user with the `revoke` method. It works in much the same way as `give`:
