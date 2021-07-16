@@ -329,6 +329,7 @@ class User
      * Get an array of permissions assigned to the user.
      *
      * @return array
+     * @deprecated Has been renamed as `all()` in version 2.0.
      */
     public function permissions(): array
     {
