@@ -67,16 +67,16 @@ The point of defining your permissions here is to create a single source of trut
 
 ## Working with permissions
 
-### The `Permissions` facade
+### The `Deadbolt` facade
 
-Deadbolt provides a Laravel facade named `Permissions`. Anything that Deadbolt can do can be handled through the use of this facade.
+Deadbolt provides a Laravel facade named `Deadbolt`. Anything that Deadbolt can do can be handled through the use of this facade.
 
 ### Getting the defined permissions
 
 You can easily grab a list of permissions:
 
 ```php
-$permissions = Permissions::all();
+$permissions = Deadbolt::all();
 
 /*
 [
@@ -90,7 +90,7 @@ $permissions = Permissions::all();
 This will return an array of permission names. If you also want the descriptions you defined for each permission, you can use the describe method:
 
 ```php
-$permissions = Permissions::describe();
+$permissions = Deadbolt::describe();
 
 /*
 [
@@ -104,10 +104,10 @@ $permissions = Permissions::describe();
 You can also use the describe method to get the description for just one permission, or a sub-set of permissions:
 
 ```php
-$permission = Permission::describe('articles.create');
+$permission = Deadbolt::describe('articles.create');
 // $permission = 'Create Articles';
 
-$permissions = Permissions::describe(['articles.create', 'articles.edit']);
+$permissions = Deadbolt::describe(['articles.create', 'articles.edit']);
 
 /*
 [
@@ -124,32 +124,32 @@ Deadbolt uses the word "User" to mean any model that has permissions. Meaning an
 To work with permissions on a "user" Deadbolt provides a `user()` method on the `Permissions` facade to which you need to pass your Laravel model:
 
 ```php
-$deadbolt = Permissions::user($request->user());
+$deadbolt = Deadbolt::user($request->user());
 ```
 
 There are two main methods you can use to assign permissions. The `give()` method can be used to assign specific permissions, and the `super()` method is a quick way to assign ALL permissions.
 
 ```php
 // Give a single permission
-Permissions::user($user)->give('articles.create');
+Deadbolt::user($user)->give('articles.create');
 
 // Give muliple permissions
-Permissions::user($user)->give('articles.create', 'articles.edit');
+Deadbolt::user($user)->give('articles.create', 'articles.edit');
 
 // Give an array of permissions
-Permissions::user($user)->give($arrayOfPermissions);
+Deadbolt::user($user)->give($arrayOfPermissions);
 ```
 
-The `super()` method is really just a shortcut for `give(Permissions::all())`:
+The `super()` method is really just a shortcut for `give(Deadbolt::all())`:
 
 ```php
-Permissions::user($user)->super();
+Deadbolt::user($user)->super();
 ```
 
 If you attempt to assign a non-existent permission you'll get a `NoSuchPermissionException`.
 
 ```php
-Permissions::user($user)->give('articles.publish');
+Deadbolt::user($user)->give('articles.publish');
 // Throws a NoSuchPermissionException.
 ```
 
@@ -159,13 +159,13 @@ You can take permissions away from a user with the `revoke` method. It works in 
 
 ```php
 // Revoke a single permission
-Permissions::user($user)->revoke('articles.edit');
+Deadbolt::user($user)->revoke('articles.edit');
 
 // Revoke multiple permissions
-Permissions::user($user)->revoke('articles.edit', 'articles.delete');
+Deadbolt::user($user)->revoke('articles.edit', 'articles.delete');
 
 // Revoke an array of permissions
-Permissions::user($user)->revoke($arrayOfArticles);
+Deadbolt::user($user)->revoke($arrayOfArticles);
 ```
 
 Again, trying to revoke a permission that is not defined will throw a `NoSuchPermissionException`, however attempting to a permission DOES exist but not assigned to the user, the `revoke` method will do nothing.
@@ -173,7 +173,7 @@ Again, trying to revoke a permission that is not defined will throw a `NoSuchPer
 In addition there is also a `revokeAll` method which is simply remove all permissions currently assigned to the user.
 
 ```php
-Permissions::user($user)->revokeAll();
+Deadbolt::user($user)->revokeAll();
 ```
 
 ### Syncing permissions
@@ -181,7 +181,7 @@ Permissions::user($user)->revokeAll();
 Sometimes it can be useful to synchronise a users permissions. You can do this with the `sync` method, which will revoke permissions NOT in the passed array and assign permissions that are not already assigned:
 
 ```php
-Permissions::user($user)->sync($arrayOfPermissions);
+Deadbolt::user($user)->sync($arrayOfPermissions);
 ```
 
 Essentially, this is the same as doing `revokeAll()->give($arrayOfPermissions)`.
@@ -196,10 +196,10 @@ Use the `has` method to check if a user has *ALL* of the specified permissions:
 
 ```php
 // Check if a user has a permission
-Permissions::user($user)->has('articles.create');
+Deadbolt::user($user)->has('articles.create');
 
 // Check that a user has ALL of the permissions
-Permissions::user($user)->has('articles.create', 'articles.edit');
+Deadbolt::user($user)->has('articles.create', 'articles.edit');
 ```
 
 ### any
@@ -208,7 +208,7 @@ Use the `any` method to check if a user has ANY of the permissions specified:
 
 ```php
 // Will be true even if only one of the permissions is assigned.
-Permissions::user($user)->any('articles.edit', 'articles.delete');
+Deadbolt::user($user)->any('articles.edit', 'articles.delete');
 ```
 
 ### none
@@ -217,19 +217,19 @@ Use the `none` method to ensure that a user has NONE of the permissions specifie
 
 ```php
 // Will be false if the user has any of the specified permissions
-Permissions::user($user)->none('articles.create', 'articles.delete');
+Deadbolt::user($user)->none('articles.create', 'articles.delete');
 ```
 
 ## Multiple users
 
-Deadbolt also allows you to deal with permissions across multiple users at the same time. By using the `users` method on the `Permissions` facade, you can use the same set of methods to work with more than one user at a time by passing a collection of user models:
+Deadbolt also allows you to deal with permissions across multiple users at the same time. By using the `users` method on the `Deadbolt` facade, you can use the same set of methods to work with more than one user at a time by passing a collection of user models:
 
 ```php
 // Give all the users a permission
-Permissions::users($users)->give('articles.edit');
+Deadbolt::users($users)->give('articles.edit');
 
 // Remove the specified permisssions from all users.
-Permissions::users($users)->revoke('articles.delete');
+Deadbolt::users($users)->revoke('articles.delete');
 ```
 
 For testing permissions there are special set of methods specifically for testing across multiple users.
@@ -240,7 +240,7 @@ Use the `have` method to test that all the users have the specified permissions:
 
 ```php
 // All the users MUST HAVE all of the permissions
-Permissions::users($users)->have($arrayOfPermissions);
+Deadbolt::users($users)->have($arrayOfPermissions);
 ```
 
 ### dontHave
@@ -248,14 +248,14 @@ Permissions::users($users)->have($arrayOfPermissions);
 Use the `dontHave` method to ensure that NONE of the users have the specified permissions:
 
 ```php
-Permissions::users($users)->dontHave($arrayOfPermissions);
+Deadbolt::users($users)->dontHave($arrayOfPermissions);
 ```
 
 ### any
 
 ## The `HasPermissions` Trait
 
-Deadbolt also comes with a simple `HasPermissions` trait which you can add to your `User` model (or whichever model is given permissions. It works by simply doing the `Permissions::user($user)` part for you. To get started, simply add the `HasPermissions` trait to your model:
+Deadbolt also comes with a simple `HasPermissions` trait which you can add to your `User` model (or whichever model is given permissions. It works by simply doing the `Deadbolt::user($user)` part for you. To get started, simply add the `HasPermissions` trait to your model:
 
 ```php
 class User extends Authenticatable
@@ -281,7 +281,7 @@ $user->permissions()->revoke('articles.edit');
 $canEdit = $user->permissions()->has('articles.edit');
 ```
 
-The `HasPermissions` trait is optional and there is no requirement for you to use it instead of using the `Permissions` facade directly. Either way is correct and you can choose whichever feels better.
+The `HasPermissions` trait is optional and there is no requirement for you to use it instead of using the `Deadbolt` facade directly. Either way is correct and you can choose whichever feels better.
 
 ## Laravel Policies
 
