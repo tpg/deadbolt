@@ -13,7 +13,7 @@ class addDeadboltPermissionsColumn extends Migration
     public function up(): void
     {
         Schema::table($this->table, function (Blueprint $table) {
-            $table->json('permissions')->after('id');
+            $table->json('permissions')->after('id')->nullable();
         });
     }
 
