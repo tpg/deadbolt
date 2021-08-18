@@ -42,7 +42,7 @@
                 "TPG\\Deadbolt\\DeadboltServiceProvider"
             ],
             "aliases": {
-                "Deadbolt": "Permissions"
+                "Deadbolt": "TPG\\Deadbolt\\Facades\\Deadbolt"
             }
         }
     }
