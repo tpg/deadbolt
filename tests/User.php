@@ -11,10 +11,10 @@ class User extends Authenticatable
 {
     use Notifiable, HasPermissions;
 
-    protected $casts = [
-        'permissions' => 'json',
-    ];
-
+//    protected $casts = [
+//        'permissions' => 'json',
+//    ];
+//
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);

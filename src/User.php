@@ -182,7 +182,7 @@ class User implements UserInterface
      */
     protected function userPermissions(bool $refresh = false): array
     {
-        $permissions = $this->user->{$this->config['column']} ?: [];
+        $permissions = $this->user->getAttributeValue($this->config['column']) ?: [];
         if (is_array($permissions)) {
             return $permissions;
         }
