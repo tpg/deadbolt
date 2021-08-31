@@ -1,4 +1,3 @@
-# README
 
 [![Tests](https://github.com/tpg/deadbolt/actions/workflows/php.yml/badge.svg)](https://github.com/tpg/deadbolt/actions/workflows/php.yml)
 
@@ -400,6 +399,35 @@ class DatabaseDriver implements DriverInterface
 ```
 
 How the `permissions` method sources permissions is up to you. It could a database request, or even a remote API request.
+
+## JavaScript Helper
+Deadbolt includes a simple JavaScript helper that provides some simple tools for checking permissions. You'll need to pass your User object to your front-end. You can import the `Deadbolt` class into your JavaScript component. If you're using Vue you could use it something like this:
+
+```javascript
+import Deadbolt from '../../vendor/thepublicgood/deadbolt/dist/Deadbolt';
+
+export default {
+  props: {
+    user: Object,
+  },
+  setup (props) {
+    
+    const deadbolt = new Deadbolt(props.user);
+    
+    // Check if the user has a permission
+    deadbolt.has('articles.create');
+    
+    // Check if the user has any permission
+    deadbolt.hasAny(['articles.create', 'articles.edit']);
+    
+    // Check if the user has all permissions
+    deadbolt.hasAll(['articles.edit', 'articles.delete']);
+    
+    // Check if the user has no permissions
+    deadbolt.hasNone(['articles.edit', 'articles.delete']);
+  }
+}
+```
 
 ## Upgrading from version 1
 
