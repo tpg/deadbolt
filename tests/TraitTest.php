@@ -9,7 +9,7 @@ class TraitTest extends TestCase
     /**
      * @test
      **/
-    public function it_can_get_all_permissions()
+    public function it_can_get_all_permissions(): void
     {
         $user = $this->user();
 
