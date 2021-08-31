@@ -1,7 +1,11 @@
-export class Deadbolt {
-    _permissions;
-    constructor(permissions) {
-        this._permissions = permissions;
+export default class Deadbolt {
+    constructor(user) {
+        if (typeof user.permissions === 'string') {
+            this._permissions = JSON.parse(user.permissions);
+        }
+        else {
+            this._permissions = user.permissions;
+        }
     }
     has(permission) {
         return this._permissions.includes(permission);

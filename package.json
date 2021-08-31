@@ -6,6 +6,9 @@
   "repository": "git@github.com:tpg/deadbolt.git",
   "author": "THEPUBLICGOOD <makers@thepublicgood.dev>",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
   "dependencies": {
     "typescript": "^4.4.2"
   }

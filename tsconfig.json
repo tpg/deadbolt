@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
+        "target": "es2019",
+        "module": "es6",
         "moduleResolution": "node",
         "sourceMap": true,
         "strict": true,

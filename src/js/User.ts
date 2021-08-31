@@ -1,3 +1,3 @@
 export interface User {
-    permissions: [string],
+    permissions: string[]|string,
 }
