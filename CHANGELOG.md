@@ -4,9 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [2.1.0] 2021-09-01
 ### Added
-- Added a simple JavaScript library to aid in using permissions on the front-end.
+- Added a simple JavaScript library to aid in using permissions on the front-end (ESM).
+- Cleaned up some PHP tests.
+- Added a basic MochaJS test for the new JavaScript class.
+- Updated the README with info about the JavaScript implementation.
+- [fixed] A bug that would cause an exception when using the `HasPermissions` trait.
+
+## [2.0.2] 2021-08-18
+### Fixed
+- Made a change to `composer.json` causing problems with the `Deadbolt` alias. #22
+
+## [2.0.1] 2021-08-11
+### Changed
+- The `permissions` column in the default migration is now nullable by default.
 
 ## [2.0.0] 2021-07-16
 ### Removed
