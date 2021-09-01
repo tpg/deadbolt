@@ -1,5 +1,5 @@
 
-[![Tests](https://github.com/tpg/deadbolt/actions/workflows/php.yml/badge.svg)](https://github.com/tpg/deadbolt/actions/workflows/php.yml)
+[![Tests](https://github.com/tpg/deadbolt/actions/workflows/tests.yml/badge.svg)](https://github.com/tpg/deadbolt/actions/workflows/tests.yml)
 
 ## Why another authorization package?
 
