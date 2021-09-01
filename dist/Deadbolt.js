@@ -1,10 +1,10 @@
 export default class Deadbolt {
-    constructor(user) {
+    constructor(user, column = 'permissions') {
         if (typeof user.permissions === 'string') {
-            this._permissions = JSON.parse(user.permissions);
+            this._permissions = JSON.parse(user[column]);
         }
         else {
-            this._permissions = user.permissions;
+            this._permissions = user[column];
         }
     }
     has(permission) {

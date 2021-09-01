@@ -4,11 +4,11 @@ export default class Deadbolt {
 
     readonly _permissions: string[];
 
-    constructor(user: User) {
+    constructor(user: User, column: string = 'permissions') {
         if (typeof user.permissions === 'string') {
-            this._permissions = JSON.parse(user.permissions);
+            this._permissions = JSON.parse(user[column]);
         } else {
-            this._permissions = user.permissions;
+            this._permissions = user[column];
         }
     }
 

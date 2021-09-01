@@ -408,23 +408,23 @@ import Deadbolt from '../../vendor/thepublicgood/deadbolt/dist/Deadbolt';
 
 export default {
   props: {
-    user: Object,
+    user: Object,   // The object that has the "permissions" column
   },
   setup (props) {
     
-    const deadbolt = new Deadbolt(props.user);
+    const permissions = new Deadbolt(props.user);
     
     // Check if the user has a permission
-    deadbolt.has('articles.create');
+    permissions.has('articles.create');
     
     // Check if the user has any permission
-    deadbolt.hasAny(['articles.create', 'articles.edit']);
+    permissions.hasAny(['articles.create', 'articles.edit']);
     
     // Check if the user has all permissions
-    deadbolt.hasAll(['articles.edit', 'articles.delete']);
+    permissions.hasAll(['articles.edit', 'articles.delete']);
     
     // Check if the user has no permissions
-    deadbolt.hasNone(['articles.edit', 'articles.delete']);
+    permissions.hasNone(['articles.edit', 'articles.delete']);
   }
 }
 ```

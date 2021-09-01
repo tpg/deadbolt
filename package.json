@@ -1,6 +1,6 @@
 {
   "name": "deadbolt",
-  "version": "",
+  "version": "2.0.3-0.0.2",
   "description": "Dead simple permissions for Laravel",
   "main": "index.js",
   "repository": "git@github.com:tpg/deadbolt.git",
