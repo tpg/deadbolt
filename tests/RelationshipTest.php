@@ -28,7 +28,7 @@ class RelationshipTest extends TestCase
     /**
      * @test
      */
-    public function it_can_test_related_roles()
+    public function it_can_test_related_roles(): void
     {
         $user = $this->user();
 

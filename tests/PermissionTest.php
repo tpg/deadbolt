@@ -12,7 +12,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_an_array_of_defined_permissions()
+    public function it_can_get_an_array_of_defined_permissions(): void
     {
         $permissions = Deadbolt::all();
 
@@ -26,7 +26,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_describe_the_specified_permissions()
+    public function it_can_describe_the_specified_permissions(): void
     {
         self::assertEquals(['articles.create' => 'Create Articles'], Deadbolt::describe('articles.create'));
         self::assertEquals(['articles.edit' => null], Deadbolt::describe('articles.edit'));
@@ -35,20 +35,20 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function users_can_have_permissions()
+    public function users_can_have_permissions(): void
     {
         $user = $this->user();
 
         Deadbolt::user($user)->give('articles.edit', 'articles.create');
 
         self::assertTrue(Deadbolt::user($user)->has('articles.edit'));
-        self::assertTrue(in_array('articles.create', Deadbolt::user($user)->all()));
+        self::assertContains('articles.create', Deadbolt::user($user)->all());
     }
 
     /**
      * @test
      */
-    public function it_can_test_that_a_user_has_all_the_specified_permissions()
+    public function it_can_test_that_a_user_has_all_the_specified_permissions(): void
     {
         $user = $this->user();
         Deadbolt::user($user)->give('articles.edit', 'articles.create');
@@ -60,7 +60,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_test_that_a_user_has_any_of_the_specified_permissions()
+    public function it_can_test_that_a_user_has_any_of_the_specified_permissions(): void
     {
         $user = $this->user();
         Deadbolt::user($user)->give('articles.edit');
@@ -72,7 +72,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_test_that_a_user_has_none_of_the_specified_permissions()
+    public function it_can_test_that_a_user_has_none_of_the_specified_permissions(): void
     {
         $user = $this->user();
         Deadbolt::user($user)->give('articles.edit');
@@ -84,7 +84,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_will_throw_an_exception_if_the_permission_does_not_exist()
+    public function it_will_throw_an_exception_if_the_permission_does_not_exist(): void
     {
         $user = $this->user();
 
@@ -95,7 +95,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_make_a_super_user()
+    public function it_can_make_a_super_user(): void
     {
         $user = $this->user();
         Deadbolt::user($user)->super();
@@ -106,7 +106,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_revoke_permissions_from_a_user()
+    public function it_can_revoke_permissions_from_a_user(): void
     {
         $user = $this->user();
         Deadbolt::user($user)->super();
@@ -119,7 +119,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_revoke_all_permissions_from_a_user()
+    public function it_can_revoke_all_permissions_from_a_user(): void
     {
         $user = $this->user();
         Deadbolt::user($user)->super();
@@ -132,7 +132,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_sync_permissions()
+    public function it_can_sync_permissions(): void
     {
         $user = $this->user();
         Deadbolt::user($user)->give('articles.edit');
@@ -146,7 +146,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_allows_a_different_column_name()
+    public function it_allows_a_different_column_name(): void
     {
         $this->app['config']->set('deadbolt.column', 'rights');
 
@@ -173,7 +173,7 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_assign_permissioins_to_multiple_users()
+    public function it_can_assign_permissioins_to_multiple_users(): void
     {
         $users = $this->getUserCollection();
 

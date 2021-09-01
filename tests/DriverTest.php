@@ -9,7 +9,7 @@ class DriverTest extends TestCase
     /**
      * @test
      */
-    public function it_can_use_a_custom_driver()
+    public function it_can_use_a_custom_driver(): void
     {
         $this->app['config']->set('deadbolt.driver', CustomDriver::class);
 
@@ -26,7 +26,7 @@ class DriverTest extends TestCase
     /**
      * @test
      */
-    public function a_custom_driver_can_be_set_inline()
+    public function a_custom_driver_can_be_set_inline(): void
     {
         $user = $this->user();
 
