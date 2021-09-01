@@ -267,7 +267,7 @@ class User extends Authenticatable
 {
     use HasPermissions;
 
-		//...
+    //...
 }
 ```
 
@@ -310,8 +310,8 @@ class ArticlePolicy
     {
         return Deadbolt::user($user)->has('articles.create');
 
-				// Or if you're using the HasPermissions trait:
-				return $user->permissions()->has('articles.create');
+		// Or if you're using the HasPermissions trait:
+		return $user->permissions()->has('articles.create');
     }
 }
 ```
@@ -329,8 +329,8 @@ public function update(User $user, Article $article)
 {
     return Deadbolt::user($user)->hasAll('articles.create', 'articles.edit');
 
-		// Or if you're using the HasPermissions trait:
-		return $user->hasAll('articles.create', 'articles.edit');
+	// Or if you're using the HasPermissions trait:
+	return $user->hasAll('articles.create', 'articles.edit');
 }
 ```
 
