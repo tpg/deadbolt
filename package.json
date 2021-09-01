@@ -6,10 +6,15 @@
   "repository": "git@github.com:tpg/deadbolt.git",
   "author": "THEPUBLICGOOD <makers@thepublicgood.dev>",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "mocha ./tests/js"
   },
   "dependencies": {
     "typescript": "^4.4.2"
+  },
+  "devDependencies": {
+    "mocha": "^9.1.1"
   }
 }

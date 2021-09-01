@@ -1,9 +1,14 @@
 name: Tests
 
-on: [push, pull_request]
+on:
+  pull_request:
+    paths-ignore: ['dist/**', '*.md']
+  push:
+    paths-ignore: ['dist/**', '*.md']
 
 jobs:
   tests:
+    name: PHP {{ matrix.php }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,6 +29,13 @@ jobs:
       - name: Install dependencies
         run: |
           composer update --prefer-dist --no-interaction --no-suggest
+          yarn install
 
-      - name: Execute tests
+      - name: Build
+        run: yarn build
+
+      - name: Run PHP tests
         run: vendor/bin/phpunit
+
+      - name: Rust JS tests
+        run: yarn test

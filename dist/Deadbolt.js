@@ -11,7 +11,7 @@ export default class Deadbolt {
         return this._permissions.includes(permission);
     }
     hasAll(permissions) {
-        return this._permissions.filter(permission => !permissions.includes(permission)).length === 0;
+        return permissions.filter(permission => !this._permissions.includes(permission)).length === 0;
     }
     hasAny(permissions) {
         return this._permissions.filter(permission => permissions.includes(permission)).length > 0;

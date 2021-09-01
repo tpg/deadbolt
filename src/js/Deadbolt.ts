@@ -17,7 +17,7 @@ export default class Deadbolt {
     }
 
     hasAll (permissions: string[]): boolean {
-        return this._permissions.filter(permission => !permissions.includes(permission)).length === 0;
+        return permissions.filter(permission => !this._permissions.includes(permission)).length === 0;
     }
 
     hasAny (permissions: string[]): boolean {
