@@ -7,7 +7,7 @@ namespace TPG\Deadbolt\Exceptions;
 class NoSuchPermissionException extends \Exception
 {
     /**
-     * @param string $permission
+     * @param  string  $permission
      */
     public function __construct(string $permission)
     {

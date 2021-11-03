@@ -26,9 +26,9 @@ class User implements UserInterface
     protected $permissions;
 
     /**
-     * @param Model $user
-     * @param array $permissions
-     * @param array $config
+     * @param  Model  $user
+     * @param  array  $permissions
+     * @param  array  $config
      */
     public function __construct(Model $user, array $permissions, array $config)
     {
@@ -40,8 +40,9 @@ class User implements UserInterface
     /**
      * Give the specified permissions.
      *
-     * @param mixed ...$names
+     * @param  mixed  ...$names
      * @return UserInterface
+     *
      * @throws JsonException|NoSuchPermissionException
      */
     public function give(...$names): UserInterface
@@ -60,7 +61,7 @@ class User implements UserInterface
     /**
      * Merge the specified permissions with the current permissions.
      *
-     * @param array $permissions
+     * @param  array  $permissions
      * @return UserInterface
      */
     protected function assignPermissions(array $permissions): UserInterface
@@ -79,6 +80,7 @@ class User implements UserInterface
      * Make a super user.
      *
      * @return UserInterface
+     *
      * @throws JsonException|NoSuchPermissionException
      */
     public function super(): UserInterface
@@ -91,6 +93,7 @@ class User implements UserInterface
      *
      * @param  mixed  ...$names
      * @return UserInterface
+     *
      * @throws JsonException
      */
     public function revoke(...$names): UserInterface
@@ -115,7 +118,7 @@ class User implements UserInterface
     /**
      * Sync permissions with the names provided.
      *
-     * @param mixed ...$names
+     * @param  mixed  ...$names
      * @return UserInterface
      */
     public function sync(...$names): UserInterface
@@ -138,8 +141,9 @@ class User implements UserInterface
     /**
      * Check if an array is defined.
      *
-     * @param string $permission
+     * @param  string  $permission
      * @return bool
+     *
      * @throws NoSuchPermissionException
      */
     protected function exists(string $permission): bool
@@ -154,7 +158,7 @@ class User implements UserInterface
     /**
      * Check if the given name is a permission.
      *
-     * @param string $name
+     * @param  string  $name
      * @return bool
      */
     protected function isPermission(string $name): bool
@@ -167,6 +171,7 @@ class User implements UserInterface
      *
      * @param  string  $permission
      * @return bool
+     *
      * @throws JsonException
      */
     public function has(string $permission): bool
@@ -178,6 +183,7 @@ class User implements UserInterface
      * Get the permissions currently assigned to the user.
      *
      * @return array
+     *
      * @throws JsonException
      */
     protected function userPermissions(bool $refresh = false): array
@@ -195,6 +201,7 @@ class User implements UserInterface
      *
      * @param  mixed  ...$permissions
      * @return bool
+     *
      * @throws JsonException
      */
     public function hasAll(...$permissions): bool
@@ -215,6 +222,7 @@ class User implements UserInterface
      *
      * @param  mixed  ...$permissions
      * @return bool
+     *
      * @throws JsonException
      */
     public function hasAny(...$permissions): bool
@@ -235,6 +243,7 @@ class User implements UserInterface
      *
      * @param  mixed  ...$permissions
      * @return bool
+     *
      * @throws JsonException
      */
     public function hasNone(...$permissions): bool
@@ -246,6 +255,7 @@ class User implements UserInterface
      * Get an array of permissions assigned to the user.
      *
      * @return array
+     *
      * @throws JsonException
      */
     public function all(): array

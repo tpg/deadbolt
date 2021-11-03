@@ -25,7 +25,7 @@ class DeadboltService implements DeadboltServiceInterface
     protected $driver;
 
     /**
-     * @param array $config
+     * @param  array  $config
      */
     public function __construct(array $config)
     {
@@ -41,7 +41,7 @@ class DeadboltService implements DeadboltServiceInterface
     /**
      * A user.
      *
-     * @param Model $model
+     * @param  Model  $model
      * @return User
      */
     public function user(Model $model): User
@@ -65,7 +65,7 @@ class DeadboltService implements DeadboltServiceInterface
     /**
      * Set permissions the driver.
      *
-     * @param DriverInterface $driver
+     * @param  DriverInterface  $driver
      * @return DeadboltServiceInterface
      */
     public function driver(DriverInterface $driver): DeadboltServiceInterface
