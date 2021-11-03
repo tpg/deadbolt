@@ -10,7 +10,7 @@ const user = {
     ],
 }
 
-const permissions = new Deadbolt(user);
+const permissions = new Deadbolt(user.permissions);
 
 it('"has" should return true for an existing permission', () => {
     assert.equal(permissions.has('articles.create'), true);

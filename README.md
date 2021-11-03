@@ -401,7 +401,7 @@ class DatabaseDriver implements DriverInterface
 How the `permissions` method sources permissions is up to you. It could a database request, or even a remote API request.
 
 ## JavaScript Helper
-Deadbolt includes a simple JavaScript helper that provides some simple tools for checking permissions. You'll need to pass your User object to your front-end. You can import the `Deadbolt` class into your JavaScript component. If you're using Vue you could use it something like this:
+Deadbolt includes a simple JavaScript helper that provides some simple tools for checking permissions. You'll need to pass the user permissions to your front-end. You can import the `Deadbolt` class into your JavaScript component. If you're using Vue you could do something like this:
 
 ```javascript
 import Deadbolt from '../../vendor/thepublicgood/deadbolt/dist/Deadbolt';
@@ -412,7 +412,7 @@ export default {
   },
   setup (props) {
     
-    const permissions = new Deadbolt(props.user);
+    const permissions = new Deadbolt(props.user.permissions);
     
     // Check if the user has a permission
     permissions.has('articles.create');

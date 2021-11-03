@@ -1,14 +1,13 @@
-import {User} from '@/User';
-
 export default class Deadbolt {
 
     readonly _permissions: string[];
 
-    constructor(user: User, column: string = 'permissions') {
-        if (typeof user.permissions === 'string') {
-            this._permissions = JSON.parse(user[column]);
+    constructor(permissions: string|string[]) {
+
+        if (typeof permissions === 'string') {
+            this._permissions = JSON.parse(permissions);
         } else {
-            this._permissions = user[column];
+            this._permissions = permissions;
         }
     }
 
