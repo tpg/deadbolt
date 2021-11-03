@@ -107,8 +107,9 @@ class UserCollection implements UserCollectionInterface
 
     /**
      * Call the.
-     * @param string $name
-     * @param mixed|null $arguments
+     *
+     * @param  string  $name
+     * @param  mixed|null  $arguments
      * @return UserCollectionInterface
      */
     protected function callOnEachUser(string $name, $arguments = null): UserCollectionInterface

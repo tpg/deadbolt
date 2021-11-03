@@ -16,8 +16,9 @@ interface UserInterface
     /**
      * Give the specified permissions.
      *
-     * @param mixed ...$names
+     * @param  mixed  ...$names
      * @return UserInterface
+     *
      * @throws JsonException|NoSuchPermissionException
      */
     public function give(...$names): UserInterface;
@@ -26,6 +27,7 @@ interface UserInterface
      * Make a super user.
      *
      * @return UserInterface
+     *
      * @throws JsonException|NoSuchPermissionException
      */
     public function super(): UserInterface;
@@ -35,6 +37,7 @@ interface UserInterface
      *
      * @param  mixed  ...$names
      * @return UserInterface
+     *
      * @throws JsonException
      */
     public function revoke(...$names): UserInterface;
@@ -49,7 +52,7 @@ interface UserInterface
     /**
      * Sync permissions with the names provided.
      *
-     * @param mixed ...$names
+     * @param  mixed  ...$names
      * @return UserInterface
      */
     public function sync(...$names): UserInterface;
@@ -66,6 +69,7 @@ interface UserInterface
      *
      * @param  string  $permission
      * @return bool
+     *
      * @throws JsonException
      */
     public function has(string $permission): bool;
@@ -75,6 +79,7 @@ interface UserInterface
      *
      * @param  mixed  ...$permissions
      * @return bool
+     *
      * @throws JsonException
      */
     public function hasAll(...$permissions): bool;
@@ -84,6 +89,7 @@ interface UserInterface
      *
      * @param  mixed  ...$permissions
      * @return bool
+     *
      * @throws JsonException
      */
     public function hasAny(...$permissions): bool;
@@ -93,6 +99,7 @@ interface UserInterface
      *
      * @param  mixed  ...$permissions
      * @return bool
+     *
      * @throws JsonException
      */
     public function hasNone(...$permissions): bool;
@@ -101,6 +108,7 @@ interface UserInterface
      * Get an array of permissions assigned to the user.
      *
      * @return array
+     *
      * @throws JsonException
      */
     public function all(): array;

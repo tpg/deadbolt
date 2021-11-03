@@ -10,8 +10,7 @@ class EloquentDriver implements DriverInterface
 {
     public function permissions(): array
     {
-        return Permission
-            ::select(['name', 'description'])
+        return Permission::select(['name', 'description'])
             ->pluck('description', 'name')
             ->toArray();
     }

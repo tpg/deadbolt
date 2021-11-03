@@ -12,14 +12,14 @@ use TPG\Deadbolt\UserCollection;
 interface DeadboltServiceInterface
 {
     /**
-     * @param array $config
+     * @param  array  $config
      */
     public function __construct(array $config);
 
     /**
      * A user.
      *
-     * @param Model $model
+     * @param  Model  $model
      * @return User
      */
     public function user(Model $model): User;
@@ -35,7 +35,7 @@ interface DeadboltServiceInterface
     /**
      * Set permissions the driver.
      *
-     * @param DriverInterface $driver
+     * @param  DriverInterface  $driver
      * @return DeadboltServiceInterface
      */
     public function driver(DriverInterface $driver): DeadboltServiceInterface;

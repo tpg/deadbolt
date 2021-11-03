@@ -15,7 +15,7 @@ class ArrayDriver implements DriverInterface
     protected $config;
 
     /**
-     * @param array $config
+     * @param  array  $config
      */
     public function __construct(array $config)
     {
@@ -37,7 +37,7 @@ class ArrayDriver implements DriverInterface
     /**
      * Get the names of the permissions without descriptions.
      *
-     * @param array $permissions
+     * @param  array  $permissions
      * @return array
      */
     protected function getPermissionNames(array $permissions): array
@@ -54,7 +54,7 @@ class ArrayDriver implements DriverInterface
     /**
      * Return the permission names with the descriptions.
      *
-     * @param array $permissions
+     * @param  array  $permissions
      * @return array
      */
     protected function getDescriptions(array $permissions): array
