@@ -25,9 +25,9 @@ return [
     |
     */
 
-//    'permissions' => [
-        // 'articles.create' => 'Create new articles',
-//    ],
+    //    'permissions' => [
+    // 'articles.create' => 'Create new articles',
+    //    ],
 
     'permissions' => [
         \TPG\Deadbolt\Permission::create(
