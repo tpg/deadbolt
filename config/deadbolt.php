@@ -25,8 +25,21 @@ return [
     |
     */
 
-    'permissions' => [
+//    'permissions' => [
         // 'articles.create' => 'Create new articles',
+//    ],
+
+    'permissions' => [
+        \TPG\Deadbolt\Permission::create(
+            name: 'create',
+            group: 'articles',
+            description: 'Can create new articles',
+        ),
+        \TPG\Deadbolt\Permission::create(
+            name: 'edit',
+            group: 'articles',
+            description: 'Can edit exiting articles',
+        ),
     ],
 
     /*
