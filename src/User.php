@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use JsonException;
 use TPG\Deadbolt\Contracts\UserInterface;
 use TPG\Deadbolt\Exceptions\NoSuchPermissionException;
+use TPG\Deadbolt\Facades\Deadbolt;
 
 class User implements UserInterface
 {
@@ -71,13 +72,18 @@ class User implements UserInterface
         return $this->save();
     }
 
+    /**
+     * Check if the "permissions" field has already been cast on the model.
+     *
+     * @return bool
+     */
     protected function permissionsAreCast(): bool
     {
         return Arr::get($this->user->getCasts(), $this->config['column']) === 'json';
     }
 
     /**
-     * Make a super user.
+     * Make a super-user.
      *
      * @return UserInterface
      *
@@ -261,5 +267,16 @@ class User implements UserInterface
     public function all(): array
     {
         return $this->userPermissions();
+    }
+
+    /**
+     * Get an array of permissions with descriptions.
+     *
+     * @return array
+     * @throws JsonException
+     */
+    public function describe(): array
+    {
+        return Deadbolt::describe($this->all());
     }
 }

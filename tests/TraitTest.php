@@ -17,4 +17,16 @@ class TraitTest extends TestCase
 
         self::assertSame(['articles.edit'], $user->permissions()->all());
     }
+
+    /**
+     * @test
+     **/
+    public function it_can_get_permission_descriptions(): void
+    {
+        $user = $this->user();
+
+        $user->permissions()->give('articles.create');
+
+        self::assertSame(['articles.create' => 'Create Articles'], $user->permissions()->describe());
+    }
 }
