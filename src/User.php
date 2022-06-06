@@ -273,6 +273,7 @@ class User implements UserInterface
      * Get an array of permissions with descriptions.
      *
      * @return array
+     *
      * @throws JsonException
      */
     public function describe(): array
