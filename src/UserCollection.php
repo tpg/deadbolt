@@ -155,6 +155,11 @@ class UserCollection implements UserCollectionInterface
         return false;
     }
 
+    public function has($permission): bool
+    {
+        return $this->anyHave($permission);
+    }
+
     /**
      * Check if none of the users have the specified permissions.
      *

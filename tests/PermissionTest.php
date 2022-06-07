@@ -183,6 +183,7 @@ class PermissionTest extends TestCase
         self::assertTrue(Deadbolt::user($users[0])->has('articles.create'));
         self::assertTrue(Deadbolt::user($users[1])->has('articles.create'));
 
+        self::assertTrue(Deadbolt::users($users)->has('articles.create'));
         self::assertTrue(Deadbolt::users($users)->allHave('articles.create'));
         self::assertFalse(Deadbolt::users($users)->allHave('articles.edit'));
         self::assertTrue(Deadbolt::users($users)->anyHave('articles.create'));
