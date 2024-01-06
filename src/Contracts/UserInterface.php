@@ -16,7 +16,7 @@ interface UserInterface
     /**
      * Give the specified permissions.
      *
-     * @param array<string>|string ...$names
+     * @param  array<string>|string  ...$names
      * @return UserInterface
      *
      * @throws JsonException|NoSuchPermissionException
@@ -38,7 +38,7 @@ interface UserInterface
     /**
      * Revoke the specified permissions.
      *
-     * @param array<string>|string $names
+     * @param  array<string>|string  $names
      *
      * @throws JsonException
      */
@@ -52,7 +52,7 @@ interface UserInterface
     /**
      * Sync permissions with the names provided.
      *
-     * @param array<string>|string ...$names
+     * @param  array<string>|string  ...$names
      */
     public function sync(...$names): UserInterface;
 
@@ -62,7 +62,8 @@ interface UserInterface
     public function save(): UserInterface;
 
     /**
-     * Check if the specified permission is assigned.*
+     * Check if the specified permission is assigned.*.
+     *
      * @throws JsonException
      */
     public function has(string $permission): bool;
@@ -70,7 +71,8 @@ interface UserInterface
     /**
      * Check if all the specified permissions are assigned.
      *
-     * @param array<string>|string $permissions
+     * @param  array<string>|string  $permissions
+     *
      * @throws JsonException
      */
     public function hasAll(...$permissions): bool;
@@ -78,7 +80,8 @@ interface UserInterface
     /**
      * Check if any of the specified permissions are assigned.
      *
-     * @param array<string>|string $permissions
+     * @param  array<string>|string  $permissions
+     *
      * @throws JsonException
      */
     public function hasAny(...$permissions): bool;
@@ -86,7 +89,8 @@ interface UserInterface
     /**
      * Check if none of the specified permissions are assigned.
      *
-     * @param array<string>|string ...$permissions
+     * @param  array<string>|string  ...$permissions
+     *
      * @throws JsonException
      */
     public function hasNone(...$permissions): bool;

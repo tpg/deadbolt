@@ -26,7 +26,7 @@ class UserCollection implements UserCollectionInterface
     /**
      * Give the specified permissions to the user collection.
      *
-     * @param array<string> $names
+     * @param  array<string>  $names
      */
     public function give(...$names): UserCollectionInterface
     {
@@ -48,7 +48,7 @@ class UserCollection implements UserCollectionInterface
     /**
      * Revoke the specified permissions from the user collection.
      *
-     * @param array<string> $names
+     * @param  array<string>  $names
      * @return UserCollectionInterface
      */
     public function revoke(...$names): UserCollectionInterface
@@ -71,7 +71,7 @@ class UserCollection implements UserCollectionInterface
     /**
      * Sync the specified permissions with the user collection.
      *
-     * @param array<string> $names
+     * @param  array<string>  $names
      * @return UserCollectionInterface
      */
     public function sync(...$names): UserCollectionInterface
@@ -103,12 +103,12 @@ class UserCollection implements UserCollectionInterface
     /**
      * Check if all the users have the specified permissions.
      *
-     * @param array<string> $permissions
+     * @param  array<string>  $permissions
      */
     public function allHave(...$permissions): bool
     {
         foreach ($this->users as $user) {
-            if (!$user->hasAll($permissions)) {
+            if (! $user->hasAll($permissions)) {
                 return false;
             }
         }
@@ -119,7 +119,7 @@ class UserCollection implements UserCollectionInterface
     /**
      * Check if any of the users have all the specified permissions.
      *
-     * @param array<string> $permissions
+     * @param  array<string>  $permissions
      */
     public function anyHave(...$permissions): bool
     {
@@ -140,7 +140,7 @@ class UserCollection implements UserCollectionInterface
     /**
      * Check if none of the users have the specified permissions.
      *
-     * @param ...$permissions
+     * @param  ...$permissions
      * @return bool
      */
     public function noneHave(...$permissions): bool

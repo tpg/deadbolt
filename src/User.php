@@ -20,7 +20,7 @@ class User implements UserInterface
     /**
      * Give the specified permissions.
      *
-     * @param array<string>|string $names
+     * @param  array<string>|string  $names
      * @return UserInterface
      *
      * @throws JsonException|NoSuchPermissionException
@@ -43,13 +43,13 @@ class User implements UserInterface
     {
         $this->user->{$this->config['column']} = $this->permissionsAreCast()
             ? $permissions
-            : json_encode($permissions,JSON_THROW_ON_ERROR);
+            : json_encode($permissions, JSON_THROW_ON_ERROR);
 
         return $this->save();
     }
 
     /**
-     * Check if the "permissions" field has already been cast on the model
+     * Check if the "permissions" field has already been cast on the model.
      */
     protected function permissionsAreCast(): bool
     {
@@ -81,7 +81,7 @@ class User implements UserInterface
     /**
      * Revoke the specified permissions.
      *
-     * @param array<string>|string ...$names
+     * @param  array<string>|string  ...$names
      * @return UserInterface
      *
      * @throws JsonException|NoSuchPermissionException
@@ -108,7 +108,8 @@ class User implements UserInterface
     /**
      * Sync permissions with the names provided.
      *
-     * @param array<string>|string $names
+     * @param  array<string>|string  $names
+     *
      * @throws JsonException
      * @throws NoSuchPermissionException
      */
@@ -132,7 +133,7 @@ class User implements UserInterface
      */
     protected function findPermissionOrFail(string $permission): bool
     {
-        if (!$this->isPermission($permission)) {
+        if (! $this->isPermission($permission)) {
             throw new NoSuchPermissionException($permission);
         }
 
@@ -147,7 +148,7 @@ class User implements UserInterface
     /**
      * Check if the specified permission is assigned.
      *
-     * @param string $permission
+     * @param  string  $permission
      * @return bool
      *
      * @throws JsonException
@@ -173,13 +174,14 @@ class User implements UserInterface
     /**
      * Check if all the specified permissions are assigned.
      *
-     * @param array<string>|string $permissions
+     * @param  array<string>|string  $permissions
+     *
      * @throws JsonException
      */
     public function hasAll(...$permissions): bool
     {
         foreach (Arr::flatten($permissions) as $permission) {
-            if (!in_array($permission, $this->userPermissions(), true)) {
+            if (! in_array($permission, $this->userPermissions(), true)) {
                 return false;
             }
         }
@@ -190,7 +192,8 @@ class User implements UserInterface
     /**
      * Check if any of the specified permissions are assigned.
      *
-     * @param array<string>|string ...$permissions
+     * @param  array<string>|string  ...$permissions
+     *
      * @throws JsonException
      */
     public function hasAny(...$permissions): bool
@@ -207,12 +210,13 @@ class User implements UserInterface
     /**
      * Check if none of the specified permissions are assigned.
      *
-     * @param array<string>|string $permissions
+     * @param  array<string>|string  $permissions
+     *
      * @throws JsonException
      */
     public function hasNone(...$permissions): bool
     {
-        return !$this->hasAny($permissions);
+        return ! $this->hasAny($permissions);
     }
 
     /**
