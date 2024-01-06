@@ -44,7 +44,7 @@ class DeadboltServiceProvider extends ServiceProvider
     {
         $timestamp = date('Y_m_d_His');
 
-        return (string)collect(glob($this->app->databasePath().'/migrations/*'.$migrationName.'.php'))
+        return (string) collect(glob($this->app->databasePath().'/migrations/*'.$migrationName.'.php'))
             ->push($this->app->databasePath().'/migrations/'.$timestamp.'_'.$migrationName.'.php')
             ->first();
     }

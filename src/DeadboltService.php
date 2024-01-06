@@ -39,7 +39,7 @@ class DeadboltService implements DeadboltServiceInterface
     /**
      * A collection of users to manipulate permissions for.
      *
-     * @param array<Model> $users
+     * @param  array<Model>  $users
      */
     public function users(...$users): UserCollection
     {
@@ -67,7 +67,7 @@ class DeadboltService implements DeadboltServiceInterface
     /**
      * Get the permission descriptions.
      *
-     * @param array<string> $permissions
+     * @param  array<string>  $permissions
      */
     public function describe(...$permissions): array
     {
