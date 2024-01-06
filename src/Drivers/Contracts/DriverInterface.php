@@ -8,8 +8,6 @@ interface DriverInterface
 {
     /**
      * Get an array of permission names.
-     *
-     * @return array
      */
     public function permissions(): array;
 }

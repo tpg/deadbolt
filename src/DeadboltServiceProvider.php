@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TPG\Deadbolt;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\ServiceProvider;
 use TPG\Deadbolt\Console\InstallCommand;
 
@@ -19,6 +20,10 @@ class DeadboltServiceProvider extends ServiceProvider
                 InstallCommand::class,
             ]);
         }
+
+        Factory::guessFactoryNamesUsing(
+            static fn ($modelName) => 'TPG\\Deadbolt\\Tests\\Factories\\'.class_basename($modelName).'Factory'
+        );
     }
 
     protected function publicConfig(): void
@@ -39,8 +44,7 @@ class DeadboltServiceProvider extends ServiceProvider
     {
         $timestamp = date('Y_m_d_His');
 
-        return collect(
-            glob($this->app->databasePath().'/migrations/*'.$migrationName.'.php'))
+        return (string)collect(glob($this->app->databasePath().'/migrations/*'.$migrationName.'.php'))
             ->push($this->app->databasePath().'/migrations/'.$timestamp.'_'.$migrationName.'.php')
             ->first();
     }

@@ -13,46 +13,21 @@ use TPG\Deadbolt\Facades\Deadbolt;
 
 class User implements UserInterface
 {
-    /**
-     * @var Model
-     */
-    private $user;
-    /**
-     * @var array
-     */
-    private $config;
-    /**
-     * @var array
-     */
-    protected $permissions;
-
-    /**
-     * @param  Model  $user
-     * @param  array  $permissions
-     * @param  array  $config
-     */
-    public function __construct(Model $user, array $permissions, array $config)
+    public function __construct(protected Model $user, protected array $permissions, protected array $config)
     {
-        $this->user = $user;
-        $this->config = $config;
-        $this->permissions = $permissions;
     }
 
     /**
      * Give the specified permissions.
      *
-     * @param  mixed  ...$names
+     * @param array<string>|string $names
      * @return UserInterface
      *
      * @throws JsonException|NoSuchPermissionException
      */
     public function give(...$names): UserInterface
     {
-        $permissions = array_filter(Arr::flatten($names), function ($permission) {
-            $this->exists($permission);
-
-            return true;
-        });
+        $permissions = array_filter(Arr::flatten($names), fn ($permission) => $this->findPermissionOrFail($permission));
 
         $this->assignPermissions(array_merge($this->userPermissions(), $permissions));
 
@@ -62,20 +37,19 @@ class User implements UserInterface
     /**
      * Merge the specified permissions with the current permissions.
      *
-     * @param  array  $permissions
-     * @return UserInterface
+     * @throws JsonException
      */
     protected function assignPermissions(array $permissions): UserInterface
     {
-        $this->user->{$this->config['column']} = $this->permissionsAreCast() ? $permissions : json_encode($permissions);
+        $this->user->{$this->config['column']} = $this->permissionsAreCast()
+            ? $permissions
+            : json_encode($permissions,JSON_THROW_ON_ERROR);
 
         return $this->save();
     }
 
     /**
-     * Check if the "permissions" field has already been cast on the model.
-     *
-     * @return bool
+     * Check if the "permissions" field has already been cast on the model
      */
     protected function permissionsAreCast(): bool
     {
@@ -91,32 +65,42 @@ class User implements UserInterface
      */
     public function super(): UserInterface
     {
-        return $this->give($this->permissions);
+        return $this->give(...$this->permissions);
+    }
+
+    /**
+     * Check if the user is super.
+     *
+     * @throws JsonException
+     */
+    public function isSuper(): bool
+    {
+        return $this->hasAll(...$this->permissions);
     }
 
     /**
      * Revoke the specified permissions.
      *
-     * @param  mixed  ...$names
+     * @param array<string>|string ...$names
      * @return UserInterface
      *
-     * @throws JsonException
+     * @throws JsonException|NoSuchPermissionException
      */
     public function revoke(...$names): UserInterface
     {
         return $this->sync(
-            array_diff($this->userPermissions(), $names)
+            ...array_diff($this->userPermissions(), $names)
         );
     }
 
     /**
      * Revoke all permissions.
      *
-     * @return UserInterface
+     * @throws JsonException
      */
     public function revokeAll(): UserInterface
     {
-        $this->user->{$this->config['column']} = json_encode([]);
+        $this->user->{$this->config['column']} = json_encode([], JSON_THROW_ON_ERROR);
 
         return $this->save();
     }
@@ -124,8 +108,9 @@ class User implements UserInterface
     /**
      * Sync permissions with the names provided.
      *
-     * @param  mixed  ...$names
-     * @return UserInterface
+     * @param array<string>|string $names
+     * @throws JsonException
+     * @throws NoSuchPermissionException
      */
     public function sync(...$names): UserInterface
     {
@@ -134,8 +119,6 @@ class User implements UserInterface
 
     /**
      * Save the current permission set.
-     *
-     * @return UserInterface
      */
     public function save(): UserInterface
     {
@@ -145,28 +128,17 @@ class User implements UserInterface
     }
 
     /**
-     * Check if an array is defined.
-     *
-     * @param  string  $permission
-     * @return bool
-     *
      * @throws NoSuchPermissionException
      */
-    protected function exists(string $permission): bool
+    protected function findPermissionOrFail(string $permission): bool
     {
-        if (! $this->isPermission($permission)) {
+        if (!$this->isPermission($permission)) {
             throw new NoSuchPermissionException($permission);
         }
 
         return true;
     }
 
-    /**
-     * Check if the given name is a permission.
-     *
-     * @param  string  $name
-     * @return bool
-     */
     protected function isPermission(string $name): bool
     {
         return in_array($name, $this->permissions, true);
@@ -175,7 +147,7 @@ class User implements UserInterface
     /**
      * Check if the specified permission is assigned.
      *
-     * @param  string  $permission
+     * @param string $permission
      * @return bool
      *
      * @throws JsonException
@@ -186,13 +158,9 @@ class User implements UserInterface
     }
 
     /**
-     * Get the permissions currently assigned to the user.
-     *
-     * @return array
-     *
      * @throws JsonException
      */
-    protected function userPermissions(bool $refresh = false): array
+    protected function userPermissions(): array
     {
         $permissions = $this->user->getAttributeValue($this->config['column']) ?: [];
         if (is_array($permissions)) {
@@ -205,17 +173,13 @@ class User implements UserInterface
     /**
      * Check if all the specified permissions are assigned.
      *
-     * @param  mixed  ...$permissions
-     * @return bool
-     *
+     * @param array<string>|string $permissions
      * @throws JsonException
      */
     public function hasAll(...$permissions): bool
     {
-        $permissions = Arr::flatten($permissions);
-
-        foreach ($permissions as $permission) {
-            if (! in_array($permission, $this->userPermissions(), true)) {
+        foreach (Arr::flatten($permissions) as $permission) {
+            if (!in_array($permission, $this->userPermissions(), true)) {
                 return false;
             }
         }
@@ -226,16 +190,12 @@ class User implements UserInterface
     /**
      * Check if any of the specified permissions are assigned.
      *
-     * @param  mixed  ...$permissions
-     * @return bool
-     *
+     * @param array<string>|string ...$permissions
      * @throws JsonException
      */
     public function hasAny(...$permissions): bool
     {
-        $permissions = Arr::flatten($permissions);
-
-        foreach ($permissions as $permission) {
+        foreach (Arr::flatten($permissions) as $permission) {
             if (in_array($permission, $this->userPermissions(), true)) {
                 return true;
             }
@@ -247,20 +207,16 @@ class User implements UserInterface
     /**
      * Check if none of the specified permissions are assigned.
      *
-     * @param  mixed  ...$permissions
-     * @return bool
-     *
+     * @param array<string>|string $permissions
      * @throws JsonException
      */
     public function hasNone(...$permissions): bool
     {
-        return ! $this->hasAny($permissions);
+        return !$this->hasAny($permissions);
     }
 
     /**
      * Get an array of permissions assigned to the user.
-     *
-     * @return array
      *
      * @throws JsonException
      */
@@ -271,8 +227,6 @@ class User implements UserInterface
 
     /**
      * Get an array of permissions with descriptions.
-     *
-     * @return array
      *
      * @throws JsonException
      */

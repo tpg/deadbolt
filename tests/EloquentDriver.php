@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace TPG\Tests;
+namespace TPG\Deadbolt\Tests;
 
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
+use TPG\Deadbolt\Tests\Models\Permission;
 
 class EloquentDriver implements DriverInterface
 {

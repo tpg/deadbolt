@@ -9,6 +9,10 @@ Deadbolt is "dead" simple. It's in the name. You define your permissions in the 
 
 Deadbolt is simple by design. If you need something more feature rich, there are plenty of other choices. If this doesn't fit the bill, then my go to package is Spatie's [laravel-permission](https://github.com/spatie/laravel-permission) package.
 
+## Requirements
+
+Version 3 requires PHP 8.1 or later and Laravel 10 or later. If you're still using older versions then you'll need to stick with version 2.2. 
+
 ## Installation
 
 Deadbolt can be installed via Composer:
@@ -118,7 +122,7 @@ $permissions = Deadbolt::describe(['articles.create', 'articles.edit']);
 
 ### Assigning permissions
 
-Deadbolt uses the word "User" to mean any model that has permissions. Meaning any Laravel model that has a "permissions" column, but it doesn't have to your actual `User` model. It could be `Role` model, or an `Organisation` model, for example.
+Deadbolt uses the word "User" to mean any model that has permissions that returns array of assigned permissions. This could be any Laravel model that has a "permissions" attribute, but it doesn't have to your actual `User` model. It could be `Role` model, or an `Organisation` model, for example.
 
 To work with permissions on a "user" Deadbolt provides a `user()` method on the `Permissions` facade to which you need to pass your Laravel model:
 

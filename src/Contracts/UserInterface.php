@@ -16,7 +16,7 @@ interface UserInterface
     /**
      * Give the specified permissions.
      *
-     * @param  mixed  ...$names
+     * @param array<string>|string ...$names
      * @return UserInterface
      *
      * @throws JsonException|NoSuchPermissionException
@@ -24,19 +24,21 @@ interface UserInterface
     public function give(...$names): UserInterface;
 
     /**
-     * Make a super user.
-     *
-     * @return UserInterface
+     * Make a superuser.
      *
      * @throws JsonException|NoSuchPermissionException
      */
     public function super(): UserInterface;
 
     /**
+     * Check if the user is super.
+     */
+    public function isSuper(): bool;
+
+    /**
      * Revoke the specified permissions.
      *
-     * @param  mixed  ...$names
-     * @return UserInterface
+     * @param array<string>|string $names
      *
      * @throws JsonException
      */
@@ -44,32 +46,23 @@ interface UserInterface
 
     /**
      * Revoke all permissions.
-     *
-     * @return UserInterface
      */
     public function revokeAll(): UserInterface;
 
     /**
      * Sync permissions with the names provided.
      *
-     * @param  mixed  ...$names
-     * @return UserInterface
+     * @param array<string>|string ...$names
      */
     public function sync(...$names): UserInterface;
 
     /**
      * Save the current permission set.
-     *
-     * @return UserInterface
      */
     public function save(): UserInterface;
 
     /**
-     * Check if the specified permission is assigned.
-     *
-     * @param  string  $permission
-     * @return bool
-     *
+     * Check if the specified permission is assigned.*
      * @throws JsonException
      */
     public function has(string $permission): bool;
@@ -77,9 +70,7 @@ interface UserInterface
     /**
      * Check if all the specified permissions are assigned.
      *
-     * @param  mixed  ...$permissions
-     * @return bool
-     *
+     * @param array<string>|string $permissions
      * @throws JsonException
      */
     public function hasAll(...$permissions): bool;
@@ -87,9 +78,7 @@ interface UserInterface
     /**
      * Check if any of the specified permissions are assigned.
      *
-     * @param  mixed  ...$permissions
-     * @return bool
-     *
+     * @param array<string>|string $permissions
      * @throws JsonException
      */
     public function hasAny(...$permissions): bool;
@@ -97,17 +86,13 @@ interface UserInterface
     /**
      * Check if none of the specified permissions are assigned.
      *
-     * @param  mixed  ...$permissions
-     * @return bool
-     *
+     * @param array<string>|string ...$permissions
      * @throws JsonException
      */
     public function hasNone(...$permissions): bool;
 
     /**
      * Get an array of permissions assigned to the user.
-     *
-     * @return array
      *
      * @throws JsonException
      */

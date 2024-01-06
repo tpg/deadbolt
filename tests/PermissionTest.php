@@ -1,6 +1,6 @@
 <?php
 
-namespace TPG\Tests;
+namespace TPG\Deadbolt\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -100,7 +100,7 @@ class PermissionTest extends TestCase
         $user = $this->user();
         Deadbolt::user($user)->super();
 
-        self::assertTrue(Deadbolt::user($user)->hasAll(Deadbolt::all()));
+        self::assertTrue(Deadbolt::user($user)->hasAll(...Deadbolt::all()));
     }
 
     /**
@@ -126,7 +126,7 @@ class PermissionTest extends TestCase
 
         Deadbolt::user($user)->revokeAll();
 
-        self::assertTrue(Deadbolt::user($user)->hasNone(Deadbolt::all()));
+        self::assertTrue(Deadbolt::user($user)->hasNone(...Deadbolt::all()));
     }
 
     /**
@@ -187,6 +187,38 @@ class PermissionTest extends TestCase
         self::assertTrue(Deadbolt::users($users)->allHave('articles.create'));
         self::assertFalse(Deadbolt::users($users)->allHave('articles.edit'));
         self::assertTrue(Deadbolt::users($users)->anyHave('articles.create'));
+    }
+
+    /**
+     * @test
+     **/
+    public function it_can_make_multiple_users_super(): void
+    {
+        $users = $this->getUserCollection();
+
+        Deadbolt::users($users)->super();
+
+        self::assertTrue(Deadbolt::user($users[0])->isSuper());
+        self::assertTrue(Deadbolt::user($users[1])->isSuper());
+    }
+
+    /**
+     * @test
+     **/
+    public function it_can_revoke_permissions_from_users(): void
+    {
+        $users = $this->getUserCollection();
+
+        Deadbolt::users($users)->super();
+
+        Deadbolt::users($users)->revoke('articles.create');
+
+        self::assertFalse(Deadbolt::user($users[0])->has('articles.create'));
+        self::assertFalse(Deadbolt::user($users[1])->has('articles.create'));
+
+        Deadbolt::users($users)->revokeAll();
+
+        self::assertFalse(Deadbolt::user($users[0])->hasAny(Deadbolt::all()));
     }
 
     protected function getUserCollection(): array

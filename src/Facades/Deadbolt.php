@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TPG\Deadbolt\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use TPG\Deadbolt\DeadboltService;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 use TPG\Deadbolt\User;
 use TPG\Deadbolt\UserCollection;
@@ -15,7 +16,7 @@ use TPG\Deadbolt\UserCollection;
  * @method static array all()
  * @method static array describe(...$permissions)
  * @method static array groups()
- * @method static \TPG\Deadbolt\DeadboltService driver(DriverInterface $driver)
+ * @method static DeadboltService driver(DriverInterface $driver)
  */
 class Deadbolt extends Facade
 {

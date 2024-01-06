@@ -1,7 +1,8 @@
 <?php
 
-namespace TPG\Tests;
+namespace TPG\Deadbolt\Tests;
 
+use Illuminate\Support\Facades\Config;
 use TPG\Deadbolt\Facades\Deadbolt;
 
 class DriverTest extends TestCase
@@ -11,7 +12,7 @@ class DriverTest extends TestCase
      */
     public function it_can_use_a_custom_driver(): void
     {
-        $this->app['config']->set('deadbolt.driver', CustomDriver::class);
+        Config::set('deadbolt.driver', CustomDriver::class);
 
         $this->assertEquals((new CustomDriver())->permissions(), Deadbolt::describe());
         $this->assertEquals(array_keys((new CustomDriver())->permissions()), Deadbolt::all());

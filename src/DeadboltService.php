@@ -10,39 +10,26 @@ use TPG\Deadbolt\Contracts\DeadboltServiceInterface;
 use TPG\Deadbolt\Drivers\ArrayDriver;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
-/**
- * Class Deadbolt.
- */
 class DeadboltService implements DeadboltServiceInterface
 {
-    /**
-     * @var array
-     */
-    protected $config;
-    /**
-     * @var DriverInterface
-     */
-    protected $driver;
+    protected array $config;
 
-    /**
-     * @param  array  $config
-     */
+    protected DriverInterface $driver;
+
     public function __construct(array $config)
     {
         $this->config = $config;
 
-        if ($driver = Arr::get($this->config, 'driver')) {
-            $this->driver(new $driver($config));
-        } else {
-            $this->driver(new ArrayDriver($config));
-        }
+        $configuredDriver = Arr::get($this->config, 'driver');
+
+        $this->driver($configuredDriver
+            ? new $configuredDriver($config)
+            : new ArrayDriver($config)
+        );
     }
 
     /**
-     * A user.
-     *
-     * @param  Model  $model
-     * @return User
+     * Specify the user to  manipulate permissions for.
      */
     public function user(Model $model): User
     {
@@ -50,23 +37,17 @@ class DeadboltService implements DeadboltServiceInterface
     }
 
     /**
-     * A collection of users.
+     * A collection of users to manipulate permissions for.
      *
-     * @param ...$users
-     * @return UserCollection
+     * @param array<Model> $users
      */
     public function users(...$users): UserCollection
     {
-        $users = Arr::flatten($users);
-
-        return new UserCollection($users, $this->all(), $this->config);
+        return new UserCollection(Arr::flatten($users), $this->all(), $this->config);
     }
 
     /**
-     * Set permissions the driver.
-     *
-     * @param  DriverInterface  $driver
-     * @return DeadboltServiceInterface
+     * Set the driver used to access permissions.
      */
     public function driver(DriverInterface $driver): DeadboltServiceInterface
     {
@@ -77,8 +58,6 @@ class DeadboltService implements DeadboltServiceInterface
 
     /**
      * Get an array of permissions.
-     *
-     * @return array
      */
     public function all(): array
     {
@@ -88,21 +67,20 @@ class DeadboltService implements DeadboltServiceInterface
     /**
      * Get the permission descriptions.
      *
-     * @param ...$permissions
-     * @return array
+     * @param array<string> $permissions
      */
     public function describe(...$permissions): array
     {
         $filter = Arr::flatten($permissions);
 
-        $permissions = $this->driver->permissions();
-
         if (! empty($filter)) {
-            $permissions = array_filter($permissions, function ($description, $permission) use ($filter) {
-                return in_array($permission, $filter, true);
-            }, ARRAY_FILTER_USE_BOTH);
+            return array_filter(
+                $this->driver->permissions(),
+                static fn ($description, $permission) => in_array($permission, $filter, true),
+                ARRAY_FILTER_USE_BOTH
+            );
         }
 
-        return $permissions;
+        return $this->driver->permissions();
     }
 }

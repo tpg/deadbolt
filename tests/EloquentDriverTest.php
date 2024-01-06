@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace TPG\Tests;
+namespace TPG\Deadbolt\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use TPG\Deadbolt\Facades\Deadbolt;
+use TPG\Deadbolt\Tests\Models\Permission;
 
-class DatabaseDriverTest extends TestCase
+class EloquentDriverTest extends TestCase
 {
     protected function setUp(): void
     {

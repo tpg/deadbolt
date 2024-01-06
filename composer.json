@@ -20,18 +20,18 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "TPG\\Tests\\": "tests/"
+            "TPG\\Deadbolt\\Tests\\": "tests/",
+            "TPG\\Deadbolt\\Tests\\Factories\\": "tests/factories/"
         }
     },
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.2",
         "ext-json": "*",
-        "laravel/framework": ">=7.24"
+        "laravel/framework": "^10.0"
     },
     "require-dev": {
-        "laravel/legacy-factories": "^1.1",
-        "orchestra/testbench": ">=5.0",
-        "phpunit/phpunit": "^8.5|^9.3",
+        "orchestra/testbench": "^8.0",
+        "phpunit/phpunit": "^10.0",
         "roave/security-advisories": "dev-master"
     },
     "minimum-stability": "dev",

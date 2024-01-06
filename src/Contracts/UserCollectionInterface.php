@@ -16,69 +16,62 @@ interface UserCollectionInterface
     /**
      * Give the specified permissions to the user collection.
      *
-     * @param ...$names
-     * @return UserCollectionInterface
+     * @param array<string> $names
      */
     public function give(...$names): UserCollectionInterface;
 
     /**
      * Give all permissions to the user collection.
-     *
-     * @return UserCollectionInterface
      */
     public function super(): UserCollectionInterface;
 
     /**
      * Revoke the specified permissions from the user collection.
      *
-     * @param ...$names
-     * @return UserCollectionInterface
+     * @param array<string> $names
      */
     public function revoke(...$names): UserCollectionInterface;
 
     /**
      * Revoke all permissions from the user collection.
-     *
-     * @return UserCollectionInterface
      */
     public function revokeAll(): UserCollectionInterface;
 
     /**
      * Sync the specified permissions with the user collection.
      *
-     * @param ...$names
-     * @return UserCollectionInterface
+     * @param array<string> $names
      */
     public function sync(...$names): UserCollectionInterface;
 
     /**
      * Save the user collection.
-     *
-     * @return UserCollectionInterface
      */
     public function save(): UserCollectionInterface;
 
     /**
      * Check if all the users have all the specified permissions.
      *
-     * @param ...$permissions
-     * @return bool
+     * @param array<string> $permissions
      */
     public function allHave(...$permissions): bool;
 
     /**
      * Check if all the users have at least one of the specified permissions.
      *
-     * @param ...$permissions
-     * @return bool
+     * @param array<string> $permissions
      */
     public function anyHave(...$permissions): bool;
 
     /**
-     * Check if all of the users have none of the specified permissions.
+     * Check if all the users have the specified permissions.
+     */
+    public function has(string $permission): bool;
+
+    /**
+     * Check if all the users have none of the specified permissions.
      *
-     * @param ...$permissions
-     * @return bool
+     * @param array<string> $permissions
      */
     public function noneHave(...$permissions): bool;
 }

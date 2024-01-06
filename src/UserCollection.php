@@ -12,19 +12,12 @@ use TPG\Deadbolt\Contracts\UserCollectionInterface;
  */
 class UserCollection implements UserCollectionInterface
 {
-    /**
-     * @var Collection
-     */
-    protected $users;
+    protected Collection $users;
 
-    /**
-     * @param  array  $users
-     * @param  array  $permissions
-     * @param  array  $config
-     */
     public function __construct(array $users, array $permissions, array $config)
     {
         $collection = collect($users);
+
         $this->users = $collection->map(function ($user) use ($permissions, $config) {
             return new User($user, $permissions, $config);
         });
@@ -33,8 +26,7 @@ class UserCollection implements UserCollectionInterface
     /**
      * Give the specified permissions to the user collection.
      *
-     * @param ...$names
-     * @return UserCollectionInterface
+     * @param array<string> $names
      */
     public function give(...$names): UserCollectionInterface
     {
@@ -45,8 +37,6 @@ class UserCollection implements UserCollectionInterface
 
     /**
      * Give all permissions to the user collection.
-     *
-     * @return UserCollectionInterface
      */
     public function super(): UserCollectionInterface
     {
@@ -58,20 +48,18 @@ class UserCollection implements UserCollectionInterface
     /**
      * Revoke the specified permissions from the user collection.
      *
-     * @param ...$names
+     * @param array<string> $names
      * @return UserCollectionInterface
      */
     public function revoke(...$names): UserCollectionInterface
     {
-        $this->callOnEachUser('revoke', $names);
+        $this->callOnEachUser('revoke', ...$names);
 
         return $this;
     }
 
     /**
      * Revoke all permissions from the user collection.
-     *
-     * @return UserCollectionInterface
      */
     public function revokeAll(): UserCollectionInterface
     {
@@ -83,7 +71,7 @@ class UserCollection implements UserCollectionInterface
     /**
      * Sync the specified permissions with the user collection.
      *
-     * @param ...$names
+     * @param array<string> $names
      * @return UserCollectionInterface
      */
     public function sync(...$names): UserCollectionInterface
@@ -95,8 +83,6 @@ class UserCollection implements UserCollectionInterface
 
     /**
      * Save the user collection.
-     *
-     * @return UserCollectionInterface
      */
     public function save(): UserCollectionInterface
     {
@@ -105,14 +91,7 @@ class UserCollection implements UserCollectionInterface
         return $this;
     }
 
-    /**
-     * Call the.
-     *
-     * @param  string  $name
-     * @param  mixed|null  $arguments
-     * @return UserCollectionInterface
-     */
-    protected function callOnEachUser(string $name, $arguments = null): UserCollectionInterface
+    protected function callOnEachUser(string $name, mixed $arguments = null): UserCollectionInterface
     {
         $this->users->each(function (User $user) use ($name, $arguments) {
             $user->{$name}($arguments);
@@ -124,13 +103,12 @@ class UserCollection implements UserCollectionInterface
     /**
      * Check if all the users have the specified permissions.
      *
-     * @param ...$permissions
-     * @return bool
+     * @param array<string> $permissions
      */
     public function allHave(...$permissions): bool
     {
         foreach ($this->users as $user) {
-            if (! $user->hasAll($permissions)) {
+            if (!$user->hasAll($permissions)) {
                 return false;
             }
         }
@@ -141,8 +119,7 @@ class UserCollection implements UserCollectionInterface
     /**
      * Check if any of the users have all the specified permissions.
      *
-     * @param ...$permissions
-     * @return bool
+     * @param array<string> $permissions
      */
     public function anyHave(...$permissions): bool
     {
@@ -155,7 +132,7 @@ class UserCollection implements UserCollectionInterface
         return false;
     }
 
-    public function has($permission): bool
+    public function has(string $permission): bool
     {
         return $this->anyHave($permission);
     }

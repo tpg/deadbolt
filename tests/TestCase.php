@@ -1,12 +1,13 @@
 <?php
 
-namespace TPG\Tests;
+namespace TPG\Deadbolt\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use TPG\Deadbolt\DeadboltServiceProvider;
 use TPG\Deadbolt\Facades\Deadbolt;
+use TPG\Deadbolt\Tests\Models\User;
 
 class TestCase extends Orchestra
 {
@@ -31,8 +32,6 @@ class TestCase extends Orchestra
             $table->rememberToken();
             $table->timestamps();
         });
-
-        $this->withFactories(__DIR__.'/factories');
     }
 
     protected function setPermissions(): void
@@ -44,14 +43,14 @@ class TestCase extends Orchestra
         ]);
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             DeadboltServiceProvider::class,
         ];
     }
 
-    protected function getPackageAliases($app)
+    protected function getPackageAliases($app): array
     {
         return [
             'Deadbolt' => Deadbolt::class,
@@ -60,6 +59,6 @@ class TestCase extends Orchestra
 
     protected function user(): User
     {
-        return factory(User::class)->create();
+        return User::factory()->create();
     }
 }

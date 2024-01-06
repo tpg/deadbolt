@@ -12,46 +12,36 @@ use TPG\Deadbolt\UserCollection;
 interface DeadboltServiceInterface
 {
     /**
-     * @param  array  $config
+     * @param array $config
      */
     public function __construct(array $config);
 
     /**
-     * A user.
-     *
-     * @param  Model  $model
-     * @return User
+     * Specify the user to  manipulate permissions for.
      */
     public function user(Model $model): User;
 
     /**
-     * A collection of users.
-     *
-     * @param ...$users
-     * @return UserCollection
+     * A collection of users to manipulate permissions for.
+     *     *
+     * @param array<Model> $users
      */
     public function users(...$users): UserCollection;
 
     /**
-     * Set permissions the driver.
-     *
-     * @param  DriverInterface  $driver
-     * @return DeadboltServiceInterface
+     * Set the driver used to access permissions.
      */
     public function driver(DriverInterface $driver): DeadboltServiceInterface;
 
     /**
      * Get an array of permissions.
-     *
-     * @return array
      */
     public function all(): array;
 
     /**
      * Get the permission descriptions.
      *
-     * @param ...$permissions
-     * @return array
+     * @param array<string> $permissions
      */
     public function describe(...$permissions): array;
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace TPG\Tests;
+namespace TPG\Deadbolt\Tests;
 
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
 class CustomDriver implements DriverInterface
 {
-    protected $permissions = [
+    protected array $permissions = [
         'test permission' => 'Testing',
     ];
 

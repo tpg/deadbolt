@@ -7,7 +7,7 @@ return [
     | The name of the permissions column
     |--------------------------------------------------------------------------
     |
-    | This is the name of the column where permissions are stored. By default
+    | This is the name of the column where permissions are stored. By default,
     | this is set to "permissions", but it can be anything you like.
     |
     */
@@ -21,7 +21,7 @@ return [
     |
     | Only the permissions defined in this array are permitted. This gives
     | you a single source of truth and avoids errors. Permission names can
-    | be anything you like and you can provide a description.
+    | be anything you like, and you can provide a description.
     |
     */
 
@@ -43,5 +43,4 @@ return [
     */
 
     'driver' => TPG\Deadbolt\Drivers\ArrayDriver::class,
-
 ];

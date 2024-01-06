@@ -1,11 +1,18 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace TPG\Deadbolt\Tests\Factories;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use TPG\Deadbolt\Tests\Models\Role;
 
-$factory->define(\TPG\Tests\Role::class, function (Faker $faker) {
-    return [
-        'name' => $faker->word,
-    ];
-});
+class RoleFactory extends Factory
+{
+    protected $model = Role::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->word,
+        ];
+    }
+}

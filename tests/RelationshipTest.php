@@ -1,10 +1,11 @@
 <?php
 
-namespace TPG\Tests;
+namespace TPG\Deadbolt\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use TPG\Deadbolt\Facades\Deadbolt;
+use TPG\Deadbolt\Tests\Models\Role;
 
 class RelationshipTest extends TestCase
 {
