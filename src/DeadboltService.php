@@ -67,7 +67,7 @@ class DeadboltService implements DeadboltServiceInterface
     /**
      * Get the permission descriptions.
      *
-     * @param  array<string>  $permissions
+     * @param  array<string>|string  $permissions
      */
     public function describe(...$permissions): array
     {
