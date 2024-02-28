@@ -32,7 +32,8 @@
     "require-dev": {
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^10.0",
-        "roave/security-advisories": "dev-master"
+        "pestphp/pest": "^2.31",
+        "roave/security-advisories": "dev-latest"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -44,6 +45,11 @@
             "aliases": {
                 "Deadbolt": "TPG\\Deadbolt\\Facades\\Deadbolt"
             }
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     }
 }

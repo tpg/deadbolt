@@ -105,7 +105,7 @@ class UserCollection implements UserCollectionInterface
      *
      * @param  array<string>  $permissions
      */
-    public function allHave(...$permissions): bool
+    public function have(...$permissions): bool
     {
         foreach ($this->users as $user) {
             if (! $user->hasAll($permissions)) {
@@ -121,7 +121,7 @@ class UserCollection implements UserCollectionInterface
      *
      * @param  array<string>  $permissions
      */
-    public function anyHave(...$permissions): bool
+    public function any(...$permissions): bool
     {
         foreach ($this->users as $user) {
             if ($user->hasAll($permissions)) {
@@ -132,18 +132,13 @@ class UserCollection implements UserCollectionInterface
         return false;
     }
 
-    public function has(string $permission): bool
-    {
-        return $this->anyHave($permission);
-    }
-
     /**
      * Check if none of the users have the specified permissions.
      *
      * @param  ...$permissions
      * @return bool
      */
-    public function noneHave(...$permissions): bool
+    public function dontHave(...$permissions): bool
     {
         foreach ($this->users as $user) {
             if ($user->hasAny($permissions)) {

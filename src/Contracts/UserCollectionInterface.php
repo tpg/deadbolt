@@ -54,24 +54,19 @@ interface UserCollectionInterface
      *
      * @param  array<string>  $permissions
      */
-    public function allHave(...$permissions): bool;
+    public function have(...$permissions): bool;
 
     /**
      * Check if all the users have at least one of the specified permissions.
      *
      * @param  array<string>  $permissions
      */
-    public function anyHave(...$permissions): bool;
-
-    /**
-     * Check if all the users have the specified permissions.
-     */
-    public function has(string $permission): bool;
+    public function any(...$permissions): bool;
 
     /**
      * Check if all the users have none of the specified permissions.
      *
      * @param  array<string>  $permissions
      */
-    public function noneHave(...$permissions): bool;
+    public function dontHave(...$permissions): bool;
 }
