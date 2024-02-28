@@ -11,6 +11,4 @@
 |
 */
 
-use TPG\Deadbolt\Tests\Models\User;
-
 uses(\TPG\Deadbolt\Tests\TestCase::class)->in('*');
