@@ -27,10 +27,10 @@
     "require": {
         "php": "^8.2",
         "ext-json": "*",
-        "laravel/framework": "^10.0"
+        "laravel/framework": "^10.0|^11.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^8.0",
+        "orchestra/testbench": "^8.0|^9.0",
         "phpunit/phpunit": "^10.0",
         "pestphp/pest": "^2.31",
         "roave/security-advisories": "dev-latest"
