@@ -1,6 +1,6 @@
 {
   "name": "deadbolt",
-  "version": "2.0.3-0.0.2",
+  "version": "2.0",
   "description": "Dead simple permissions for Laravel",
   "main": "index.js",
   "repository": "git@github.com:tpg/deadbolt.git",
@@ -12,9 +12,9 @@
     "test": "mocha ./tests/js"
   },
   "dependencies": {
-    "typescript": "^4.9.0"
+    "typescript": "^5.4.0"
   },
   "devDependencies": {
-    "mocha": "^10.1.0"
+    "mocha": "^10.5.0"
   }
 }
