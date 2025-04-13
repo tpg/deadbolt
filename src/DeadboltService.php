@@ -7,7 +7,7 @@ namespace TPG\Deadbolt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use TPG\Deadbolt\Contracts\DeadboltServiceInterface;
-use TPG\Deadbolt\Drivers\ConfigDriver;
+use TPG\Deadbolt\Drivers\ArrayDriver;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
 class DeadboltService implements DeadboltServiceInterface
@@ -24,7 +24,7 @@ class DeadboltService implements DeadboltServiceInterface
 
         $this->driver($configuredDriver
             ? new $configuredDriver($config)
-            : new ConfigDriver($config)
+            : new ArrayDriver($config)
         );
     }
 

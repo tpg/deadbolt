@@ -42,5 +42,5 @@ return [
     |
     */
 
-    'driver' => TPG\Deadbolt\Drivers\ConfigDriver::class,
+    'driver' => TPG\Deadbolt\Drivers\ArrayDriver::class,
 ];

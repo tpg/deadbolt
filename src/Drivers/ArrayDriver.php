@@ -7,7 +7,7 @@ namespace TPG\Deadbolt\Drivers;
 use Illuminate\Support\Arr;
 use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
-class ConfigDriver implements DriverInterface
+class ArrayDriver implements DriverInterface
 {
     public function __construct(protected array $config) {}
 
