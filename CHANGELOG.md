@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.3.0 - 2025-04-13
+
+- [Bug] fix two missing methods identified in #31. Methods were previously removed, but documentation was not updated. Methods have been returned.
+- [Improvement] Added support for PHP 8.4 and Laravel 12.
+- [Improvement] Updated NPM dependencies to address potential vulnerabilities
+- [Change] Removed `styleci` in favour of Laravel Pint.
+
 ## v2.2.5 - 2022-11-29
 
 This is a really, really, really tiny release, just to update the JS dependencies.
