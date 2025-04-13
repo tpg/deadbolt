@@ -17,7 +17,6 @@ interface UserInterface
      * Give the specified permissions.
      *
      * @param  array<string>|string  ...$names
-     * @return UserInterface
      *
      * @throws JsonException|NoSuchPermissionException
      */

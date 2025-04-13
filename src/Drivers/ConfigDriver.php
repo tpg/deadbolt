@@ -9,14 +9,10 @@ use TPG\Deadbolt\Drivers\Contracts\DriverInterface;
 
 class ConfigDriver implements DriverInterface
 {
-    public function __construct(protected array $config)
-    {
-    }
+    public function __construct(protected array $config) {}
 
     /**
      * Get an array of permission names.
-     *
-     * @return array
      */
     public function permissions(): array
     {

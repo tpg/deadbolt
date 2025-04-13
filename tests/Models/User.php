@@ -10,12 +10,12 @@ use TPG\Deadbolt\Traits\HasPermissions;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasPermissions, HasFactory;
+    use HasFactory, HasPermissions, Notifiable;
 
-//    protected $casts = [
-//        'permissions' => 'json',
-//    ];
-//
+    //    protected $casts = [
+    //        'permissions' => 'json',
+    //    ];
+    //
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);

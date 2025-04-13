@@ -6,11 +6,6 @@ namespace TPG\Deadbolt\Contracts;
 
 interface UserCollectionInterface
 {
-    /**
-     * @param  array  $users
-     * @param  array  $permissions
-     * @param  array  $config
-     */
     public function __construct(array $users, array $permissions, array $config);
 
     /**

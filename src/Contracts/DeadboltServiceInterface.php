@@ -11,9 +11,6 @@ use TPG\Deadbolt\UserCollection;
 
 interface DeadboltServiceInterface
 {
-    /**
-     * @param  array  $config
-     */
     public function __construct(array $config);
 
     /**

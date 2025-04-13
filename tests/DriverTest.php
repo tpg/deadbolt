@@ -14,8 +14,8 @@ class DriverTest extends TestCase
     {
         Config::set('deadbolt.driver', CustomDriver::class);
 
-        $this->assertEquals((new CustomDriver())->permissions(), Deadbolt::describe());
-        $this->assertEquals(array_keys((new CustomDriver())->permissions()), Deadbolt::all());
+        $this->assertEquals((new CustomDriver)->permissions(), Deadbolt::describe());
+        $this->assertEquals(array_keys((new CustomDriver)->permissions()), Deadbolt::all());
 
         $user = $this->user();
 
@@ -31,8 +31,8 @@ class DriverTest extends TestCase
     {
         $user = $this->user();
 
-        Deadbolt::driver(new CustomDriver())->user($user)->give('test permission');
+        Deadbolt::driver(new CustomDriver)->user($user)->give('test permission');
 
-        $this->assertTrue(Deadbolt::driver(new CustomDriver())->user($user)->has('test permission'));
+        $this->assertTrue(Deadbolt::driver(new CustomDriver)->user($user)->has('test permission'));
     }
 }

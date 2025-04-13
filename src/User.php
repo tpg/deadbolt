@@ -13,15 +13,12 @@ use TPG\Deadbolt\Facades\Deadbolt;
 
 class User implements UserInterface
 {
-    public function __construct(protected Model $user, protected array $permissions, protected array $config)
-    {
-    }
+    public function __construct(protected Model $user, protected array $permissions, protected array $config) {}
 
     /**
      * Give the specified permissions.
      *
      * @param  array<string>|string  $names
-     * @return UserInterface
      *
      * @throws JsonException|NoSuchPermissionException
      */
@@ -59,8 +56,6 @@ class User implements UserInterface
     /**
      * Make a super-user.
      *
-     * @return UserInterface
-     *
      * @throws JsonException|NoSuchPermissionException
      */
     public function super(): UserInterface
@@ -82,7 +77,6 @@ class User implements UserInterface
      * Revoke the specified permissions.
      *
      * @param  array<string>|string  ...$names
-     * @return UserInterface
      *
      * @throws JsonException|NoSuchPermissionException
      */
@@ -148,8 +142,6 @@ class User implements UserInterface
     /**
      * Check if the specified permission is assigned.
      *
-     * @param  string  $permission
-     * @return bool
      *
      * @throws JsonException
      */
