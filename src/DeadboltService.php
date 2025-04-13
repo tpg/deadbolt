@@ -39,7 +39,7 @@ class DeadboltService implements DeadboltServiceInterface
     /**
      * A collection of users to manipulate permissions for.
      *
-     * @param  array<Model>  $users
+     * @param  Model[]  $users
      */
     public function users(...$users): UserCollection
     {

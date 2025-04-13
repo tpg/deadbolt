@@ -87,6 +87,15 @@ interface UserInterface
     public function hasAny(...$permissions): bool;
 
     /**
+     * Check if any of the specified permissions are assigned.
+     *
+     * @param  array<string>|string  $permissions
+     *
+     * @throws JsonException
+     */
+    public function any(...$permissions): bool;
+
+    /**
      * Check if none of the specified permissions are assigned.
      *
      * @param  array<string>|string  ...$permissions
@@ -94,6 +103,15 @@ interface UserInterface
      * @throws JsonException
      */
     public function hasNone(...$permissions): bool;
+
+    /**
+     * Check if none of the specified permissions are assigned.
+     *
+     * @param  array<string>|string  ...$permissions
+     *
+     * @throws JsonException
+     */
+    public function none(...$permissions): bool;
 
     /**
      * Get an array of permissions assigned to the user.

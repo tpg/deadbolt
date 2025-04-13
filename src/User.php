@@ -208,6 +208,18 @@ class User implements UserInterface
     }
 
     /**
+     * Check if any of the specified permissions are assigned.
+     *
+     * @param  array<string>|string  ...$permissions
+     *
+     * @throws JsonException
+     */
+    public function any(...$permissions): bool
+    {
+        return $this->hasAny(...$permissions);
+    }
+
+    /**
      * Check if none of the specified permissions are assigned.
      *
      * @param  array<string>|string  $permissions
@@ -217,6 +229,18 @@ class User implements UserInterface
     public function hasNone(...$permissions): bool
     {
         return ! $this->hasAny($permissions);
+    }
+
+    /**
+     * Check if none of the specified permissions are assigned.
+     *
+     * @param  array<string>|string  $permissions
+     *
+     * @throws JsonException
+     */
+    public function none(...$permissions): bool
+    {
+        return $this->hasNone(...$permissions);
     }
 
     /**

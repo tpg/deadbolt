@@ -65,8 +65,8 @@ class PermissionTest extends TestCase
         $user = $this->user();
         Deadbolt::user($user)->give('articles.edit');
 
-        self::assertTrue(Deadbolt::user($user)->hasAny('articles.edit', 'articles.create'));
-        self::assertFalse(Deadbolt::user($user)->hasAny('articles.create', 'articles.delete'));
+        self::assertTrue(Deadbolt::user($user)->any('articles.edit', 'articles.create'));
+        self::assertFalse(Deadbolt::user($user)->any('articles.create', 'articles.delete'));
     }
 
     /**
@@ -77,8 +77,8 @@ class PermissionTest extends TestCase
         $user = $this->user();
         Deadbolt::user($user)->give('articles.edit');
 
-        self::assertTrue(Deadbolt::user($user)->hasNone('articles.create', 'articles.delete'));
-        self::assertFalse(Deadbolt::user($user)->hasNone('articles.edit', 'articles.create'));
+        self::assertTrue(Deadbolt::user($user)->none('articles.create', 'articles.delete'));
+        self::assertFalse(Deadbolt::user($user)->none('articles.edit', 'articles.create'));
     }
 
     /**
