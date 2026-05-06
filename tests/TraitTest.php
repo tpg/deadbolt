@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace TPG\Deadbolt\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class TraitTest extends TestCase
 {
-    /**
-     * @test
-     **/
+    #[Test]
     public function it_can_get_all_permissions(): void
     {
         $user = $this->user();
@@ -18,9 +18,7 @@ class TraitTest extends TestCase
         self::assertSame(['articles.edit'], $user->permissions()->all());
     }
 
-    /**
-     * @test
-     **/
+    #[Test]
     public function it_can_get_permission_descriptions(): void
     {
         $user = $this->user();

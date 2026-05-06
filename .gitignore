@@ -1,5 +1,6 @@
 build/
 vendor/
 node_modules/
+.idea/
 composer.lock
 .phpunit.result.cache

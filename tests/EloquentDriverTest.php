@@ -7,6 +7,7 @@ namespace TPG\Deadbolt\Tests;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 use TPG\Deadbolt\Facades\Deadbolt;
 use TPG\Deadbolt\Tests\Models\Permission;
 
@@ -40,9 +41,7 @@ class EloquentDriverTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     **/
+    #[Test]
     public function it_can_return_an_array_of_permissions(): void
     {
         $permissions = Deadbolt::all();

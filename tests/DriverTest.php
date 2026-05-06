@@ -3,13 +3,12 @@
 namespace TPG\Deadbolt\Tests;
 
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\Test;
 use TPG\Deadbolt\Facades\Deadbolt;
 
 class DriverTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_use_a_custom_driver(): void
     {
         Config::set('deadbolt.driver', CustomDriver::class);
@@ -24,9 +23,7 @@ class DriverTest extends TestCase
         $this->assertTrue(Deadbolt::user($user)->has('test permission'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function a_custom_driver_can_be_set_inline(): void
     {
         $user = $this->user();

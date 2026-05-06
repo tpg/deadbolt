@@ -4,14 +4,13 @@ namespace TPG\Deadbolt\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 use TPG\Deadbolt\Exceptions\NoSuchPermissionException;
 use TPG\Deadbolt\Facades\Deadbolt;
 
 class PermissionTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_get_an_array_of_defined_permissions(): void
     {
         $permissions = Deadbolt::all();
@@ -23,18 +22,14 @@ class PermissionTest extends TestCase
         ], $permissions);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_describe_the_specified_permissions(): void
     {
         self::assertEquals(['articles.create' => 'Create Articles'], Deadbolt::describe('articles.create'));
         self::assertEquals(['articles.edit' => null], Deadbolt::describe('articles.edit'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function users_can_have_permissions(): void
     {
         $user = $this->user();
@@ -45,9 +40,7 @@ class PermissionTest extends TestCase
         self::assertContains('articles.create', Deadbolt::user($user)->all());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_test_that_a_user_has_all_the_specified_permissions(): void
     {
         $user = $this->user();
@@ -57,9 +50,7 @@ class PermissionTest extends TestCase
         self::assertFalse(Deadbolt::user($user)->hasAll('articles.edit', 'articles.delete'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_test_that_a_user_has_any_of_the_specified_permissions(): void
     {
         $user = $this->user();
@@ -69,9 +60,7 @@ class PermissionTest extends TestCase
         self::assertFalse(Deadbolt::user($user)->any('articles.create', 'articles.delete'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_test_that_a_user_has_none_of_the_specified_permissions(): void
     {
         $user = $this->user();
@@ -81,9 +70,7 @@ class PermissionTest extends TestCase
         self::assertFalse(Deadbolt::user($user)->none('articles.edit', 'articles.create'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_throw_an_exception_if_the_permission_does_not_exist(): void
     {
         $user = $this->user();
@@ -92,9 +79,7 @@ class PermissionTest extends TestCase
         Deadbolt::user($user)->give('articles.change');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_make_a_super_user(): void
     {
         $user = $this->user();
@@ -103,9 +88,7 @@ class PermissionTest extends TestCase
         self::assertTrue(Deadbolt::user($user)->hasAll(...Deadbolt::all()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_revoke_permissions_from_a_user(): void
     {
         $user = $this->user();
@@ -116,9 +99,7 @@ class PermissionTest extends TestCase
         self::assertFalse(Deadbolt::user($user)->has('articles.edit'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_revoke_all_permissions_from_a_user(): void
     {
         $user = $this->user();
@@ -143,9 +124,7 @@ class PermissionTest extends TestCase
         self::assertTrue(Deadbolt::user($user)->hasNone('articles.edit'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_a_different_column_name(): void
     {
         $this->app['config']->set('deadbolt.column', 'rights');
@@ -170,9 +149,7 @@ class PermissionTest extends TestCase
         self::assertContains('articles.create', Deadbolt::user($user)->all());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_assign_permissioins_to_multiple_users(): void
     {
         $users = $this->getUserCollection();
@@ -188,9 +165,7 @@ class PermissionTest extends TestCase
         self::assertTrue(Deadbolt::users($users)->any('articles.create'));
     }
 
-    /**
-     * @test
-     **/
+    #[Test]
     public function it_can_make_multiple_users_super(): void
     {
         $users = $this->getUserCollection();
@@ -201,9 +176,7 @@ class PermissionTest extends TestCase
         self::assertTrue(Deadbolt::user($users[1])->isSuper());
     }
 
-    /**
-     * @test
-     **/
+    #[Test]
     public function it_can_revoke_permissions_from_users(): void
     {
         $users = $this->getUserCollection();
